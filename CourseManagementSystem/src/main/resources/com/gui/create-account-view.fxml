@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #171717;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gui.CreateAccountController">
+   <children>
+      <Pane layoutX="600.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2E2E2E; -fx-shape: 'M 0 0 50 0 50 50 z';" />
+      <Pane layoutY="400.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2E2E2E; -fx-shape: 'M 50 50 0 0 0 50 z';" />
+      <VBox alignment="TOP_CENTER" layoutX="130.0" layoutY="72.0" prefHeight="456.0" prefWidth="540.0" style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-background-color: #2E2E2E;">
+         <children>
+            <Label text="Create account" textFill="WHITE">
+               <font>
+                  <Font size="26.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </Label>
+            <Label text="Email or Username" textFill="WHITE">
+               <font>
+                  <Font size="22.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </Label>
+            <TextField prefHeight="47.0" prefWidth="451.0" style="-fx-border-color: #6D6D6D; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-border-width: 4px; -fx-background-color: transparent; -fx-max-width: 400px; -fx-min-height: 50px; -fx-text-fill: #FFFFFF;">
+               <font>
+                  <Font size="22.0" />
+               </font></TextField>
+            <Label text="Password" textFill="WHITE">
+               <font>
+                  <Font size="22.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </Label>
+            <PasswordField style="-fx-background-radius: 10px; -fx-border-radius: 10px; -fx-border-width: 4px; -fx-border-color: #6D6D6D; -fx-background-color: transparent; -fx-max-width: 400px; -fx-min-height: 50px; -fx-text-fill: #FFFFFF;">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </PasswordField>
+            <Label text="Confirm Password" textFill="WHITE">
+               <font>
+                  <Font size="22.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </Label>
+            <PasswordField style="-fx-background-radius: 10px; -fx-border-radius: 10px; -fx-border-width: 4px; -fx-border-color: #6D6D6D; -fx-background-color: transparent; -fx-max-width: 400px; -fx-min-height: 50px; -fx-text-fill: #FFFFFF;">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </PasswordField>
+            <Button mnemonicParsing="false" prefHeight="39.0" prefWidth="279.0" style="-fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #2076C6; -fx-text-fill: #FFFFFF; -fx-max-width: 400px;" text="Create account">
+               <font>
+                  <Font size="22.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+      <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="72.0" prefWidth="129.0">
+         <center>
+            <Button mnemonicParsing="false" onAction="#goBack" prefHeight="38.0" prefWidth="93.0" style="-fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #2076C6; -fx-text-fill: #FFFFFF; -fx-max-width: 100px;" text="Back" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Button>
+         </center>
+      </BorderPane>
+   </children>
+</Pane>
