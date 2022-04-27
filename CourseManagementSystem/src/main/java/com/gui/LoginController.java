@@ -4,18 +4,21 @@ import com.consts.FileNames;
 import com.io.IOManager;
 import com.models.User;
 import com.models.Users;
+import com.security.StringHash;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class LoginController {
     private final Users users;
     private final IOManager ioManager;
+    private final StringHash stringHash;
     @FXML
     private TextField usernameEmailField;
     @FXML
@@ -24,10 +27,11 @@ public class LoginController {
     public LoginController() {
         this.users = new Users();
         this.ioManager = new IOManager();
+        this.stringHash = new StringHash();
     }
 
     @FXML
-    public void login(ActionEvent event) throws IOException {
+    public void login(ActionEvent event) throws IOException, NoSuchAlgorithmException {
         ArrayList<String> users = this.ioManager.readFile(FileNames.Users);
         this.users.processRawUsers(users);
 
@@ -39,7 +43,8 @@ public class LoginController {
             return;
         }
 
-        if (!Objects.equals(user.getPassword(), this.passwordField.getText())) {
+        String hashedPassword = this.stringHash.hash(this.passwordField.getText());
+        if (!Objects.equals(user.getPassword(), hashedPassword)) {
             AlertBox.display("Error", "Incorrect password.");
             this.passwordField.setText("");
         } else {

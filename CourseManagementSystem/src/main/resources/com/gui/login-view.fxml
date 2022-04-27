@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
@@ -29,7 +30,10 @@
                   <Font size="22.0" />
                </font>
             </Label>
-            <TextField fx:id="usernameEmailField" prefHeight="47.0" prefWidth="451.0" style="-fx-border-color: #6D6D6D; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-border-width: 4px; -fx-background-color: transparent; -fx-max-width: 400px; -fx-min-height: 50px; -fx-text-fill: #FFFFFF;" />
+            <TextField fx:id="usernameEmailField" prefHeight="47.0" prefWidth="451.0" style="-fx-border-color: #6D6D6D; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-border-width: 4px; -fx-background-color: transparent; -fx-max-width: 400px; -fx-min-height: 50px; -fx-text-fill: #FFFFFF;">
+               <font>
+                  <Font size="22.0" />
+               </font></TextField>
             <Label text="Password" textFill="WHITE">
                <VBox.margin>
                   <Insets top="20.0" />

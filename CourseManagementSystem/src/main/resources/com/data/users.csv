@@ -1,4 +1,5 @@
-student,John,Mason,john.mason@wlv.ac.uk,john.mason,password
-student,Joshua,Talbot,john.talbot@wlv.ac.uk,josh.talbot,password
-courseAdmin,Bill,Bo,bill.bo@wlv.ac.uk,bill.bo,password
-instructor,Dave,Cox, dave.cox@wlv.ac.uk,dave.cox,password
+Student,John,Mason,john.mason@wlv.ac.uk,john.mason,24407c265f6959d21823ac7a87fbd4b8d6b76c1dc288f87ac78ea4482a756231
+Student,Joshua,Talbot,john.talbot@wlv.ac.uk,josh.talbot,password
+CourseAdmin,Bill,Bo,bill.bo@wlv.ac.uk,bill.bo,password
+Instructor,Dave,Cox, dave.cox@wlv.ac.uk,dave.cox,password
+Student,becca,mason,becca.mason@me.com,becca.mason,64faab08d5b09cace8eff3c468692ddf4024be7083b9a7f61efd93ba289804ee
