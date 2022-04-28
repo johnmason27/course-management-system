@@ -1,5 +1,6 @@
 package com.gui;
 
+import com.models.Users;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,6 +16,7 @@ public class MainApplication extends Application {
         stage.setTitle("Course Management System");
         stage.setScene(scene);
         stage.show();
+        new Users();
     }
 
     public static void main(String[] args) {

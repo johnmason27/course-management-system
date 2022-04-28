@@ -1,7 +1,5 @@
 package com.gui;
 
-import com.consts.FileNames;
-import com.io.IOManager;
 import com.models.User;
 import com.models.Users;
 import com.models.enums.UserType;
@@ -13,11 +11,9 @@ import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class CreateAccountController {
-    private final IOManager ioManager;
     private final StringHash stringHash;
     @FXML
     private ToggleGroup userTypeGroup;
@@ -36,7 +32,6 @@ public class CreateAccountController {
     private PasswordField passwordConfirmField;
 
     public CreateAccountController() {
-        this.ioManager = new IOManager();
         this.stringHash = new StringHash();
     }
 
@@ -61,10 +56,6 @@ public class CreateAccountController {
 
     @FXML
     public void createAccount(ActionEvent event) throws NoSuchAlgorithmException, IOException {
-        ArrayList<String> rawUsers = this.ioManager.readFile(FileNames.Users);
-        Users users = new Users();
-        users.processRawUsers(rawUsers);
-
         String forename = this.forenameField.getText();
         if (forename.length() == 0) {
             AlertBox.display("Error", "You can't leave the forename field blank.");
@@ -104,8 +95,8 @@ public class CreateAccountController {
             return;
         }
 
-        User existingUserByUsername = users.findUser(username);
-        User existingUserByEmail = users.findUser(email);
+        User existingUserByUsername = Users.findUser(username);
+        User existingUserByEmail = Users.findUser(email);
         if (existingUserByUsername != null) {
             AlertBox.display("Error", "You cannot create a user with this username as it already exists.");
             this.forenameField.setText("");
@@ -145,9 +136,8 @@ public class CreateAccountController {
         String hashedPassword = this.stringHash.hash(password);
 
         User user = new User(this.selectedUserType, forename, surname, email, username, hashedPassword);
-        users.addUser(user);
-        ArrayList<String> updatedUsers = users.getStringUsers();
-        this.ioManager.writeFile(updatedUsers, FileNames.Users);
+        Users.addUser(user);
+        Users.saveUsers();
         this.goBack();
     }
 

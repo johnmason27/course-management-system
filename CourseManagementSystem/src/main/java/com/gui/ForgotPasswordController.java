@@ -1,7 +1,5 @@
 package com.gui;
 
-import com.consts.FileNames;
-import com.io.IOManager;
 import com.models.User;
 import com.models.Users;
 import com.security.StringHash;
@@ -12,11 +10,9 @@ import javafx.scene.control.TextField;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class ForgotPasswordController {
-    private final IOManager ioManager;
     private final StringHash stringHash;
     @FXML
     private TextField emailUsername;
@@ -26,17 +22,12 @@ public class ForgotPasswordController {
     private PasswordField confirmPasswordField;
 
     public ForgotPasswordController() {
-        this.ioManager = new IOManager();
         this.stringHash = new StringHash();
     }
 
     @FXML
     public void resetPassword() throws IOException, NoSuchAlgorithmException {
-        ArrayList<String> usersData = this.ioManager.readFile(FileNames.Users);
-        Users users = new Users();
-        users.processRawUsers(usersData);
-
-        User user = users.findUser(this.emailUsername.getText());
+        User user = Users.findUser(this.emailUsername.getText());
 
         if (user == null) {
             AlertBox.display("Error", "Couldn't find an account with that email or username");
@@ -64,9 +55,8 @@ public class ForgotPasswordController {
 
         String hashedPassword = this.stringHash.hash(password);
         user.setPassword(hashedPassword);
-        users.updateUser(user);
-
-        this.ioManager.writeFile(users.getStringUsers(), FileNames.Users);
+        Users.updateUser(user);
+        Users.saveUsers();
         AlertBox.display("Success", "Password reset.");
         this.emailUsername.setText("");
         this.passwordField.setText("");

@@ -1,19 +1,59 @@
 package com.models;
 
+import com.consts.FileNames;
+import com.io.IOManager;
 import com.models.enums.UserType;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class Users {
-    private final ArrayList<User> users;
+    private static IOManager ioManager;
+    private static ArrayList<User> users;
     
     public Users() {
-        this.users = new ArrayList<>();
+        ioManager = new IOManager();
+        users = new ArrayList<>();
+        ArrayList<String> stringUsers = ioManager.readFile(FileNames.Users);
+        Users.processRawUsers(stringUsers);
     }
 
-    public void processRawUsers(ArrayList<String> users) {
+    public static ArrayList<User> getUsers() {
+        return users;
+    }
+
+    public static void updateUser(User user) {
+        int index = 0;
+        String username = user.getUsername();
+
+        for (int i = 0; i < users.size(); i ++) {
+            if (Objects.equals(users.get(i).getUsername(), username)) {
+                index = i;
+                break;
+            }
+        }
+
+        users.set(index, user);
+    }
+
+    public static User findUser(String usernameEmail) {
+        return users.stream()
+                .filter(user -> usernameEmail.equals(user.getUsername()) || usernameEmail.equals(user.getEmail()))
+                .findAny()
+                .orElse(null);
+    }
+
+    public static void addUser(User user) {
+        users.add(user);
+    }
+
+    public static void saveUsers() throws IOException {
+        Users.ioManager.writeFile(Users.getStringUsers(), FileNames.Users);
+    }
+
+    private static void processRawUsers(ArrayList<String> users) {
         for (String userLine :
                 users) {
             try {
@@ -37,7 +77,7 @@ public class Users {
                 String password = parts[5];
 
                 User user = new User(userType, forename, surname, email, username, password);
-                this.users.add(user);
+                Users.users.add(user);
             } catch (NumberFormatException e) {
                 String error = "Number conversion error in '" + userLine + "' - " + e.getMessage();
                 System.out.println(error);
@@ -48,15 +88,11 @@ public class Users {
         }
     }
 
-    public ArrayList<User> getUsers() {
-        return this.users;
-    }
-
-    public ArrayList<String> getStringUsers() {
-        ArrayList<String> stringUsers = new ArrayList<String>();
+    private static ArrayList<String> getStringUsers() {
+        ArrayList<String> stringUsers = new ArrayList<>();
 
         for (User user :
-                this.users) {
+                users) {
             String userType = user.getUserType().toString();
             String forename = user.getForename();
             String surname = user.getSurname();
@@ -70,37 +106,5 @@ public class Users {
         }
 
         return stringUsers;
-    }
-
-    public void updateUser(User user) {
-        int index = 0;
-        String username = user.getUsername();
-
-        for (int i = 0; i < this.users.size(); i ++) {
-            if (Objects.equals(this.users.get(i).getUsername(), username)) {
-                index = i;
-                break;
-            }
-        }
-
-        this.users.set(index, user);
-    }
-
-    public User findUser(String usernameEmail) {
-        return this.users.stream()
-                .filter(user -> usernameEmail.equals(user.getUsername()) || usernameEmail.equals(user.getEmail()))
-                .findAny()
-                .orElse(null);
-    }
-
-    public void addUser(User user) {
-        this.users.add(user);
-    }
-
-    public void saveUsers() {
-        // do all the logic in here
-        // have a static users
-        // convert users on construction
-        // users.Add()
     }
 }
