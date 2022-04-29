@@ -39,6 +39,7 @@ public class LoginController {
             AlertBox.display("Error", "Incorrect password.");
             this.passwordField.setText("");
         } else {
+            Session.setUser(user);
             if (user.getUserType() == UserType.Student) {
                 Navigator.navigateToStudentView(event);
             } else if (user.getUserType() == UserType.CourseAdmin) {

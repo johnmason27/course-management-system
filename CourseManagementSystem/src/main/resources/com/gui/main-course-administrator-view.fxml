@@ -2,13 +2,10 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #2E2E2E;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #2E2E2E;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gui.CourseAdminController">
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="120.0" style="-fx-background-color: #171717;">
          <children>
@@ -29,9 +26,34 @@
             </Button>
          </children>
       </VBox>
-      <Label layoutX="129.0" layoutY="14.0" text="Overview" textFill="WHITE">
+      <Label layoutX="135.0" layoutY="14.0" text="Overview" textFill="WHITE">
          <font>
             <Font size="26.0" />
+         </font>
+      </Label>
+      <VBox alignment="CENTER_LEFT" layoutX="135.0" layoutY="117.0" prefHeight="231.0" prefWidth="647.0" style="-fx-background-radius: 20px; -fx-border-radius: 20px; -fx-background-color: #171717;">
+         <children>
+            <Label fx:id="date" alignment="TOP_LEFT" text="Date" textFill="WHITE">
+               <font>
+                  <Font size="28.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="30.0" />
+               </VBox.margin>
+            </Label>
+            <Label fx:id="time" text="Time" textFill="WHITE">
+               <font>
+                  <Font size="26.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="30.0" />
+               </VBox.margin>
+            </Label>
+         </children>
+      </VBox>
+      <Label fx:id="welcomeBackMessage" layoutX="135.0" layoutY="52.0" text="Welcome back, " textFill="#6f6f6f">
+         <font>
+            <Font size="22.0" />
          </font>
       </Label>
    </children>
