@@ -7,6 +7,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.UUID;
+
 public class UsersTest {
     @Before
     public void setup() {
@@ -20,7 +22,7 @@ public class UsersTest {
 
     @Test
     public void testUpdateUserUpdatesTheSpecificUser() {
-        User user = new User(UserType.Student, "John", "Mason", "john.mason@wlv.ac.uk", "john.mason", "password");
+        User user = new User(UUID.randomUUID(), UserType.Student, "John", "Mason", "john.mason@wlv.ac.uk", "john.mason", "password");
         String updatedPassword = "updatedPassword";
         user.setPassword(updatedPassword);
         Users.updateUser(user);

@@ -25,6 +25,24 @@ public final class Navigator {
         Navigator.stage.show();
     }
 
+    public static void navigateToCourseAdministratorView(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(Navigator.class.getResource("/com/gui/main-course-administrator-view.fxml"));
+        Navigator.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Navigator.scene = new Scene(root);
+        Navigator.previousScene = Navigator.stage.getScene();
+        Navigator.stage.setScene(Navigator.scene);
+        Navigator.stage.show();
+    }
+
+    public static void navigateToInstructorView(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(Navigator.class.getResource("/com/gui/main-instructor-view.fxml"));
+        Navigator.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Navigator.scene = new Scene(root);
+        Navigator.previousScene = Navigator.stage.getScene();
+        Navigator.stage.setScene(Navigator.scene);
+        Navigator.stage.show();
+    }
+
     public static void navigateToCreateAccountView(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Navigator.class.getResource("/com/gui/create-account-view.fxml"));
         Navigator.stage = (Stage)((Node)event.getSource()).getScene().getWindow();

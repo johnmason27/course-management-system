@@ -2,6 +2,7 @@ package com.gui;
 
 import com.models.User;
 import com.models.Users;
+import com.models.enums.UserType;
 import com.security.StringHash;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -38,7 +39,13 @@ public class LoginController {
             AlertBox.display("Error", "Incorrect password.");
             this.passwordField.setText("");
         } else {
-            Navigator.navigateToStudentView(event);
+            if (user.getUserType() == UserType.Student) {
+                Navigator.navigateToStudentView(event);
+            } else if (user.getUserType() == UserType.CourseAdmin) {
+                Navigator.navigateToCourseAdministratorView(event);
+            } else if (user.getUserType() == UserType.Instructor) {
+                Navigator.navigateToInstructorView(event);
+            }
         }
     }
 

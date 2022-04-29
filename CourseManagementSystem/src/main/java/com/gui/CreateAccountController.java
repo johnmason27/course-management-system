@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
+import java.util.UUID;
 
 public class CreateAccountController {
     private final StringHash stringHash;
@@ -135,7 +136,7 @@ public class CreateAccountController {
 
         String hashedPassword = this.stringHash.hash(password);
 
-        User user = new User(this.selectedUserType, forename, surname, email, username, hashedPassword);
+        User user = new User(UUID.randomUUID(), this.selectedUserType, forename, surname, email, username, hashedPassword);
         Users.addUser(user);
         Users.saveUsers();
         this.goBack();

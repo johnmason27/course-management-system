@@ -2,7 +2,10 @@ package com.models;
 
 import com.models.enums.UserType;
 
+import java.util.UUID;
+
 public class User {
+    private UUID id;
     private UserType userType;
     private String forename;
     private String surname;
@@ -10,13 +13,22 @@ public class User {
     private String username;
     private String password;
 
-    public User(UserType userType, String forename, String surname, String email, String username, String password) {
+    public User(UUID id, UserType userType, String forename, String surname, String email, String username, String password) {
+        this.id = id;
         this.userType = userType;
         this.forename = forename;
         this.surname = surname;
         this.email = email;
         this.username = username;
         this.password = password;
+    }
+
+    public UUID getId() {
+        return this.id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public UserType getUserType() {
