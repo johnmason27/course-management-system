@@ -1,8 +1,11 @@
 package com.gui;
 
+import com.models.Course;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,5 +38,15 @@ public class CourseAdminController {
         SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm");
         this.date.setText(String.format("%s, %d %s, %d", dayOfWeek, dayOfMonth, month, year));
         this.time.setText(timeFormatter.format(date));
+    }
+
+    @FXML
+    public void openManagementView(ActionEvent event) throws IOException {
+        Navigator.navigateToCourseListView(event);
+    }
+
+    @FXML
+    public void openPrintReportView(ActionEvent event) throws IOException {
+        Navigator.navigateToPrintReportView(event);
     }
 }

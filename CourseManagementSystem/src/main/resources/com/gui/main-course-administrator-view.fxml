@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
@@ -14,12 +15,12 @@
                   <Insets top="20.0" />
                </VBox.margin>
             </Button>
-            <Button mnemonicParsing="false" style="-fx-background-color: transparent; -fx-graphic: url('file:/C:/Development/GitHub/course-management-system/CourseManagementSystem/src/main/resources/com/media/manage.png'); -fx-max-width: 72px; -fx-min-width: 72px; -fx-max-height: 72px; -fx-min-height: 72px;">
+            <Button fx:id="managementButton" mnemonicParsing="false" onAction="#openManagementView" style="-fx-background-color: transparent; -fx-graphic: url('file:/C:/Development/GitHub/course-management-system/CourseManagementSystem/src/main/resources/com/media/manage.png'); -fx-max-width: 72px; -fx-min-width: 72px; -fx-max-height: 72px; -fx-min-height: 72px;">
                <VBox.margin>
                   <Insets top="50.0" />
                </VBox.margin>
             </Button>
-            <Button mnemonicParsing="false" style="-fx-background-color: transparent; -fx-graphic: url('file:/C:/Development/GitHub/course-management-system/CourseManagementSystem/src/main/resources/com/media/print-report.png'); -fx-max-width: 72px; -fx-min-width: 72px; -fx-max-height: 72px; -fx-min-height: 72px;">
+            <Button mnemonicParsing="false" onAction="#openPrintReportView" style="-fx-background-color: transparent; -fx-graphic: url('file:/C:/Development/GitHub/course-management-system/CourseManagementSystem/src/main/resources/com/media/print-report.png'); -fx-max-width: 72px; -fx-min-width: 72px; -fx-max-height: 72px; -fx-min-height: 72px;">
                <VBox.margin>
                   <Insets top="20.0" />
                </VBox.margin>

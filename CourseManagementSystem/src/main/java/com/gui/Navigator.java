@@ -61,6 +61,24 @@ public final class Navigator {
         Navigator.stage.show();
     }
 
+    public static void navigateToCourseListView(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(Navigator.class.getResource("/com/gui/course-list-view.fxml"));
+        Navigator.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Navigator.scene = new Scene(root);
+        Navigator.previousScene = Navigator.stage.getScene();
+        Navigator.stage.setScene(Navigator.scene);
+        Navigator.stage.show();
+    }
+
+    public static void navigateToPrintReportView(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(Navigator.class.getResource("/com/gui/print-report-view.fxml"));
+        Navigator.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Navigator.scene = new Scene(root);
+        Navigator.previousScene = Navigator.stage.getScene();
+        Navigator.stage.setScene(Navigator.scene);
+        Navigator.stage.show();
+    }
+
     public static void navigateBack() {
         Navigator.stage.setScene(Navigator.previousScene);
         Navigator.stage.show();
