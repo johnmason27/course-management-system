@@ -25,14 +25,24 @@ public class Modules {
         return modules;
     }
 
-    public static void saveModules() {
-        Gson gson = new Gson();
-        String modulesJson = gson.toJson(Modules.modules);
-        Modules.ioManager.writeFile(FileNames.Modules, modulesJson);
-    }
-
     public static void addModule(Module module) {
         modules.add(module);
+        saveModules();
+    }
+
+    public static void addModules(ArrayList<Module> newModules) {
+        modules.addAll(newModules);
+        saveModules();
+    }
+
+    public static void removeModule(Module module) {
+        modules.remove(module);
+        saveModules();
+    }
+
+    public static void removeModules(ArrayList<Module> modulesToDelete) {
+        modules.removeAll(modulesToDelete);
+        saveModules();
     }
 
     public static Module findModule(String moduleName) {
@@ -54,5 +64,12 @@ public class Modules {
         }
 
         modules.set(index, module);
+        saveModules();
+    }
+
+    private static void saveModules() {
+        Gson gson = new Gson();
+        String modulesJson = gson.toJson(Modules.modules);
+        Modules.ioManager.writeFile(FileNames.Modules, modulesJson);
     }
 }

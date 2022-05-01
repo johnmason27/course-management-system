@@ -8,6 +8,7 @@ import com.io.IOManager;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Courses {
     private static IOManager ioManager;
@@ -25,14 +26,15 @@ public class Courses {
         return courses;
     }
 
-    public static void saveCourses() {
-        Gson gson = new Gson();
-        String coursesJson = gson.toJson(Courses.courses);
-        Courses.ioManager.writeFile(FileNames.Courses, coursesJson);
-    }
-
     public static void addCourse(Course course) {
         courses.add(course);
+        saveCourses();
+    }
+
+    public static void deleteCourse(Course course) {
+        courses.remove(course);
+        Modules.removeModules(course.getCourseModules());
+        saveCourses();
     }
 
     public static Course findCourse(String courseName) {
@@ -54,5 +56,27 @@ public class Courses {
         }
 
         courses.set(index, course);
+        saveCourses();
+    }
+
+    public static void updateCourseById(Course course) {
+        int index = 0;
+        UUID courseId = course.getId();
+
+        for (int i = 0; i < courses.size(); i ++) {
+            if (Objects.equals(courses.get(i).getId(), courseId)) {
+                index = i;
+                break;
+            }
+        }
+
+        courses.set(index, course);
+        saveCourses();
+    }
+
+    private static void saveCourses() {
+        Gson gson = new Gson();
+        String coursesJson = gson.toJson(Courses.courses);
+        Courses.ioManager.writeFile(FileNames.Courses, coursesJson);
     }
 }

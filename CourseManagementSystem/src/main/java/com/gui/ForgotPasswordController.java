@@ -56,7 +56,6 @@ public class ForgotPasswordController {
         String hashedPassword = this.stringHash.hash(password);
         user.setPassword(hashedPassword);
         Users.updateUser(user);
-        Users.saveUsers();
         AlertBox.display("Success", "Password reset.");
         this.emailUsername.setText("");
         this.passwordField.setText("");

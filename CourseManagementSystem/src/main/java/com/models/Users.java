@@ -37,6 +37,7 @@ public class Users {
         }
 
         users.set(index, user);
+        saveUsers();
     }
 
     public static User findUser(String usernameEmail) {
@@ -48,9 +49,10 @@ public class Users {
 
     public static void addUser(User user) {
         users.add(user);
+        saveUsers();
     }
 
-    public static void saveUsers() {
+    private static void saveUsers() {
         Gson gson = new Gson();
         String usersJson = gson.toJson(Users.users);
         Users.ioManager.writeFile(FileNames.Users, usersJson);

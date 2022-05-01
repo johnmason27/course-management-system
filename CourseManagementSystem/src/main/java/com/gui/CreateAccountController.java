@@ -138,7 +138,6 @@ public class CreateAccountController {
 
         User user = new User(UUID.randomUUID(), this.selectedUserType, forename, surname, email, username, hashedPassword);
         Users.addUser(user);
-        Users.saveUsers();
         this.goBack();
     }
 
