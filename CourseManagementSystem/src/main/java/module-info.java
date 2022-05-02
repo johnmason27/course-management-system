@@ -12,6 +12,7 @@ module com.gui {
     opens com.models.enums to com.google.gson, javafx.base;
 
     exports com.models;
+    exports com.models.enums;
     exports com.tests.models;
     exports com.tests.security;
 }

@@ -1,7 +1,6 @@
 package com.gui;
 
 import com.models.Courses;
-import com.models.Modules;
 import com.models.Users;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +18,6 @@ public class MainApplication extends Application {
         stage.setScene(scene);
         stage.show();
         new Users();
-        new Modules();
         new Courses();
     }
 

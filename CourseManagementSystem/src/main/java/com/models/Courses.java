@@ -33,7 +33,6 @@ public class Courses {
 
     public static void deleteCourse(Course course) {
         courses.remove(course);
-        Modules.removeModules(course.getCourseModules());
         saveCourses();
     }
 

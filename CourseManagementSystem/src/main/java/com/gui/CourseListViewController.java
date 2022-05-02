@@ -46,11 +46,8 @@ public class CourseListViewController {
             return;
         }
 
-        Course updatedCourse = EditCourseBox.display(selectedItem);
-        if (updatedCourse != null) {
-            Courses.updateCourseById(updatedCourse);
-            this.courseTable.refresh();
-        }
+        EditCourseBox.display(selectedItem);
+        this.courseTable.refresh();
     }
 
     @FXML

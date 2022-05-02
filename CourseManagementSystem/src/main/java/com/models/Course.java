@@ -36,12 +36,16 @@ public class Course {
         return this.courseModules;
     }
 
-    public void setCourseModules(ArrayList<Module> courseModules) {
+    public void setModules(ArrayList<Module> courseModules) {
         this.courseModules = courseModules;
     }
 
-    public void addCourseModule(Module module) {
+    public void addModule(Module module) {
         this.courseModules.add(module);
+    }
+
+    public void removeModule(Module module) {
+        this.courseModules.remove(module);
     }
 
     public Module findModule(Module module) {
@@ -57,5 +61,14 @@ public class Course {
 
     public void setIsCourseRunning(boolean isCourseRunning) {
         this.isCourseRunning = isCourseRunning;
+    }
+
+    public void toggleModuleRunning(UUID moduleId, boolean isRunning) {
+        for (Module module : getCourseModules()) {
+            if (module.getId() == moduleId) {
+                module.setIsModuleRunning(isRunning);
+                break;
+            }
+        }
     }
 }

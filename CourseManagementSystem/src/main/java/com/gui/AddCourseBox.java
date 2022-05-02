@@ -3,7 +3,6 @@ package com.gui;
 import com.models.Course;
 import com.models.Courses;
 import com.models.Module;
-import com.models.Modules;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -61,7 +60,6 @@ public class AddCourseBox {
                 courseNameInput.setText("");
             } else {
                 ArrayList<Module> modules = new ArrayList<>(observableModules);
-                Modules.addModules(modules);
 
                 course = new Course(UUID.randomUUID(), courseName, modules, true);
                 AlertBox.display("Success", "Course created");
