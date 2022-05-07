@@ -75,7 +75,7 @@ public class Courses {
 
     private static void saveCourses() {
         Gson gson = new Gson();
-        String coursesJson = gson.toJson(Courses.courses);
-        Courses.ioManager.writeFile(FileNames.Courses, coursesJson);
+        String coursesJson = gson.toJson(courses);
+        ioManager.writeFile(FileNames.Courses, coursesJson);
     }
 }

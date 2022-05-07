@@ -54,7 +54,7 @@ public class Users {
 
     private static void saveUsers() {
         Gson gson = new Gson();
-        String usersJson = gson.toJson(Users.users);
-        Users.ioManager.writeFile(FileNames.Users, usersJson);
+        String usersJson = gson.toJson(users);
+        ioManager.writeFile(FileNames.Users, usersJson);
     }
 }

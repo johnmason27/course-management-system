@@ -29,15 +29,15 @@ public class LoginController {
         User user = Users.findUser(this.usernameEmailField.getText());
         if (user == null) {
             AlertBox.display("Error", "Incorrect username or email.");
-            this.usernameEmailField.setText("");
-            this.passwordField.setText("");
+            this.usernameEmailField.clear();
+            this.passwordField.clear();
             return;
         }
 
         String hashedPassword = this.stringHash.hash(this.passwordField.getText());
         if (!Objects.equals(user.getPassword(), hashedPassword)) {
             AlertBox.display("Error", "Incorrect password.");
-            this.passwordField.setText("");
+            this.passwordField.clear();
         } else {
             Session.setUser(user);
             if (user.getUserType() == UserType.Student) {

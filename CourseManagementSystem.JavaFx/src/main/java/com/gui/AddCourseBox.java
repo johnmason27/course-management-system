@@ -20,13 +20,15 @@ import java.util.UUID;
 
 public class AddCourseBox {
     private static ObservableList<Module> observableModules = FXCollections.observableArrayList();
+    private static TextField courseNameInput;
     private static TextField moduleNameInput;
     private static TextField moduleLevelInput;
-    private static TableView<Module> table;
+    private static TableView<Module> moduleTable;
     private static Course course = null;
+    private static Stage window;
 
     public static Course display() {
-        Stage window = new Stage();
+        window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Add Course");
         window.setMinWidth(800);
@@ -34,54 +36,32 @@ public class AddCourseBox {
 
         Button backButton = new Button("Back");
         backButton.setStyle("-fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #2076C6; -fx-text-fill: #FFFFFF; -fx-font-size: 18px; -fx-min-width: 100px;");
-        backButton.setOnAction(e -> {
-            window.close();
-        });
+        backButton.setOnAction(e -> window.close());
         HBox topContainer = new HBox();
         topContainer.getChildren().add(backButton);
         topContainer.setAlignment(Pos.TOP_LEFT);
 
-        Label modalTitle = new Label("Add Course");
-        modalTitle.setStyle("-fx-text-fill: #FFFFFF; -fx-font-size: 22px;");
-        TextField courseNameInput = new TextField();
+        Label addModalTitle = new Label("Add Course");
+        addModalTitle.setStyle("-fx-text-fill: #FFFFFF; -fx-font-size: 22px;");
+        courseNameInput = new TextField();
         courseNameInput.setPromptText("Course Name...");
         courseNameInput.setStyle("-fx-border-color: #6D6D6D; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-border-width: 4px; -fx-background-color: transparent; -fx-max-width: 400px; -fx-min-height: 50px; -fx-text-fill: #FFFFFF; -fx-font-size: 18px;");
 
-        Button createCourseButton = new Button("Create Course");
-        createCourseButton.setStyle("-fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #2076C6; -fx-text-fill: #FFFFFF; -fx-font-size: 18px; -fx-min-width: 200px;");
-        createCourseButton.setOnAction(e -> {
-            String courseName = courseNameInput.getText();
+        TableColumn<Module, UUID> moduleUUIDTableColumn = new TableColumn<>("Id");
+        moduleUUIDTableColumn.setMinWidth(300);
+        moduleUUIDTableColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        TableColumn<Module, String> moduleNameTableColumn = new TableColumn<>("Module name");
+        moduleNameTableColumn.setMinWidth(400);
+        moduleNameTableColumn.setCellValueFactory(new PropertyValueFactory<>("moduleName"));
+        TableColumn<Module, Integer> moduleLevelTableColumn = new TableColumn<>("Module Level");
+        moduleLevelTableColumn.setMinWidth(100);
+        moduleLevelTableColumn.setCellValueFactory(new PropertyValueFactory<>("level"));
 
-            if (courseName.length() == 0) {
-                AlertBox.display("Error", "Enter a course name");
-                courseNameInput.setText("");
-            } else if (Courses.findCourse(courseName) != null) {
-                AlertBox.display("Error", "A course already exists with that name");
-                courseNameInput.setText("");
-            } else {
-                ArrayList<Module> modules = new ArrayList<>(observableModules);
-
-                course = new Course(UUID.randomUUID(), courseName, modules, true);
-                AlertBox.display("Success", "Course created");
-                window.close();
-            }
-        });
-
-        TableColumn<Module, UUID> moduleIdColumn = new TableColumn<>("Id");
-        moduleIdColumn.setMinWidth(300);
-        moduleIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        TableColumn<Module, String> moduleNameColumn = new TableColumn<>("Module name");
-        moduleNameColumn.setMinWidth(400);
-        moduleNameColumn.setCellValueFactory(new PropertyValueFactory<>("moduleName"));
-        TableColumn<Module, Integer> moduleLevelColumn = new TableColumn<>("Module Level");
-        moduleLevelColumn.setMinWidth(100);
-        moduleLevelColumn.setCellValueFactory(new PropertyValueFactory<>("level"));
-
-        table = new TableView<>();
-        table.getStylesheets().add(String.valueOf(AddCourseBox.class.getResource("/com/styles/table-styles.css")));
-        table.setItems(FXCollections.observableList(observableModules));
-        table.getColumns().addAll(moduleIdColumn, moduleNameColumn, moduleLevelColumn);
-        table.setPlaceholder(new Label("No modules"));
+        moduleTable = new TableView<>();
+        moduleTable.getStylesheets().add(String.valueOf(AddCourseBox.class.getResource("/com/styles/table-styles.css")));
+        moduleTable.setItems(FXCollections.observableList(observableModules));
+        moduleTable.getColumns().addAll(moduleUUIDTableColumn, moduleNameTableColumn, moduleLevelTableColumn);
+        moduleTable.setPlaceholder(new Label("No modules"));
 
         moduleNameInput = new TextField();
         moduleNameInput.setPromptText("Module name...");
@@ -96,14 +76,18 @@ public class AddCourseBox {
         removeModuleButton.setStyle("-fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #2076C6; -fx-text-fill: #FFFFFF; -fx-font-size: 18px; -fx-min-width: 100px;");
         removeModuleButton.setOnAction(e -> removeModuleButtonClicked());
 
-        HBox inputContainer = new HBox();
-        inputContainer.getChildren().addAll(moduleNameInput, moduleLevelInput, addModuleButton, removeModuleButton);
-        inputContainer.setPadding(new Insets(10, 10, 10, 10));
-        inputContainer.setSpacing(10);
-        inputContainer.setAlignment(Pos.CENTER);
+        HBox moduleInputItems = new HBox();
+        moduleInputItems.getChildren().addAll(moduleNameInput, moduleLevelInput, addModuleButton, removeModuleButton);
+        moduleInputItems.setPadding(new Insets(10, 10, 10, 10));
+        moduleInputItems.setSpacing(10);
+        moduleInputItems.setAlignment(Pos.CENTER);
+
+        Button createCourseButton = new Button("Create Course");
+        createCourseButton.setStyle("-fx-border-radius: 10px; -fx-background-radius: 10px; -fx-background-color: #2076C6; -fx-text-fill: #FFFFFF; -fx-font-size: 18px; -fx-min-width: 200px;");
+        createCourseButton.setOnAction(e -> createCourseButtonClicked());
 
         VBox layout = new VBox();
-        layout.getChildren().addAll(topContainer, modalTitle, courseNameInput, table, inputContainer, createCourseButton);
+        layout.getChildren().addAll(topContainer, addModalTitle, courseNameInput, moduleTable, moduleInputItems, createCourseButton);
         layout.setAlignment(Pos.TOP_CENTER);
         layout.setStyle("-fx-background-color: #171717;");
         layout.setSpacing(10);
@@ -121,9 +105,26 @@ public class AddCourseBox {
         return returnData;
     }
 
+    private static void createCourseButtonClicked() {
+        String courseName = courseNameInput.getText();
+
+        if (courseName.length() == 0) {
+            AlertBox.display("Error", "Enter a course name");
+            courseNameInput.clear();
+        } else if (Courses.findCourse(courseName) != null) {
+            AlertBox.display("Error", "A course already exists with that name");
+            courseNameInput.clear();
+        } else {
+            ArrayList<Module> modules = new ArrayList<>(observableModules);
+            course = new Course(UUID.randomUUID(), courseName, modules, true);
+            AlertBox.display("Success", "Course created");
+            window.close();
+        }
+    }
+
     private static void addModuleButtonClicked() {
         String moduleName = moduleNameInput.getText();
-        Module existingModule = table.getItems().stream()
+        Module existingModule = moduleTable.getItems().stream()
                 .filter(i -> i.getModuleName().equals(moduleName))
                 .findAny()
                 .orElse(null);
@@ -151,17 +152,17 @@ public class AddCourseBox {
         }
 
         Module module = new Module(UUID.randomUUID(), moduleName, true, moduleLevel);
-        table.getItems().add(module);
+        moduleTable.getItems().add(module);
         moduleNameInput.clear();
         moduleLevelInput.clear();
     }
 
     private static void removeModuleButtonClicked() {
-        Module selectedItem = table.getSelectionModel().getSelectedItem();
+        Module selectedItem = moduleTable.getSelectionModel().getSelectedItem();
         if (selectedItem == null) {
             AlertBox.display("Error", "Please select a module to remove!");
             return;
         }
-        table.getItems().remove(selectedItem);
+        moduleTable.getItems().remove(selectedItem);
     }
 }

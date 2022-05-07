@@ -9,7 +9,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 import java.util.UUID;
@@ -56,7 +55,7 @@ public class CreateAccountController {
     }
 
     @FXML
-    public void createAccount(ActionEvent event) throws NoSuchAlgorithmException, IOException {
+    public void createAccount() throws NoSuchAlgorithmException {
         String forename = this.forenameField.getText();
         if (forename.length() == 0) {
             AlertBox.display("Error", "You can't leave the forename field blank.");
@@ -92,7 +91,7 @@ public class CreateAccountController {
 
         if (!StringValidator.isValidEmail(email)) {
             AlertBox.display("Error", "Invalid email address");
-            this.emailField.setText("");
+            this.emailField.clear();
             return;
         }
 
@@ -100,21 +99,21 @@ public class CreateAccountController {
         User existingUserByEmail = Users.findUser(email);
         if (existingUserByUsername != null) {
             AlertBox.display("Error", "You cannot create a user with this username as it already exists.");
-            this.forenameField.setText("");
-            this.surnameField.setText("");
-            this.emailField.setText("");
-            this.usernameField.setText("");
-            this.passwordField.setText("");
-            this.passwordConfirmField.setText("");
+            this.forenameField.clear();
+            this.surnameField.clear();
+            this.emailField.clear();
+            this.usernameField.clear();
+            this.passwordField.clear();
+            this.passwordConfirmField.clear();
             return;
         } else if (existingUserByEmail != null) {
             AlertBox.display("Error", "You cannot create a user with this email as it already exists.");
-            this.forenameField.setText("");
-            this.surnameField.setText("");
-            this.emailField.setText("");
-            this.usernameField.setText("");
-            this.passwordField.setText("");
-            this.passwordConfirmField.setText("");
+            this.forenameField.clear();
+            this.surnameField.clear();
+            this.emailField.clear();
+            this.usernameField.clear();
+            this.passwordField.clear();
+            this.passwordConfirmField.clear();
             return;
         }
 
@@ -122,15 +121,15 @@ public class CreateAccountController {
 
         if (!Objects.equals(password, this.passwordConfirmField.getText())) {
             AlertBox.display("Error", "Password's don't match! Please make sure they match.");
-            this.passwordField.setText("");
-            this.passwordConfirmField.setText("");
+            this.passwordField.clear();
+            this.passwordConfirmField.clear();
             return;
         }
 
         if (!StringValidator.isValidPassword(password)) {
             AlertBox.display("Error", "Password must contain a number, lower case letter, upper case letter, contain no whitespace and be between 8 and 64 characters long");
-            this.passwordField.setText("");
-            this.passwordConfirmField.setText("");
+            this.passwordField.clear();
+            this.passwordConfirmField.clear();
             return;
         }
 
