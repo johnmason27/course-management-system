@@ -86,6 +86,13 @@ public class Courses {
                 .orElse(null);
     }
 
+    public static Course findCourse(UUID id) {
+        return courses.stream()
+                .filter(course -> id.equals(course.getId()))
+                .findAny()
+                .orElse(null);
+    }
+
     public static void printCourses(ArrayList<Course> courses) {
         if (courses.size() == 0) {
             System.out.println("Oh looks like there is no existing courses.");

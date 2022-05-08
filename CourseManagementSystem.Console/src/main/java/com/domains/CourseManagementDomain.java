@@ -118,7 +118,7 @@ public class CourseManagementDomain {
         Course newCourse = new Course(UUID.randomUUID(), courseName, availability, courseModules);
         Courses.addCourse(newCourse);
         System.out.println("Created new course:");
-        newCourse.printCourse(newCourse);
+        Course.printCourse(newCourse);
     }
 
     private static void editCourses() {

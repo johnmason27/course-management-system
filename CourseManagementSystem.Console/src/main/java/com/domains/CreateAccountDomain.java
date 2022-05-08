@@ -1,9 +1,7 @@
 package com.domains;
 
 import com.io.Input;
-import com.models.User;
-import com.models.UserType;
-import com.models.Users;
+import com.models.*;
 import com.security.StringHash;
 import com.security.StringValidator;
 import de.vandermeer.asciitable.AsciiTable;
@@ -169,7 +167,13 @@ public class CreateAccountDomain {
                 }
 
                 UUID id = UUID.randomUUID();
-                User newUser = new User(id, userType, forename, surname, email, username, hashedPassword, null);
+                UUID studentId = null;
+                if (userType == UserType.Student) {
+                    studentId = UUID.randomUUID();
+                    Student newStudent = new Student(studentId, null);
+                    Students.addStudent(newStudent);
+                }
+                User newUser = new User(id, userType, forename, surname, email, username, hashedPassword, studentId);
                 Users.addUser(newUser);
 
                 System.out.println("Account created.");

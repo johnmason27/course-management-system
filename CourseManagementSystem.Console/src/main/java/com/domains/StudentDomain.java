@@ -12,7 +12,7 @@ public class StudentDomain {
 
         while (true) {
             String option1;
-            if (Session.getUser().getEnrolledCourseId() == null) {
+            if (Session.student.getEnrolledCourseId() == null) {
                 option1 = "1 - View course list";
             } else {
                 option1 = "1 - View enrolled course";
@@ -31,7 +31,7 @@ public class StudentDomain {
             int option = Input.readInt();
 
             if (option == 1) {
-                if (Session.getUser().getEnrolledCourseId() == null) {
+                if (Session.student.getEnrolledCourseId() == null) {
                     StudentCourseListDomain.load();
                 } else {
                     StudentEnrolledDomain.load();
@@ -40,6 +40,7 @@ public class StudentDomain {
                 throw new NotImplementedException("");
             } else if (option == 3) {
                 Session.setUser(null);
+                Session.setStudent(null);
                 System.out.println("Logged out!");
                 break;
             } else {

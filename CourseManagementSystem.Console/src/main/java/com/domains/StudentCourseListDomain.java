@@ -3,7 +3,6 @@ package com.domains;
 import com.Session;
 import com.io.Input;
 import com.models.*;
-import com.models.Module;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -16,7 +15,7 @@ public class StudentCourseListDomain {
                 "2 - Go back"
         };
         while (true) {
-            if (Session.user.getEnrolledCourseId() != null) {
+            if (Session.student.getEnrolledCourseId() != null) {
                 System.err.println("Your already enrolled onto a course. Going back.");
                 break;
             }
@@ -31,13 +30,11 @@ public class StudentCourseListDomain {
                 System.out.println("Available courses:");
                 ArrayList<Course> availableCourses = Courses.getAvailableCourses();
                 if (availableCourses.size() == 0) {
-                    System.out.println("There are no courses you can enroll on. Going back.");
                     return;
                 }
                 Courses.printCourses(availableCourses);
                 while (true) {
-                    if (Session.user.getEnrolledCourseId() != null) {
-                        System.err.println("Your already enrolled onto a course. Going back.");
+                    if (Session.student.getEnrolledCourseId() != null) {
                         break;
                     }
                     String[] availableCoursesOptions = {
@@ -80,9 +77,9 @@ public class StudentCourseListDomain {
                                     int confirmOption = Input.readInt();
 
                                     if (confirmOption == 1) {
-                                        User activeUser = Session.getUser();
-                                        activeUser.setEnrolledCourseId(existingCourse.getId());
-                                        Users.updateUser(activeUser);
+                                        Student activeStudent = Session.getStudent();
+                                        activeStudent.setEnrolledCourseId(existingCourse.getId());
+                                        Students.updateStudent(activeStudent);
                                         System.out.printf("Enrolled onto course: '%s'.%n", existingCourse.getName());
                                         break;
                                     } else if (confirmOption == 2) {

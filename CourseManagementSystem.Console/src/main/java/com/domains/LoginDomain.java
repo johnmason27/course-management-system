@@ -2,6 +2,7 @@ package com.domains;
 
 import com.Session;
 import com.io.Input;
+import com.models.Students;
 import com.models.User;
 import com.models.UserType;
 import com.models.Users;
@@ -50,6 +51,7 @@ public class LoginDomain {
         Session.setUser(userToLogin);
 
         if (userToLogin.getUserType() == UserType.Student) {
+            Session.setStudent(Students.getStudent(userToLogin.getStudentId()));
             StudentDomain.load();
         } else if (userToLogin.getUserType() == UserType.Instructor) {
             InstructorDomain.load();

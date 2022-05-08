@@ -88,7 +88,7 @@ public class Course {
         }
     }
 
-    public void printCourse(Course course) {
+    public static void printCourse(Course course) {
         AsciiTable coursesTable = new AsciiTable();
 
         coursesTable.addRule();
