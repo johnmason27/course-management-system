@@ -123,11 +123,334 @@ public class CourseManagementDomain {
     }
 
     private static void editCourses() {
+        ArrayList<Course> existingCourses = Courses.getCourses();
+        if (existingCourses.size() == 0) {
+            System.out.println("No courses to edit.");
+            return;
+        }
 
+        System.out.println("Before you decide to edit a course here are the existing courses.");
+        printCourses();
+
+        while (true) {
+            String[] options = {
+                    "1 - Edit a course",
+                    "2 - Go back"
+            };
+            for (String option :
+                    options) {
+                System.out.println(option);
+            }
+            System.out.println("What would you like to do?");
+            int option = Input.readInt();
+
+            if (option == 1) {
+//              Edit course
+                    System.out.println("Enter the id of the course to edit:");
+                    String id = Input.readString();
+                    UUID guidId;
+
+                    try {
+                        guidId = UUID.fromString(id);
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Invalid Id, enter another.");
+                        continue;
+                    }
+
+                    Course existingCourse = existingCourses.stream().filter(c -> c.getId().equals(guidId)).findAny().orElse(null);
+
+                    if (existingCourse == null) {
+                        System.err.println("Course does not exist. Enter another id.");
+                    } else {
+                        System.out.println("Found course to edit.");
+                        String[] editOptions = {
+                                "1 - Edit Name",
+                                "2 - Edit Availability",
+                                "3 - Edit Modules",
+                                "4 - Go back"
+                        };
+                        for (String editOption :
+                                editOptions) {
+                            System.out.println(editOption);
+                        }
+                        System.out.println("What would you like to do?");
+                        int editOption = Input.readInt();
+
+                        if (editOption == 1) {
+//                      Edit name
+                            System.out.printf("Existing name is '%s' enter new name:%n", existingCourse.getName());
+                            String newName = Input.readString();
+
+                            if (newName.length() == 0) {
+                                System.err.println("Name cannot be blank.");
+                            } else if (existingCourses.stream().filter(c -> c.getName().equals(newName)).findAny().orElse(null) != null) {
+                                System.err.println("Course already exists with that name, enter another.");
+                            } else {
+                                existingCourse.setName(newName);
+                                Courses.updateCourse(existingCourse);
+                                System.out.printf("Name changed to: '%s'.%n", newName);
+                            }
+                        } else if (editOption == 2) {
+//                      Edit availability
+                            System.out.printf("Existing availability is '%s'.%n", existingCourse.getAvailability() ? "Available" : "Unavailable");
+                            String[] availabilityOptions = {
+                                    "1 - Set to available",
+                                    "2 - Set to unavailable",
+                                    "3 - Go back"
+                            };
+                            for (String availabilityOption :
+                                    availabilityOptions) {
+                                System.out.println(availabilityOption);
+                            }
+                            System.out.println("What would you like to do?");
+                            int availabilityOption = Input.readInt();
+
+                            if (availabilityOption == 1) {
+                                existingCourse.setAvailability(true);
+                                Courses.updateCourse(existingCourse);
+                                System.out.println("Course availability set to available.");
+                                break;
+                            } else if (availabilityOption == 2) {
+                                existingCourse.setAvailability(false);
+                                Courses.updateCourse(existingCourse);
+                                System.out.println("Course availability set to unavailable.");
+                                break;
+                            } else if (availabilityOption == 3) {
+                                System.out.println("Going back...");
+                                break;
+                            } else {
+                                System.err.println("Enter valid option.");
+                            }
+                        } else if (editOption == 3) {
+//                      Edit modules
+                        ArrayList<Module> existingModules = existingCourse.getModules();
+                        if (existingModules.size() == 0) {
+                            System.out.println("No existing modules to edit.");
+                            while (true) {
+                                String[] addModuleOptions = {
+                                        "1 - Add",
+                                        "2 - Go back..."
+                                };
+                                for (String addModuleOption :
+                                        addModuleOptions) {
+                                    System.out.println(addModuleOption);
+                                }
+                                System.out.println("Would you like to add a new module?");
+                                int addModuleOption = Input.readInt();
+
+                                if (addModuleOption == 1) {
+                                    addModule(existingModules);
+                                    Courses.updateCourse(existingCourse);
+                                    break;
+                                } else if (addModuleOption == 2) {
+                                    System.out.println("Going back...");
+                                    break;
+                                } else {
+                                    System.err.println("Enter a valid option.");
+                                }
+                            }
+                            return;
+                        }
+
+                        System.out.println("Existing modules:");
+                        printModules(existingModules);
+                        while (true) {
+                            String[] chooseModuleOptions = {
+                                    "1 - Choose module",
+                                    "2 - Go back"
+                            };
+                            for (String chooseModuleOption :
+                                    chooseModuleOptions) {
+                                System.out.println(chooseModuleOption);
+                            }
+                            System.out.println("What do you want to do?");
+
+                            while (true) {
+                                int chooseModuleOption = Input.readInt();
+
+                                if (chooseModuleOption == 1) {
+                                    System.out.println("Which module should we edit?");
+                                    String moduleId = Input.readString();
+                                    UUID moduleGuidId;
+
+                                    try {
+                                        moduleGuidId = UUID.fromString(moduleId);
+                                    } catch (IllegalArgumentException e) {
+                                        System.err.println("Invalid Id. Enter another.");
+                                        continue;
+                                    }
+
+                                    Module existingModule = existingModules.stream().filter(m -> m.getId().equals(moduleGuidId)).findAny().orElse(null);
+
+                                    if (existingModule == null) {
+                                        System.err.println("No module with that Id. Try another.");
+                                        return;
+                                    } else {
+                                        System.out.println("Module found.");
+                                    }
+
+                                    while (true) {
+                                        String[] editModuleOptions = {
+                                                "1 - Edit Name",
+                                                "2 - Edit Availability",
+                                                "3 - Edit Level",
+                                                "4 - Remove",
+                                                "5 - Go back"
+                                        };
+                                        for (String editModuleOption :
+                                                editModuleOptions) {
+                                            System.out.println(editModuleOption);
+                                        }
+                                        System.out.println("What would you like to do?");
+                                        int editModuleOption = Input.readInt();
+
+                                        if (editModuleOption == 1) {
+                                            System.out.printf("Existing name is '%s', enter new name:%n", existingModule.getName());
+                                            while (true) {
+                                                String newName = Input.readString();
+
+                                                if (newName.length() == 0) {
+                                                    System.err.println("Name cannot be blank.");
+                                                } else if (existingModules.stream().filter(m -> m.getName().equals(newName)).findAny().orElse(null) != null) {
+                                                    System.err.println("Module already exists with that name.");
+                                                } else {
+                                                    existingModule.setName(newName);
+                                                    existingCourse.updateModule(existingModule);
+                                                    Courses.updateCourse(existingCourse);
+                                                    break;
+                                                }
+                                            }
+                                        } else if (editModuleOption == 2) {
+                                            System.out.printf("Existing availability is %s:%n", existingModule.getAvailability() ? "Available" : "Unavailable");
+                                            while (true) {
+                                                String[] availabilityOptions = {
+                                                        "1 - Available",
+                                                        "2 - Unavailable",
+                                                        "3 - Go back"
+                                                };
+                                                for (String availabilityOption :
+                                                        availabilityOptions) {
+                                                    System.out.println(availabilityOption);
+                                                }
+                                                System.out.println("What do you want to set the availability to?");
+                                                int availabilityOption = Input.readInt();
+
+                                                if (availabilityOption == 1) {
+                                                    existingModule.setAvailability(true);
+                                                    existingCourse.updateModule(existingModule);
+                                                    Courses.updateCourse(existingCourse);
+                                                    break;
+                                                } else if (availabilityOption == 2) {
+                                                    existingModule.setAvailability(false);
+                                                    existingCourse.updateModule(existingModule);
+                                                    Courses.updateCourse(existingCourse);
+                                                    break;
+                                                } else if (availabilityOption == 3) {
+                                                    System.out.println("Going back...");
+                                                    break;
+                                                } else {
+                                                    System.err.println("Enter a valid option.");
+                                                }
+                                            }
+                                            break;
+                                        } else if (editModuleOption == 3) {
+                                            System.out.printf("Existing module is level %d, enter new level 4, 5 or 6:", existingModule.getLevel());
+                                            while (true) {
+                                                int level = Input.readInt();
+
+                                                if (level != 4 && level != 5 && level != 6) {
+                                                    System.err.println("Module level should be either 4, 5 or 6. Try again.");
+                                                } else {
+                                                    existingModule.setLevel(level);
+                                                    existingCourse.updateModule(existingModule);
+                                                    Courses.updateCourse(existingCourse);
+                                                    System.out.println("Module level updated.");
+                                                    break;
+                                                }
+                                            }
+                                        } else if (editModuleOption == 4) {
+                                            existingCourse.removeModule(existingModule);
+                                            Courses.updateCourse(existingCourse);
+                                            System.out.printf("Removed module: '%s' from course.%n", existingModule.getName());
+                                        } else if (editModuleOption == 5) {
+                                            System.out.println("Going back...");
+                                            break;
+                                        } else {
+                                            System.err.println("Enter a valid option.");
+                                        }
+                                    }
+                                } else if (chooseModuleOption == 2) {
+                                    System.out.println("Going back...");
+                                    break;
+                                } else {
+                                    System.err.println("Chose a valid option.");
+                                }
+                            }
+                        }
+                    } else {
+                        System.err.println("Enter a valid option.");
+                    }
+                }
+            } else if (option == 2) {
+//              Go back
+                System.out.println("Going back...");
+                break;
+            } else {
+                System.err.println("Enter a valid option.");
+            }
+        }
     }
 
     private static void deleteCourses() {
+        ArrayList<Course> existingCourses = Courses.getCourses();
+        if (existingCourses.size() == 0) {
+            System.out.println("No courses to delete");
+            return;
+        }
 
+        System.out.println("Existing courses:");
+        printCourses();
+        while (true) {
+            String[] options = {
+                    "1 - Delete Course",
+                    "2 - Go back"
+            };
+            for (String option :
+                    options) {
+                System.out.println(option);
+            }
+            System.out.println("What would you like to do?");
+            int option = Input.readInt();
+
+            if (option == 1) {
+                while (true) {
+                    System.out.println("Enter the id of the course to delete:");
+                    String id = Input.readString();
+                    UUID guidId;
+
+                    try {
+                        guidId = UUID.fromString(id);
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Invalid Id, enter another.");
+                        continue;
+                    }
+
+                    Course foundCourse = existingCourses.stream().filter(c -> c.getId().equals(guidId)).findAny().orElse(null);
+                    if (foundCourse == null) {
+                        System.err.println("No course with that Id, enter another.");
+                    } else {
+                        Courses.deleteCourse(foundCourse);
+                        System.out.println("Course deleted.");
+                        break;
+                    }
+                }
+            } else if (option == 2) {
+                System.out.println("Going back...");
+                break;
+            } else {
+                System.err.println("Enter a valid option.");
+            }
+        }
     }
 
     private static void printCourses() {

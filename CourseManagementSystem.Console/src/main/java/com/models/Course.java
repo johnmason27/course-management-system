@@ -63,6 +63,20 @@ public class Course {
                 .orElse(null);
     }
 
+    public void updateModule(Module module) {
+        int index = 0;
+        UUID moduleId = module.getId();
+
+        for (int i = 0; i < this.modules.size(); i ++) {
+            if (this.modules.get(i).getId().equals(moduleId)) {
+                index = i;
+                break;
+            }
+        }
+
+        this.modules.set(index, module);
+    }
+
     public void toggleModuleAvailability(UUID moduleId, boolean availability) {
         for (Module module : this.getModules()) {
             if (module.getId().equals(moduleId)) {
