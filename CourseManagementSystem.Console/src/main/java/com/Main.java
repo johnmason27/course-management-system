@@ -4,12 +4,14 @@ import com.domains.CreateAccountDomain;
 import com.domains.ForgotPasswordDomain;
 import com.domains.LoginDomain;
 import com.io.Input;
+import com.models.Courses;
 import com.models.Users;
 
 public class Main {
     public static void main(String[] args) {
         // Initialise utility classes
         new Users();
+        new Courses();
         //  -------------------------
         String[] options = {
                 "1 - Login",

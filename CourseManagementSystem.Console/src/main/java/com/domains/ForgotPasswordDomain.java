@@ -67,6 +67,6 @@ public class ForgotPasswordDomain {
         userToReset.setPassword(hashedPassword);
         Users.updateUser(userToReset);
 
-        System.out.printf("User %s password has been reset.%n", userToReset.getUsername());
+        System.out.printf("User %s password has been reset.%n", userToReset.getUsername());;
     }
 }
