@@ -10,8 +10,9 @@ public class User {
     private String email;
     private String username;
     private String password;
+    private UUID enrolledCourseId;
 
-    public User(UUID id, UserType userType, String forename, String surname, String email, String username, String password) {
+    public User(UUID id, UserType userType, String forename, String surname, String email, String username, String password, UUID enrolledCourseId) {
         this.id = id;
         this.userType = userType;
         this.forename = forename;
@@ -19,6 +20,7 @@ public class User {
         this.email = email;
         this.username = username;
         this.password = password;
+        this.enrolledCourseId = enrolledCourseId;
     }
 
     public UUID getId() {
@@ -75,5 +77,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public UUID getEnrolledCourseId() {
+        return this.enrolledCourseId;
+    }
+
+    public void setEnrolledCourseId(UUID id) {
+        this.enrolledCourseId = id;
     }
 }

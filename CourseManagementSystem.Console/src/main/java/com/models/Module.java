@@ -1,5 +1,7 @@
 package com.models;
 
+import de.vandermeer.asciitable.AsciiTable;
+
 import java.util.UUID;
 
 public class Module {
@@ -45,5 +47,17 @@ public class Module {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public void printModule(Module module) {
+        AsciiTable modulesTable = new AsciiTable();
+
+        modulesTable.addRule();
+        modulesTable.addRow("Id", "Name", "Level", "Availability");
+        modulesTable.addRule();
+        modulesTable.addRow(module.getId(), module.getName(), module.getLevel(), module.getAvailability() ? "Available" : "Unavailable");
+        modulesTable.addRule();
+
+        System.out.println(modulesTable.render());
     }
 }

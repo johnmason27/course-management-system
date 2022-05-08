@@ -4,6 +4,7 @@ import com.consts.FileNames;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.io.IOManager;
+import de.vandermeer.asciitable.AsciiTable;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -28,6 +29,19 @@ public class Courses {
 
     public static ArrayList<Course> getCourses() {
         return courses;
+    }
+
+    public static ArrayList<Course> getAvailableCourses() {
+        ArrayList<Course> availableCourses = new ArrayList<>();
+
+        for (Course course :
+                courses) {
+            if (course.getAvailability()) {
+                availableCourses.add(course);
+            }
+        }
+
+        return availableCourses;
     }
 
     public static void updateCourse(Course course) {
@@ -70,6 +84,46 @@ public class Courses {
                 .filter(course -> courseName.equals(course.getName()))
                 .findAny()
                 .orElse(null);
+    }
+
+    public static void printCourses(ArrayList<Course> courses) {
+        if (courses.size() == 0) {
+            System.out.println("Oh looks like there is no existing courses.");
+            return;
+        }
+
+        AsciiTable coursesTable = new AsciiTable();
+        coursesTable.addRule();
+        coursesTable.addRow("Id", "Name", "Availability");
+        coursesTable.addRule();
+
+        for (Course course :
+                courses) {
+            coursesTable.addRow(course.getId(), course.getName(), course.getAvailability() ? "Available" : "Unavailable");
+            coursesTable.addRule();
+        }
+
+        System.out.println(coursesTable.render());
+    }
+
+    public static void printModules(ArrayList<Module> modules) {
+        if (modules.size() == 0) {
+            System.out.println("There are no modules.");
+            return;
+        }
+
+        AsciiTable modulesTable = new AsciiTable();
+        modulesTable.addRule();
+        modulesTable.addRow("Id", "Name", "Level", "Availability");
+        modulesTable.addRule();
+
+        for (Module module :
+                modules) {
+            modulesTable.addRow(module.getId(), module.getName(), module.getLevel(), module.getAvailability() ? "Available" : "Unavailable");
+            modulesTable.addRule();
+        }
+
+        System.out.println(modulesTable.render());
     }
 
     private static void saveCourses() {

@@ -169,7 +169,7 @@ public class CreateAccountDomain {
                 }
 
                 UUID id = UUID.randomUUID();
-                User newUser = new User(id, userType, forename, surname, email, username, hashedPassword);
+                User newUser = new User(id, userType, forename, surname, email, username, hashedPassword, null);
                 Users.addUser(newUser);
 
                 System.out.println("Account created.");

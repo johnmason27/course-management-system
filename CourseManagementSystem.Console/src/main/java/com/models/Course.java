@@ -1,5 +1,7 @@
 package com.models;
 
+import de.vandermeer.asciitable.AsciiTable;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -84,5 +86,17 @@ public class Course {
                 break;
             }
         }
+    }
+
+    public void printCourse(Course course) {
+        AsciiTable coursesTable = new AsciiTable();
+
+        coursesTable.addRule();
+        coursesTable.addRow("Id", "Name", "Availability");
+        coursesTable.addRule();
+        coursesTable.addRow(course.getId(), course.getName(), course.getAvailability() ? "Available" : "Unavailable");
+        coursesTable.addRule();
+
+        System.out.println(coursesTable.render());
     }
 }

@@ -4,7 +4,6 @@ import com.io.Input;
 import com.models.Course;
 import com.models.Courses;
 import com.models.Module;
-import de.vandermeer.asciitable.AsciiTable;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -43,7 +42,7 @@ public class CourseManagementDomain {
 
     private static void addCourses() {
         System.out.println("Before you decide to add a course here are the existing courses.");
-        printCourses();
+        Courses.printCourses(Courses.getCourses());
         String courseName;
         ArrayList<Module> courseModules = new ArrayList<>();
         boolean availability;
@@ -84,7 +83,7 @@ public class CourseManagementDomain {
                 removeModule(courseModules);
             } else if (option == 4) {
                 System.out.println("Modules added are:");
-                printModules(courseModules);
+                Courses.printModules(courseModules);
                 break;
             } else {
                 System.err.println("Enter a valid option.");
@@ -119,7 +118,7 @@ public class CourseManagementDomain {
         Course newCourse = new Course(UUID.randomUUID(), courseName, availability, courseModules);
         Courses.addCourse(newCourse);
         System.out.println("Created new course:");
-        printCourse(newCourse);
+        newCourse.printCourse(newCourse);
     }
 
     private static void editCourses() {
@@ -130,7 +129,7 @@ public class CourseManagementDomain {
         }
 
         System.out.println("Before you decide to edit a course here are the existing courses.");
-        printCourses();
+        Courses.printCourses(existingCourses);
 
         while (true) {
             String[] options = {
@@ -253,7 +252,7 @@ public class CourseManagementDomain {
                         }
 
                         System.out.println("Existing modules:");
-                        printModules(existingModules);
+                        Courses.printModules(existingModules);
                         while (true) {
                             String[] chooseModuleOptions = {
                                     "1 - Choose module",
@@ -409,7 +408,7 @@ public class CourseManagementDomain {
         }
 
         System.out.println("Existing courses:");
-        printCourses();
+        Courses.printCourses(existingCourses);
         while (true) {
             String[] options = {
                     "1 - Delete Course",
@@ -451,71 +450,6 @@ public class CourseManagementDomain {
                 System.err.println("Enter a valid option.");
             }
         }
-    }
-
-    private static void printCourses() {
-        ArrayList<Course> existingCourses = Courses.getCourses();
-        if (existingCourses.size() == 0) {
-            System.out.println("Oh looks like there is no existing courses.");
-            return;
-        }
-
-        AsciiTable coursesTable = new AsciiTable();
-        coursesTable.addRule();
-        coursesTable.addRow("Id", "Name", "Availability");
-        coursesTable.addRule();
-
-        for (Course course :
-                existingCourses) {
-            coursesTable.addRow(course.getId(), course.getName(), course.getAvailability() ? "Available" : "Unavailable");
-            coursesTable.addRule();
-        }
-
-        System.out.println(coursesTable.render());
-    }
-
-    private static void printCourse(Course course) {
-        AsciiTable coursesTable = new AsciiTable();
-
-        coursesTable.addRule();
-        coursesTable.addRow("Id", "Name", "Availability");
-        coursesTable.addRule();
-        coursesTable.addRow(course.getId(), course.getName(), course.getAvailability() ? "Available" : "Unavailable");
-        coursesTable.addRule();
-
-        System.out.println(coursesTable.render());
-    }
-
-    private static void printModules(ArrayList<Module> modules) {
-        if (modules.size() == 0) {
-            System.out.println("There are no modules.");
-            return;
-        }
-
-        AsciiTable modulesTable = new AsciiTable();
-        modulesTable.addRule();
-        modulesTable.addRow("Id", "Name", "Level", "Availability");
-        modulesTable.addRule();
-
-        for (Module module :
-                modules) {
-            modulesTable.addRow(module.getId(), module.getName(), module.getLevel(), module.getAvailability() ? "Available" : "Unavailable");
-            modulesTable.addRule();
-        }
-
-        System.out.println(modulesTable.render());
-    }
-
-    private static void printModule(Module module) {
-        AsciiTable modulesTable = new AsciiTable();
-
-        modulesTable.addRule();
-        modulesTable.addRow("Id", "Name", "Level", "Availability");
-        modulesTable.addRule();
-        modulesTable.addRow(module.getId(), module.getName(), module.getLevel(), module.getAvailability() ? "Available" : "Unavailable");
-        modulesTable.addRule();
-
-        System.out.println(modulesTable.render());
     }
 
     private static void addModule(ArrayList<Module> modules) {
@@ -577,8 +511,7 @@ public class CourseManagementDomain {
 //      Add module
         Module newModule = new Module(UUID.randomUUID(), name, availability, level);
         modules.add(newModule);
-
-        printModule(newModule);
+        newModule.printModule(newModule);
         System.out.println("Module added.");
     }
 
@@ -590,7 +523,7 @@ public class CourseManagementDomain {
         }
 
         System.out.println("Existing Modules:");
-        printModules(modules);
+        Courses.printModules(modules);
 
         Module existingModule;
         while (true) {
@@ -708,7 +641,7 @@ public class CourseManagementDomain {
             return;
         }
 //      Get the module and delete
-        printModules(modules);
+        Courses.printModules(modules);
         while (true) {
             System.out.println("Which module should we remove?");
             String id = Input.readString();
@@ -726,7 +659,7 @@ public class CourseManagementDomain {
             if (existingModule != null) {
                 modules.remove(existingModule);
                 System.out.println("Module removed. Remaining modules are:");
-                printModules(modules);
+                Courses.printModules(modules);
                 break;
             } else {
                 System.err.println("Module cannot be found, enter another id.");
