@@ -509,7 +509,7 @@ public class CourseManagementDomain {
             }
         }
 //      Add module
-        Module newModule = new Module(UUID.randomUUID(), name, availability, level);
+        Module newModule = new Module(UUID.randomUUID(), name, availability, level, null);
         modules.add(newModule);
         newModule.printModule(newModule);
         System.out.println("Module added.");

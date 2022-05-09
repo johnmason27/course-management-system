@@ -12,8 +12,9 @@ public class CourseAdminDomain {
 
         String[] options = {
                 "1 - Manage Courses",
-                "2 - Print Student Report",
-                "3 - Logout"
+                "2 - Manage Instructors",
+                "3 - Print Student Report",
+                "4 - Logout"
         };
 
         while (true) {
@@ -27,8 +28,10 @@ public class CourseAdminDomain {
             if (option == 1) {
                 CourseManagementDomain.load();
             } else if (option == 2) {
-                throw new NotImplementedException("Print Student Report not programmed yet.");
+                InstructorManagementDomain.load();
             } else if (option == 3) {
+                throw new NotImplementedException("Print Student Report not programmed yet.");
+            } else if (option == 4) {
                 Session.setUser(null);
                 System.out.println("Logged out!");
                 break;

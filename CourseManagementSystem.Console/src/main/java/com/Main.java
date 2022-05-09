@@ -5,6 +5,7 @@ import com.domains.ForgotPasswordDomain;
 import com.domains.LoginDomain;
 import com.io.Input;
 import com.models.Courses;
+import com.models.Instructors;
 import com.models.Students;
 import com.models.Users;
 
@@ -14,6 +15,7 @@ public class Main {
         new Users();
         new Courses();
         new Students();
+        new Instructors();
         //  -------------------------
         String[] options = {
                 "1 - Login",

@@ -4,6 +4,7 @@ import com.consts.FileNames;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.io.IOManager;
+import de.vandermeer.asciitable.AsciiTable;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -52,10 +53,42 @@ public class Students {
         saveStudents();
     }
 
+    public static void printStudents(UUID moduleId) {
+        ArrayList<User> usersOnModule = new ArrayList<>();
+        for (Student student :
+                students) {
+            Course enrolledCourse = Courses.findCourse(student.getEnrolledCourseId());
+            ArrayList<Module> enrolledModules = enrolledCourse.getModules();
+            for (Module module :
+                    enrolledModules) {
+                if (module.getId().equals(moduleId)) {
+                    usersOnModule.add(Users.findStudent(student.getId()));
+                }
+            }
+        }
+
+        if (usersOnModule.size() == 0) {
+            System.out.println("Oh looks like there are no students on the module.");
+            return;
+        }
+
+        AsciiTable usersTable = new AsciiTable();
+        usersTable.addRule();
+        usersTable.addRow("Id", "Username");
+        usersTable.addRule();
+
+        for (User user :
+                usersOnModule) {
+            usersTable.addRow(user.getId(), user.getUsername());
+            usersTable.addRule();
+        }
+
+        System.out.println(usersTable.render());
+    }
+
     private static void saveStudents() {
         Gson gson = new Gson();
         String studentsJson = gson.toJson(students);
         ioManager.writeFile(FileNames.Students, studentsJson);
     }
 }
-

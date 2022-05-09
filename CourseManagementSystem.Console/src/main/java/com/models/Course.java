@@ -3,6 +3,7 @@ package com.models;
 import de.vandermeer.asciitable.AsciiTable;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class Course {
@@ -86,6 +87,20 @@ public class Course {
                 break;
             }
         }
+    }
+
+    public ArrayList<Module> getUnassignedModules() {
+        List<Module> availableModules = this.modules.stream()
+                .filter(module -> module.getAvailability() && module.getInstructor() == null).toList();
+
+        return new ArrayList<>(availableModules);
+    }
+
+    public ArrayList<Module> getAssignedModules() {
+        List<Module> availableModules = this.modules.stream()
+                .filter(module -> module.getAvailability() && module.getInstructor() != null).toList();
+
+        return new ArrayList<>(availableModules);
     }
 
     public static void printCourse(Course course) {

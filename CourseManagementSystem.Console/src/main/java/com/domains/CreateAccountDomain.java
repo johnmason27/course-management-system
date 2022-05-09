@@ -2,11 +2,13 @@ package com.domains;
 
 import com.io.Input;
 import com.models.*;
+import com.models.Module;
 import com.security.StringHash;
 import com.security.StringValidator;
 import de.vandermeer.asciitable.AsciiTable;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class CreateAccountDomain {
@@ -168,12 +170,17 @@ public class CreateAccountDomain {
 
                 UUID id = UUID.randomUUID();
                 UUID studentId = null;
+                UUID instructorId = null;
                 if (userType == UserType.Student) {
                     studentId = UUID.randomUUID();
                     Student newStudent = new Student(studentId, null, 4);
                     Students.addStudent(newStudent);
+                } else if (userType == UserType.Instructor) {
+                    instructorId = UUID.randomUUID();
+                    Instructor newInstructor = new Instructor(instructorId, new ArrayList<>());
+                    Instructors.addInstructor(newInstructor);
                 }
-                User newUser = new User(id, userType, forename, surname, email, username, hashedPassword, studentId);
+                User newUser = new User(id, userType, forename, surname, email, username, hashedPassword, studentId, instructorId);
                 Users.addUser(newUser);
 
                 System.out.println("Account created.");

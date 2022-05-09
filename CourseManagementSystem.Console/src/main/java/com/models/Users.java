@@ -8,6 +8,7 @@ import com.io.IOManager;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Users {
     private static IOManager ioManager;
@@ -48,6 +49,20 @@ public class Users {
     public static User findUser(String usernameEmail) {
         return users.stream()
                 .filter(user -> usernameEmail.equals(user.getUsername()) || usernameEmail.equals(user.getEmail()))
+                .findAny()
+                .orElse(null);
+    }
+
+    public static User findStudent(UUID studentId) {
+        return users.stream()
+                .filter(user -> user.getStudentId() != null && user.getStudentId().equals(studentId))
+                .findAny()
+                .orElse(null);
+    }
+
+    public static User findInstructor(UUID instructorId) {
+        return users.stream()
+                .filter(user -> user.getInstructorId() != null && user.getInstructorId().equals(instructorId))
                 .findAny()
                 .orElse(null);
     }

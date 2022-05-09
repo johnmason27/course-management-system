@@ -2,10 +2,7 @@ package com.domains;
 
 import com.Session;
 import com.io.Input;
-import com.models.Students;
-import com.models.User;
-import com.models.UserType;
-import com.models.Users;
+import com.models.*;
 import com.security.StringHash;
 
 import java.security.NoSuchAlgorithmException;
@@ -54,6 +51,7 @@ public class LoginDomain {
             Session.setStudent(Students.getStudent(userToLogin.getStudentId()));
             StudentDomain.load();
         } else if (userToLogin.getUserType() == UserType.Instructor) {
+            Session.setInstructor(Instructors.getInstructor(userToLogin.getInstructorId()));
             InstructorDomain.load();
         } else if (userToLogin.getUserType() == UserType.CourseAdmin) {
             CourseAdminDomain.load();

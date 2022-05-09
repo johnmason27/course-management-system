@@ -95,7 +95,7 @@ public class Courses {
 
     public static void printCourses(ArrayList<Course> courses) {
         if (courses.size() == 0) {
-            System.out.println("Oh looks like there is no existing courses.");
+            System.out.println("Oh looks like there is no courses.");
             return;
         }
 

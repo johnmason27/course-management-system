@@ -9,12 +9,14 @@ public class Module {
     private String name;
     private boolean availability;
     private int level;
+    private UUID instructor;
 
-    public Module(UUID id, String name, boolean availability, int level) {
+    public Module(UUID id, String name, boolean availability, int level, UUID instructor) {
         this.id = id;
         this.name = name;
         this.availability = availability;
         this.level = level;
+        this.instructor = instructor;
     }
 
     public UUID getId() {
@@ -59,5 +61,13 @@ public class Module {
         modulesTable.addRule();
 
         System.out.println(modulesTable.render());
+    }
+
+    public UUID getInstructor() {
+        return this.instructor;
+    }
+
+    public void setInstructor(UUID instructor) {
+        this.instructor = instructor;
     }
 }
