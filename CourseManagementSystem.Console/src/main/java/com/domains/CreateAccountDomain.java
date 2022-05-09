@@ -170,7 +170,7 @@ public class CreateAccountDomain {
                 UUID studentId = null;
                 if (userType == UserType.Student) {
                     studentId = UUID.randomUUID();
-                    Student newStudent = new Student(studentId, null);
+                    Student newStudent = new Student(studentId, null, 4);
                     Students.addStudent(newStudent);
                 }
                 User newUser = new User(id, userType, forename, surname, email, username, hashedPassword, studentId);
