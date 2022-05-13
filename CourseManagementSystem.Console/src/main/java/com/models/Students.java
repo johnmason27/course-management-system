@@ -55,15 +55,9 @@ public class Students {
 
     public static void printStudents(UUID moduleId) {
         ArrayList<User> usersOnModule = new ArrayList<>();
-        for (Student student :
-                students) {
-            Course enrolledCourse = Courses.findCourse(student.getEnrolledCourseId());
-            ArrayList<Module> enrolledModules = enrolledCourse.getModules();
-            for (Module module :
-                    enrolledModules) {
-                if (module.getId().equals(moduleId)) {
-                    usersOnModule.add(Users.findStudent(student.getId()));
-                }
+        for (Student student : students) {
+            if (student.getEnrolledModules().stream().filter(m -> m.equals(moduleId)).findAny().orElse(null) != null) {
+                usersOnModule.add(Users.findStudent(student.getId()));
             }
         }
 
