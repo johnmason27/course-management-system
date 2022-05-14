@@ -1,5 +1,7 @@
 package com.models;
 
+import de.vandermeer.asciitable.AsciiTable;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -62,7 +64,34 @@ public class Student {
     }
 
     public void printEnrolledModules() {
-        
+        Course enrolledCourse = Courses.findCourse(this.enrolledCourseId);
+        ArrayList<Module> courseModules = enrolledCourse.getModules();
+        ArrayList<Module> enrolledModules = new ArrayList<>();
+        for (UUID moduleID: this.getEnrolledModules()) {
+            for (Module module: courseModules) {
+                if (module.getId().equals(moduleID)) {
+                    enrolledModules.add(module);
+                }
+            }
+        }
+
+        if (enrolledModules.size() == 0) {
+            System.out.println("Oops there are no enrolled modules!");
+            return;
+        }
+
+        AsciiTable moduleTable = new AsciiTable();
+        moduleTable.addRule();
+        moduleTable.addRow("Id", "Name", "Level", "Instructor");
+        moduleTable.addRule();
+
+        for (Module module: enrolledModules) {
+            User moduleInstructor = Users.findInstructor(module.getInstructor());
+            moduleTable.addRow(module.getId(), module.getName(), module.getLevel(), moduleInstructor.getUsername());
+            moduleTable.addRule();
+        }
+
+        System.out.println(moduleTable.render());
     }
 
     public ArrayList<UUID> getCompletedModules() {

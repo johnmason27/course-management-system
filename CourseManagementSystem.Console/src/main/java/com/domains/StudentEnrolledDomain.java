@@ -30,6 +30,7 @@ public class StudentEnrolledDomain {
             Student activeStudent = Session.getStudent();
 
             if (option == 1) {
+                System.out.println("Your enrolled modules are:");
                 activeStudent.printEnrolledModules();
                 break;
             } else if (option == 2) {
@@ -37,7 +38,7 @@ public class StudentEnrolledDomain {
                 System.out.printf("You are currently level %d, printing modules for your level or previous levels.%n", studentLevel);
 
                 List<Module> availableLevelModules = enrolledCourse.getModules().stream()
-                        .filter(m -> m.getLevel() <= studentLevel).toList();
+                        .filter(m -> m.getLevel() <= studentLevel && m.getAvailability()).toList();
                 ArrayList<Module> availableModules = new ArrayList<>(availableLevelModules);
 
                 for (Module availableLevelModule : availableLevelModules) {
