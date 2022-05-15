@@ -37,7 +37,7 @@ public class StudentDomain {
                     StudentEnrolledDomain.load();
                 }
             } else if (option == 2) {
-                throw new NotImplementedException("");
+                StudentGradeDomain.load();
             } else if (option == 3) {
                 Session.setStudent(null);
                 System.out.println("Logged out!");

@@ -47,6 +47,23 @@ public class Student extends User implements IStudent {
         return this.enrolledModules;
     }
 
+    public ArrayList<Module> getEnrolledModulesWithDetails() {
+        CourseLoader courseLoader = new CourseLoader();
+        Course enrolledCourse = courseLoader.find(this.enrolledCourseId);
+        ArrayList<Module> courseModules = enrolledCourse.getModules();
+        ArrayList<Module> enrolledModules = new ArrayList<>();
+
+        for (UUID moduleID: this.getEnrolledModules()) {
+            for (Module module: courseModules) {
+                if (module.getId().equals(moduleID)) {
+                    enrolledModules.add(module);
+                }
+            }
+        }
+
+        return enrolledModules;
+    }
+
     public void setEnrolledModules(ArrayList<UUID> enrolledModules) {
         this.enrolledModules = enrolledModules;
     }
@@ -60,18 +77,8 @@ public class Student extends User implements IStudent {
     }
 
     public void printEnrolledModules() {
-        CourseLoader courseLoader = new CourseLoader();
         InstructorLoader instructorLoader = new InstructorLoader();
-        Course enrolledCourse = courseLoader.find(this.enrolledCourseId);
-        ArrayList<Module> courseModules = enrolledCourse.getModules();
-        ArrayList<Module> enrolledModules = new ArrayList<>();
-        for (UUID moduleID: this.getEnrolledModules()) {
-            for (Module module: courseModules) {
-                if (module.getId().equals(moduleID)) {
-                    enrolledModules.add(module);
-                }
-            }
-        }
+        ArrayList<Module> enrolledModules = this.getEnrolledModulesWithDetails();
 
         if (enrolledModules.size() == 0) {
             System.out.println("Oops there are no enrolled modules!");
