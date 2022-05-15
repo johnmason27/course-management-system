@@ -1,5 +1,7 @@
 package com.models.interfaces;
 
+import com.models.Grade;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -14,4 +16,7 @@ public interface IStudent {
     void printEnrolledModules();
     ArrayList<UUID> getCompletedModules();
     void setCompletedModules(ArrayList<UUID> completedModules);
+    ArrayList<Grade> getGrades();
+    void setGrades(ArrayList<Grade> grades);
+    void addGrade(Grade grade);
 }

@@ -13,13 +13,15 @@ public class Student extends User implements IStudent {
     private int level;
     private ArrayList<UUID> enrolledModules;
     private ArrayList<UUID> completedModules;
+    private ArrayList<Grade> grades;
 
-    public Student(UUID id, UserType userType, String forename, String surname, String email, String username, String password, UUID enrolledCourseId, int level, ArrayList<UUID> enrolledModules, ArrayList<UUID> completedModules) {
+    public Student(UUID id, UserType userType, String forename, String surname, String email, String username, String password, UUID enrolledCourseId, int level, ArrayList<UUID> enrolledModules, ArrayList<UUID> completedModules, ArrayList<Grade> grades) {
         super(id, userType, forename, surname, email, username, password);
         this.enrolledCourseId = enrolledCourseId;
         this.level = level;
         this.enrolledModules = enrolledModules;
         this.completedModules = completedModules;
+        this.grades = grades;
     }
 
     public UUID getEnrolledCourseId() {
@@ -96,5 +98,17 @@ public class Student extends User implements IStudent {
 
     public void setCompletedModules(ArrayList<UUID> completedModules) {
         this.completedModules = completedModules;
+    }
+
+    public ArrayList<Grade> getGrades() {
+        return this.grades;
+    }
+
+    public void setGrades(ArrayList<Grade> grades) {
+        this.grades = grades;
+    }
+
+    public void addGrade(Grade grade) {
+        this.grades.add(grade);
     }
 }

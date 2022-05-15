@@ -10,15 +10,7 @@ import java.util.UUID;
 public class StudentPrinter {
     private static final StudentLoader studentLoader = new StudentLoader();
     public static void printStudentsOnModule(UUID id) {
-        ArrayList<Student> studentsOnModule = new ArrayList<>();
-        for (Student student : studentLoader.loadAll()) {
-            if (student.getEnrolledModules().stream()
-                    .filter(m -> m.equals(id))
-                    .findAny()
-                    .orElse(null) != null) {
-                studentsOnModule.add(student);
-            }
-        }
+        ArrayList<Student> studentsOnModule = studentLoader.loadFromModule(id);
 
         if (studentsOnModule.size() == 0) {
             System.out.println("Oh looks like there are no students on the module.");

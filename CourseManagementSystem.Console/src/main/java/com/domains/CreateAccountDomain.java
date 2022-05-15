@@ -199,7 +199,7 @@ public class CreateAccountDomain {
 
                 UUID id = UUID.randomUUID();
                 if (userType == UserType.Student) {
-                    Student newStudent = new Student(id, userType, forename, surname, email, username, hashedPassword, null, 4, new ArrayList<>(), new ArrayList<>());
+                    Student newStudent = new Student(id, userType, forename, surname, email, username, hashedPassword, null, 4, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
                     studentEditor.add(newStudent);
                 } else if (userType == UserType.Instructor) {
                     Instructor newInstructor = new Instructor(id, userType, forename, surname, email, username, hashedPassword, new ArrayList<>());

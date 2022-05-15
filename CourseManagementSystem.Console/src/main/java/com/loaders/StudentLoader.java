@@ -26,6 +26,21 @@ public class StudentLoader implements ILoader<Student> {
         return students;
     }
 
+    public ArrayList<Student> loadFromModule(UUID moduleId) {
+        ArrayList<Student> studentsOnModule = new ArrayList<>();
+
+        for (Student student : this.loadAll()) {
+            if (student.getEnrolledModules().stream()
+                    .filter(m -> m.equals(moduleId))
+                    .findAny()
+                    .orElse(null) != null) {
+                studentsOnModule.add(student);
+            }
+        }
+
+        return studentsOnModule;
+    }
+
     public Student find(String nameEmail) {
         return this.loadAll().stream()
                 .filter(s -> s.getUsername().equals(nameEmail) || s.getEmail().equals(nameEmail))
