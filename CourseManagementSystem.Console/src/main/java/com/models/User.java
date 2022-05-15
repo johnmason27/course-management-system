@@ -1,8 +1,10 @@
 package com.models;
 
+import com.models.interfaces.IUser;
+
 import java.util.UUID;
 
-public class User {
+public class User implements IUser {
     private UUID id;
     private UserType userType;
     private String forename;
@@ -10,10 +12,8 @@ public class User {
     private String email;
     private String username;
     private String password;
-    private UUID studentId;
-    private UUID instructorId;
 
-    public User(UUID id, UserType userType, String forename, String surname, String email, String username, String password, UUID studentId, UUID instructorId) {
+    public User(UUID id, UserType userType, String forename, String surname, String email, String username, String password) {
         this.id = id;
         this.userType = userType;
         this.forename = forename;
@@ -21,8 +21,6 @@ public class User {
         this.email = email;
         this.username = username;
         this.password = password;
-        this.studentId = studentId;
-        this.instructorId = instructorId;
     }
 
     public UUID getId() {
@@ -79,21 +77,5 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public UUID getStudentId() {
-        return this.studentId;
-    }
-
-    public void setStudentId(UUID studentId) {
-        this.studentId = studentId;
-    }
-
-    public UUID getInstructorId() {
-        return this.instructorId;
-    }
-
-    public void setInstructorId(UUID instructorId) {
-        this.instructorId = instructorId;
     }
 }

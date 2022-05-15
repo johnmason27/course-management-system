@@ -1,8 +1,13 @@
 package com.domains;
 
+import com.editors.AdminEditor;
+import com.editors.InstructorEditor;
+import com.editors.StudentEditor;
 import com.io.Input;
+import com.loaders.AdminLoader;
+import com.loaders.InstructorLoader;
+import com.loaders.StudentLoader;
 import com.models.*;
-import com.models.Module;
 import com.security.StringHash;
 import com.security.StringValidator;
 import de.vandermeer.asciitable.AsciiTable;
@@ -12,6 +17,12 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class CreateAccountDomain {
+    private static final StudentLoader studentLoader = new StudentLoader();
+    private static final InstructorLoader instructorLoader = new InstructorLoader();
+    private static final AdminLoader adminLoader = new AdminLoader();
+    private static final StudentEditor studentEditor = new StudentEditor();
+    private static final InstructorEditor instructorEditor = new InstructorEditor();
+    private static final AdminEditor adminEditor = new AdminEditor();
     public static void load() {
         System.out.println("Create Account Form!");
         System.out.println("Please fill in the following fields:");
@@ -46,7 +57,7 @@ public class CreateAccountDomain {
                 userType = UserType.Instructor;
                 break;
             } else if (userTypeInput == 3) {
-                userType = UserType.CourseAdmin;
+                userType = UserType.Admin;
                 break;
             } else {
                 System.err.println("Enter a valid option.");
@@ -87,11 +98,20 @@ public class CreateAccountDomain {
             System.out.println("Username:");
             username = Input.readString();
 
+            User user;
+            if (userType == UserType.Student) {
+                user = studentLoader.find(username);
+            } else if (userType == UserType.Instructor) {
+                user = instructorLoader.find(username);
+            } else {
+                user = adminLoader.find(username);
+            }
+
             if (username.length() == 0) {
                 System.err.println("Username cannot be blank.");
             } else if (username.contains(" ")) {
                 System.err.println("Username cannot contain whitespace.");
-            } else if (Users.findUser(username) != null) {
+            } else if (user != null) {
                 System.err.println("Username already taken, please enter another.");
             } else {
                 System.out.println("Username set.");
@@ -103,13 +123,22 @@ public class CreateAccountDomain {
             System.out.println("Email:");
             email = Input.readString();
 
+            User user;
+            if (userType == UserType.Student) {
+                user = studentLoader.find(email);
+            } else if (userType == UserType.Instructor) {
+                user = instructorLoader.find(email);
+            } else {
+                user = adminLoader.find(email);
+            }
+
             if (email.length() == 0) {
                 System.err.println("Email cannot be blank.");
             } else if (email.contains(" ")) {
                 System.err.println("Email cannot contain whitespace.");
             } else if (!StringValidator.isValidEmail(email)) {
                 System.err.println("Email entered is invalid, please enter another.");
-            } else if (Users.findUser(email) != null) {
+            } else if (user != null) {
                 System.err.println("Account already exists with this email, please enter another.");
             } else {
                 System.out.println("Email set.");
@@ -169,19 +198,16 @@ public class CreateAccountDomain {
                 }
 
                 UUID id = UUID.randomUUID();
-                UUID studentId = null;
-                UUID instructorId = null;
                 if (userType == UserType.Student) {
-                    studentId = UUID.randomUUID();
-                    Student newStudent = new Student(studentId, null, 4, null, null);
-                    Students.addStudent(newStudent);
+                    Student newStudent = new Student(id, userType, forename, surname, email, username, hashedPassword, null, 4, new ArrayList<>(), new ArrayList<>());
+                    studentEditor.add(newStudent);
                 } else if (userType == UserType.Instructor) {
-                    instructorId = UUID.randomUUID();
-                    Instructor newInstructor = new Instructor(instructorId, new ArrayList<>());
-                    Instructors.addInstructor(newInstructor);
+                    Instructor newInstructor = new Instructor(id, userType, forename, surname, email, username, hashedPassword, new ArrayList<>());
+                    instructorEditor.add(newInstructor);
+                } else {
+                    Admin newAdmin = new Admin(id, userType, forename, surname, email, username, hashedPassword);
+                    adminEditor.add(newAdmin);
                 }
-                User newUser = new User(id, userType, forename, surname, email, username, hashedPassword, studentId, instructorId);
-                Users.addUser(newUser);
 
                 System.out.println("Account created.");
                 AsciiTable consoleTable = new AsciiTable();

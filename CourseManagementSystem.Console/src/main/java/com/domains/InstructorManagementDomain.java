@@ -1,13 +1,24 @@
 package com.domains;
 
+import com.editors.CourseEditor;
+import com.editors.InstructorEditor;
 import com.io.Input;
+import com.loaders.CourseLoader;
+import com.loaders.InstructorLoader;
 import com.models.*;
 import com.models.Module;
+import com.printers.CoursePrinter;
+import com.printers.InstructorPrinter;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
 public class InstructorManagementDomain {
+    private static final InstructorLoader instructorLoader = new InstructorLoader();
+    private static final InstructorEditor instructorEditor = new InstructorEditor();
+    private static final CourseLoader courseLoader = new CourseLoader();
+    private static final CourseEditor courseEditor = new CourseEditor();
+
     public static void load() {
         System.out.println("Here you can manage your instructors by adding/removing them onto modules to teach");
 
@@ -17,8 +28,7 @@ public class InstructorManagementDomain {
                     "2 - Remove instructor from module",
                     "3 - Go back"
             };
-            for (String option :
-                    options) {
+            for (String option : options) {
                 System.out.println(option);
             }
             System.out.println("What would you like to do?");
@@ -29,13 +39,13 @@ public class InstructorManagementDomain {
                 ArrayList<Module> availableModules = chosenCourse.getUnassignedModules();
                 Module chosenModule = chooseModule(availableModules, "Enter the id of the module to assign somebody too?");
 
-                ArrayList<Instructor> availableInstructors = Instructors.getAvailableInstructors();
+                ArrayList<Instructor> availableInstructors = instructorLoader.findAvailable();
                 Instructor chosenInstructor = chooseInstructor(availableInstructors);
 
                 chosenModule.setInstructor(chosenInstructor.getId());
                 chosenInstructor.addAssignedModule(chosenModule.getId());
-                Instructors.updateInstructor(chosenInstructor);
-                Courses.updateCourse(chosenCourse);
+                instructorEditor.update(chosenInstructor);
+                courseEditor.update(chosenCourse);
                 System.out.printf("Added your chosen instructor onto the module: %s.%n", chosenModule.getName());
                 break;
             } else if (option == 2) {
@@ -49,11 +59,11 @@ public class InstructorManagementDomain {
                 Module chosenModule = chooseModule(availableModules, "Enter the id of the module to remove the instructor?");
 
                 UUID instructorId = chosenModule.getInstructor();
-                Instructor moduleInstructor = Instructors.getInstructor(instructorId);
+                Instructor moduleInstructor = instructorLoader.find(instructorId);
                 moduleInstructor.removeAssignedModule(chosenModule.getId());
                 chosenModule.setInstructor(null);
-                Courses.updateCourse(chosenCourse);
-                Instructors.updateInstructor(moduleInstructor);
+                courseEditor.update(chosenCourse);
+                instructorEditor.update(moduleInstructor);
                 System.out.printf("Removed the chosen instructor from the module: %s.%n", chosenModule.getName());
                 break;
             } else if (option == 3) {
@@ -67,8 +77,8 @@ public class InstructorManagementDomain {
 
     private static Course chooseCourse(String choiceMessage) {
         while (true) {
-            ArrayList<Course> availableCourses = Courses.getAvailableCourses();
-            Courses.printCourses(availableCourses);
+            ArrayList<Course> availableCourses = courseLoader.findAvailable();
+            CoursePrinter.printCourses(availableCourses);
             System.out.println(choiceMessage);
 
             String choice = Input.readString();
@@ -82,7 +92,7 @@ public class InstructorManagementDomain {
             }
 
             Course foundCourse = availableCourses.stream()
-                    .filter(course -> course.getId().equals(convertedId))
+                    .filter(c -> c.getId().equals(convertedId))
                     .findAny()
                     .orElse(null);
 
@@ -97,7 +107,7 @@ public class InstructorManagementDomain {
 
     private static Module chooseModule(ArrayList<Module> availableModules, String choiceMessage) {
         while (true) {
-            Courses.printModules(availableModules);
+            CoursePrinter.printModules(availableModules);
             System.out.println(choiceMessage);
 
             String choice = Input.readString();
@@ -111,7 +121,7 @@ public class InstructorManagementDomain {
             }
 
             Module foundModule = availableModules.stream()
-                    .filter(module -> module.getId().equals(convertedId))
+                    .filter(m -> m.getId().equals(convertedId))
                     .findAny()
                     .orElse(null);
 
@@ -126,7 +136,7 @@ public class InstructorManagementDomain {
 
     private static Instructor chooseInstructor(ArrayList<Instructor> instructors) {
         while (true) {
-            Instructors.printInstructors(instructors);
+            InstructorPrinter.printInstructors(instructors);
             System.out.println("Enter the id of the instructor to add to the module?");
 
             String choice = Input.readString();
@@ -140,7 +150,7 @@ public class InstructorManagementDomain {
             }
 
             Instructor foundInstructor = instructors.stream()
-                    .filter(instructor -> instructor.getId().equals(convertedId))
+                    .filter(i -> i.getId().equals(convertedId))
                     .findAny()
                     .orElse(null);
 

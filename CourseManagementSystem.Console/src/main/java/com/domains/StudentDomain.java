@@ -2,12 +2,12 @@ package com.domains;
 
 import com.Session;
 import com.io.Input;
-import com.models.User;
+import com.models.Student;
 import org.apache.commons.lang3.NotImplementedException;
 
 public class StudentDomain {
     public static void load() {
-        User currentUser = Session.getUser();
+        Student currentUser = Session.getStudent();
         System.out.printf("Welcome back %s%n", currentUser.getUsername());
 
         while (true) {
@@ -39,7 +39,6 @@ public class StudentDomain {
             } else if (option == 2) {
                 throw new NotImplementedException("");
             } else if (option == 3) {
-                Session.setUser(null);
                 Session.setStudent(null);
                 System.out.println("Logged out!");
                 break;

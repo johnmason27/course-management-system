@@ -1,7 +1,5 @@
 package com.models;
 
-import de.vandermeer.asciitable.AsciiTable;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -61,7 +59,7 @@ public class Course {
 
     public Module findModule(Module module) {
         return this.modules.stream()
-                .filter(m -> module.getName().equals(m.getName()))
+                .filter(m -> m.getName().equals(module.getName()))
                 .findAny()
                 .orElse(null);
     }
@@ -91,27 +89,17 @@ public class Course {
 
     public ArrayList<Module> getUnassignedModules() {
         List<Module> availableModules = this.modules.stream()
-                .filter(module -> module.getAvailability() && module.getInstructor() == null).toList();
+                .filter(m -> m.getAvailability() && m.getInstructor() == null)
+                .toList();
 
         return new ArrayList<>(availableModules);
     }
 
     public ArrayList<Module> getAssignedModules() {
         List<Module> availableModules = this.modules.stream()
-                .filter(module -> module.getAvailability() && module.getInstructor() != null).toList();
+                .filter(m -> m.getAvailability() && m.getInstructor() != null)
+                .toList();
 
         return new ArrayList<>(availableModules);
-    }
-
-    public static void printCourse(Course course) {
-        AsciiTable coursesTable = new AsciiTable();
-
-        coursesTable.addRule();
-        coursesTable.addRow("Id", "Name", "Availability");
-        coursesTable.addRule();
-        coursesTable.addRow(course.getId(), course.getName(), course.getAvailability() ? "Available" : "Unavailable");
-        coursesTable.addRule();
-
-        System.out.println(coursesTable.render());
     }
 }

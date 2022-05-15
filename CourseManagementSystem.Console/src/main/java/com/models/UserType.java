@@ -6,7 +6,7 @@ public enum UserType {
     @SerializedName("0")
     Student,
     @SerializedName("1")
-    CourseAdmin,
+    Admin,
     @SerializedName("2")
     Instructor
 }

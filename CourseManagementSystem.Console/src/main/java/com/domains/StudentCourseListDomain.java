@@ -1,13 +1,19 @@
 package com.domains;
 
 import com.Session;
+import com.editors.StudentEditor;
 import com.io.Input;
+import com.loaders.CourseLoader;
 import com.models.*;
+import com.printers.CoursePrinter;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
 public class StudentCourseListDomain {
+    private static final CourseLoader courseLoader = new CourseLoader();
+    private static final StudentEditor studentEditor = new StudentEditor();
+
     public static void load() {
         System.out.println("Welcome, here you can enroll onto courses.");
         String[] options = {
@@ -19,8 +25,7 @@ public class StudentCourseListDomain {
                 System.err.println("Your already enrolled onto a course. Going back.");
                 break;
             }
-            for (String option :
-                    options) {
+            for (String option : options) {
                 System.out.println(option);
             }
             System.out.println("What would you like to do?");
@@ -28,11 +33,11 @@ public class StudentCourseListDomain {
 
             if (option == 1) {
                 System.out.println("Available courses:");
-                ArrayList<Course> availableCourses = Courses.getAvailableCourses();
+                ArrayList<Course> availableCourses = courseLoader.findAvailable();
                 if (availableCourses.size() == 0) {
                     return;
                 }
-                Courses.printCourses(availableCourses);
+                CoursePrinter.printCourses(availableCourses);
                 while (true) {
                     if (Session.student.getEnrolledCourseId() != null) {
                         break;
@@ -41,8 +46,7 @@ public class StudentCourseListDomain {
                             "1 - Enroll onto a course",
                             "2 - Go back"
                     };
-                    for (String availableCoursesOption :
-                         availableCoursesOptions) {
+                    for (String availableCoursesOption : availableCoursesOptions) {
                         System.out.println(availableCoursesOption);
                     }
                     System.out.println("What would you like to do?");
@@ -61,7 +65,10 @@ public class StudentCourseListDomain {
                                 continue;
                             }
 
-                            Course existingCourse = availableCourses.stream().filter(c -> c.getId().equals(guidId)).findAny().orElse(null);
+                            Course existingCourse = availableCourses.stream()
+                                    .filter(c -> c.getId().equals(guidId))
+                                    .findAny()
+                                    .orElse(null);
 
                             if (existingCourse != null) {
                                 while (true) {
@@ -69,8 +76,7 @@ public class StudentCourseListDomain {
                                             "1 - Yes",
                                             "2 - No"
                                     };
-                                    for (String confirmOption :
-                                            confirmOptions) {
+                                    for (String confirmOption : confirmOptions) {
                                         System.out.println(confirmOption);
                                     }
                                     System.out.printf("Are you sure you want to enroll on the course: '%s'?%n", existingCourse.getName());
@@ -79,7 +85,7 @@ public class StudentCourseListDomain {
                                     if (confirmOption == 1) {
                                         Student activeStudent = Session.getStudent();
                                         activeStudent.setEnrolledCourseId(existingCourse.getId());
-                                        Students.updateStudent(activeStudent);
+                                        studentEditor.update(activeStudent);
                                         System.out.printf("Enrolled onto course: '%s'.%n", existingCourse.getName());
                                         break;
                                     } else if (confirmOption == 2) {

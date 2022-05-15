@@ -2,16 +2,20 @@ package com.domains;
 
 import com.Session;
 import com.io.Input;
+import com.loaders.InstructorLoader;
 import com.models.*;
 import com.models.Module;
+import com.printers.CoursePrinter;
+import com.printers.StudentPrinter;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
 public class InstructorDomain {
+    private static final InstructorLoader instructorLoader = new InstructorLoader();
     public static void load() {
-        User currentUser = Session.getUser();
+        Instructor currentUser = Session.getInstructor();
         System.out.printf("Welcome back %s%n", currentUser.getUsername());
 
         while (true) {
@@ -21,8 +25,7 @@ public class InstructorDomain {
                     "3 - Logout"
             };
 
-            for (String option :
-                    options) {
+            for (String option : options) {
                 System.out.println(option);
             }
             System.out.println("What would you like to do?");
@@ -30,9 +33,10 @@ public class InstructorDomain {
 
             if (option == 1) {
                 UUID instructorId = Session.instructor.getId();
-                ArrayList<Module> assignedModules = Instructors.getAssignedModules(instructorId);
+                Instructor instructor = instructorLoader.find(instructorId);
+                ArrayList<Module> assignedModules = instructor.getAssignedModulesWithDetails();
                 System.out.println("Here are your assigned modules:");
-                Courses.printModules(assignedModules);
+                CoursePrinter.printModules(assignedModules);
 
                 while (true) {
                     String[] viewOptions = {
@@ -68,7 +72,7 @@ public class InstructorDomain {
                                 System.err.println("No module with that id enter another.");
                             } else {
                                 System.out.printf("Here are the students who are on the module: %s.%n", foundModule.getName());
-                                Students.printStudents(foundModule.getId());
+                                StudentPrinter.printStudentsOnModule(foundModule.getId());
                                 break;
                             }
                         }
@@ -83,7 +87,6 @@ public class InstructorDomain {
             } else if (option == 2) {
                 throw new NotImplementedException("");
             } else if (option == 3) {
-                Session.setUser(null);
                 Session.setInstructor(null);
                 System.out.println("Logged out!");
                 break;

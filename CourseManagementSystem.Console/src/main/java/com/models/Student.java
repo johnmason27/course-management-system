@@ -1,31 +1,25 @@
 package com.models;
 
+import com.loaders.CourseLoader;
+import com.loaders.InstructorLoader;
+import com.models.interfaces.IStudent;
 import de.vandermeer.asciitable.AsciiTable;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Student {
-    private UUID id;
+public class Student extends User implements IStudent {
     private UUID enrolledCourseId;
     private int level;
     private ArrayList<UUID> enrolledModules;
     private ArrayList<UUID> completedModules;
 
-    public Student(UUID id, UUID enrolledCourseId, int level, ArrayList<UUID> enrolledModules, ArrayList<UUID> completedModules) {
-        this.id = id;
+    public Student(UUID id, UserType userType, String forename, String surname, String email, String username, String password, UUID enrolledCourseId, int level, ArrayList<UUID> enrolledModules, ArrayList<UUID> completedModules) {
+        super(id, userType, forename, surname, email, username, password);
         this.enrolledCourseId = enrolledCourseId;
         this.level = level;
         this.enrolledModules = enrolledModules;
         this.completedModules = completedModules;
-    }
-
-    public UUID getId() {
-        return this.id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public UUID getEnrolledCourseId() {
@@ -64,7 +58,9 @@ public class Student {
     }
 
     public void printEnrolledModules() {
-        Course enrolledCourse = Courses.findCourse(this.enrolledCourseId);
+        CourseLoader courseLoader = new CourseLoader();
+        InstructorLoader instructorLoader = new InstructorLoader();
+        Course enrolledCourse = courseLoader.find(this.enrolledCourseId);
         ArrayList<Module> courseModules = enrolledCourse.getModules();
         ArrayList<Module> enrolledModules = new ArrayList<>();
         for (UUID moduleID: this.getEnrolledModules()) {
@@ -86,7 +82,7 @@ public class Student {
         moduleTable.addRule();
 
         for (Module module: enrolledModules) {
-            User moduleInstructor = Users.findInstructor(module.getInstructor());
+            Instructor moduleInstructor = instructorLoader.find(module.getInstructor());
             moduleTable.addRow(module.getId(), module.getName(), module.getLevel(), moduleInstructor.getUsername());
             moduleTable.addRule();
         }

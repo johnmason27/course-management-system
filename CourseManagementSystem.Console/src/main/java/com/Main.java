@@ -4,19 +4,9 @@ import com.domains.CreateAccountDomain;
 import com.domains.ForgotPasswordDomain;
 import com.domains.LoginDomain;
 import com.io.Input;
-import com.models.Courses;
-import com.models.Instructors;
-import com.models.Students;
-import com.models.Users;
 
 public class Main {
     public static void main(String[] args) {
-        // Initialise utility classes
-        new Users();
-        new Courses();
-        new Students();
-        new Instructors();
-        //  -------------------------
         String[] options = {
                 "1 - Login",
                 "2 - Create Account",
@@ -40,8 +30,7 @@ public class Main {
     }
 
     private static void printOptions(String[] options) {
-        for (String option :
-                options) {
+        for (String option : options) {
             System.out.println(option);
         }
         System.out.println("What would you like to do?");

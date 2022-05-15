@@ -1,14 +1,19 @@
 package com.domains;
 
+import com.editors.CourseEditor;
 import com.io.Input;
+import com.loaders.CourseLoader;
 import com.models.Course;
-import com.models.Courses;
 import com.models.Module;
+import com.printers.CoursePrinter;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
 public class CourseManagementDomain {
+    private final static CourseLoader courseLoader = new CourseLoader();
+    private final static CourseEditor courseEditor = new CourseEditor();
+
     public static void load() {
         String[] options = {
                 "1 - Add Courses",
@@ -18,8 +23,7 @@ public class CourseManagementDomain {
         };
 
         while (true) {
-            for (String option :
-                    options) {
+            for (String option : options) {
                 System.out.println(option);
             }
             System.out.println("What would you like to do?");
@@ -42,7 +46,7 @@ public class CourseManagementDomain {
 
     private static void addCourses() {
         System.out.println("Before you decide to add a course here are the existing courses.");
-        Courses.printCourses(Courses.getCourses());
+        CoursePrinter.printCourses(courseLoader.loadAll());
         String courseName;
         ArrayList<Module> courseModules = new ArrayList<>();
         boolean availability;
@@ -53,7 +57,7 @@ public class CourseManagementDomain {
 
             if (courseName.length() == 0) {
                 System.err.println("Course name cannot be blank.");
-            } else if (Courses.findCourse(courseName) != null) {
+            } else if (courseLoader.find(courseName) != null) {
                 System.err.println("Course already exists with that name enter another.");
             } else {
                 System.out.println("Course name valid.");
@@ -68,8 +72,7 @@ public class CourseManagementDomain {
                     "3 - Remove Module",
                     "4 - Confirm Modules"
             };
-            for (String option :
-                    options) {
+            for (String option : options) {
                 System.out.println(option);
             }
             System.out.println("What would you like to do?");
@@ -83,7 +86,7 @@ public class CourseManagementDomain {
                 removeModule(courseModules);
             } else if (option == 4) {
                 System.out.println("Modules added are:");
-                Courses.printModules(courseModules);
+                CoursePrinter.printModules(courseModules);
                 break;
             } else {
                 System.err.println("Enter a valid option.");
@@ -95,8 +98,7 @@ public class CourseManagementDomain {
                     "1 - Available",
                     "2 - Unavailable"
             };
-            for (String option :
-                    options) {
+            for (String option : options) {
                 System.out.println(option);
             }
             System.out.println("What availability should this course be set to?");
@@ -116,28 +118,27 @@ public class CourseManagementDomain {
         }
 //      Create course
         Course newCourse = new Course(UUID.randomUUID(), courseName, availability, courseModules);
-        Courses.addCourse(newCourse);
+        courseEditor.add(newCourse);
         System.out.println("Created new course:");
-        Course.printCourse(newCourse);
+        CoursePrinter.printCourse(newCourse);
     }
 
     private static void editCourses() {
-        ArrayList<Course> existingCourses = Courses.getCourses();
+        ArrayList<Course> existingCourses = courseLoader.loadAll();
         if (existingCourses.size() == 0) {
             System.out.println("No courses to edit.");
             return;
         }
 
         System.out.println("Before you decide to edit a course here are the existing courses.");
-        Courses.printCourses(existingCourses);
+        CoursePrinter.printCourses(existingCourses);
 
         while (true) {
             String[] options = {
                     "1 - Edit a course",
                     "2 - Go back"
             };
-            for (String option :
-                    options) {
+            for (String option : options) {
                 System.out.println(option);
             }
             System.out.println("What would you like to do?");
@@ -145,82 +146,86 @@ public class CourseManagementDomain {
 
             if (option == 1) {
 //              Edit course
-                    System.out.println("Enter the id of the course to edit:");
-                    String id = Input.readString();
-                    UUID guidId;
+                System.out.println("Enter the id of the course to edit:");
+                String id = Input.readString();
+                UUID guidId;
 
-                    try {
-                        guidId = UUID.fromString(id);
-                    } catch (IllegalArgumentException e) {
-                        System.err.println("Invalid Id, enter another.");
-                        continue;
+                try {
+                    guidId = UUID.fromString(id);
+                } catch (IllegalArgumentException e) {
+                    System.err.println("Invalid Id, enter another.");
+                    continue;
+                }
+
+                Course existingCourse = existingCourses.stream()
+                        .filter(c -> c.getId().equals(guidId))
+                        .findAny()
+                        .orElse(null);
+
+                if (existingCourse == null) {
+                    System.err.println("Course does not exist. Enter another id.");
+                } else {
+                    System.out.println("Found course to edit.");
+                    String[] editOptions = {
+                            "1 - Edit Name",
+                            "2 - Edit Availability",
+                            "3 - Edit Modules",
+                            "4 - Go back"
+                    };
+                    for (String editOption : editOptions) {
+                        System.out.println(editOption);
                     }
+                    System.out.println("What would you like to do?");
+                    int editOption = Input.readInt();
 
-                    Course existingCourse = existingCourses.stream().filter(c -> c.getId().equals(guidId)).findAny().orElse(null);
+                    if (editOption == 1) {
+//                      Edit name
+                        System.out.printf("Existing name is '%s' enter new name:%n", existingCourse.getName());
+                        String newName = Input.readString();
 
-                    if (existingCourse == null) {
-                        System.err.println("Course does not exist. Enter another id.");
-                    } else {
-                        System.out.println("Found course to edit.");
-                        String[] editOptions = {
-                                "1 - Edit Name",
-                                "2 - Edit Availability",
-                                "3 - Edit Modules",
-                                "4 - Go back"
+                        if (newName.length() == 0) {
+                            System.err.println("Name cannot be blank.");
+                        } else if (existingCourses.stream()
+                                .filter(c -> c.getName().equals(newName))
+                                .findAny()
+                                .orElse(null) != null) {
+                            System.err.println("Course already exists with that name, enter another.");
+                        } else {
+                            existingCourse.setName(newName);
+                            courseEditor.update(existingCourse);
+                            System.out.printf("Name changed to: '%s'.%n", newName);
+                        }
+                    } else if (editOption == 2) {
+//                      Edit availability
+                        System.out.printf("Existing availability is '%s'.%n", existingCourse.getAvailability() ? "Available" : "Unavailable");
+                        String[] availabilityOptions = {
+                                "1 - Set to available",
+                                "2 - Set to unavailable",
+                                "3 - Go back"
                         };
-                        for (String editOption :
-                                editOptions) {
-                            System.out.println(editOption);
+                        for (String availabilityOption : availabilityOptions) {
+                            System.out.println(availabilityOption);
                         }
                         System.out.println("What would you like to do?");
-                        int editOption = Input.readInt();
+                        int availabilityOption = Input.readInt();
 
-                        if (editOption == 1) {
-//                      Edit name
-                            System.out.printf("Existing name is '%s' enter new name:%n", existingCourse.getName());
-                            String newName = Input.readString();
-
-                            if (newName.length() == 0) {
-                                System.err.println("Name cannot be blank.");
-                            } else if (existingCourses.stream().filter(c -> c.getName().equals(newName)).findAny().orElse(null) != null) {
-                                System.err.println("Course already exists with that name, enter another.");
-                            } else {
-                                existingCourse.setName(newName);
-                                Courses.updateCourse(existingCourse);
-                                System.out.printf("Name changed to: '%s'.%n", newName);
-                            }
-                        } else if (editOption == 2) {
-//                      Edit availability
-                            System.out.printf("Existing availability is '%s'.%n", existingCourse.getAvailability() ? "Available" : "Unavailable");
-                            String[] availabilityOptions = {
-                                    "1 - Set to available",
-                                    "2 - Set to unavailable",
-                                    "3 - Go back"
-                            };
-                            for (String availabilityOption :
-                                    availabilityOptions) {
-                                System.out.println(availabilityOption);
-                            }
-                            System.out.println("What would you like to do?");
-                            int availabilityOption = Input.readInt();
-
-                            if (availabilityOption == 1) {
-                                existingCourse.setAvailability(true);
-                                Courses.updateCourse(existingCourse);
-                                System.out.println("Course availability set to available.");
-                                break;
-                            } else if (availabilityOption == 2) {
-                                existingCourse.setAvailability(false);
-                                Courses.updateCourse(existingCourse);
-                                System.out.println("Course availability set to unavailable.");
-                                break;
-                            } else if (availabilityOption == 3) {
-                                System.out.println("Going back...");
-                                break;
-                            } else {
-                                System.err.println("Enter valid option.");
-                            }
-                        } else if (editOption == 3) {
+                        if (availabilityOption == 1) {
+                            existingCourse.setAvailability(true);
+                            courseEditor.update(existingCourse);
+                            System.out.println("Course availability set to available.");
+                            break;
+                        } else if (availabilityOption == 2) {
+                            existingCourse.setAvailability(false);
+                            courseEditor.update(existingCourse);
+                            System.out.println("Course availability set to unavailable.");
+                            break;
+                        } else if (availabilityOption == 3) {
+                            System.out.println("Going back...");
+                            break;
+                        } else {
+                            System.err.println("Enter valid option.");
+                        }
+                    } else if (editOption == 3) {
 //                      Edit modules
                         ArrayList<Module> existingModules = existingCourse.getModules();
                         if (existingModules.size() == 0) {
@@ -230,8 +235,7 @@ public class CourseManagementDomain {
                                         "1 - Add",
                                         "2 - Go back..."
                                 };
-                                for (String addModuleOption :
-                                        addModuleOptions) {
+                                for (String addModuleOption : addModuleOptions) {
                                     System.out.println(addModuleOption);
                                 }
                                 System.out.println("Would you like to add a new module?");
@@ -239,7 +243,7 @@ public class CourseManagementDomain {
 
                                 if (addModuleOption == 1) {
                                     addModule(existingModules);
-                                    Courses.updateCourse(existingCourse);
+                                    courseEditor.update(existingCourse);
                                     break;
                                 } else if (addModuleOption == 2) {
                                     System.out.println("Going back...");
@@ -252,19 +256,17 @@ public class CourseManagementDomain {
                         }
 
                         System.out.println("Existing modules:");
-                        Courses.printModules(existingModules);
+                        CoursePrinter.printModules(existingModules);
                         while (true) {
                             String[] chooseModuleOptions = {
                                     "1 - Choose module",
                                     "2 - Go back"
                             };
-                            for (String chooseModuleOption :
-                                    chooseModuleOptions) {
+                            for (String chooseModuleOption : chooseModuleOptions) {
                                 System.out.println(chooseModuleOption);
                             }
                             System.out.println("What do you want to do?");
 
-                            while (true) {
                                 int chooseModuleOption = Input.readInt();
 
                                 if (chooseModuleOption == 1) {
@@ -279,7 +281,10 @@ public class CourseManagementDomain {
                                         continue;
                                     }
 
-                                    Module existingModule = existingModules.stream().filter(m -> m.getId().equals(moduleGuidId)).findAny().orElse(null);
+                                    Module existingModule = existingModules.stream()
+                                            .filter(m -> m.getId().equals(moduleGuidId))
+                                            .findAny()
+                                            .orElse(null);
 
                                     if (existingModule == null) {
                                         System.err.println("No module with that Id. Try another.");
@@ -296,8 +301,7 @@ public class CourseManagementDomain {
                                                 "4 - Remove",
                                                 "5 - Go back"
                                         };
-                                        for (String editModuleOption :
-                                                editModuleOptions) {
+                                        for (String editModuleOption : editModuleOptions) {
                                             System.out.println(editModuleOption);
                                         }
                                         System.out.println("What would you like to do?");
@@ -310,12 +314,15 @@ public class CourseManagementDomain {
 
                                                 if (newName.length() == 0) {
                                                     System.err.println("Name cannot be blank.");
-                                                } else if (existingModules.stream().filter(m -> m.getName().equals(newName)).findAny().orElse(null) != null) {
+                                                } else if (existingModules.stream()
+                                                        .filter(m -> m.getName().equals(newName))
+                                                        .findAny()
+                                                        .orElse(null) != null) {
                                                     System.err.println("Module already exists with that name.");
                                                 } else {
                                                     existingModule.setName(newName);
                                                     existingCourse.updateModule(existingModule);
-                                                    Courses.updateCourse(existingCourse);
+                                                    courseEditor.update(existingCourse);
                                                     break;
                                                 }
                                             }
@@ -327,8 +334,7 @@ public class CourseManagementDomain {
                                                         "2 - Unavailable",
                                                         "3 - Go back"
                                                 };
-                                                for (String availabilityOption :
-                                                        availabilityOptions) {
+                                                for (String availabilityOption : availabilityOptions) {
                                                     System.out.println(availabilityOption);
                                                 }
                                                 System.out.println("What do you want to set the availability to?");
@@ -337,12 +343,12 @@ public class CourseManagementDomain {
                                                 if (availabilityOption == 1) {
                                                     existingModule.setAvailability(true);
                                                     existingCourse.updateModule(existingModule);
-                                                    Courses.updateCourse(existingCourse);
+                                                    courseEditor.update(existingCourse);
                                                     break;
                                                 } else if (availabilityOption == 2) {
                                                     existingModule.setAvailability(false);
                                                     existingCourse.updateModule(existingModule);
-                                                    Courses.updateCourse(existingCourse);
+                                                    courseEditor.update(existingCourse);
                                                     break;
                                                 } else if (availabilityOption == 3) {
                                                     System.out.println("Going back...");
@@ -362,14 +368,14 @@ public class CourseManagementDomain {
                                                 } else {
                                                     existingModule.setLevel(level);
                                                     existingCourse.updateModule(existingModule);
-                                                    Courses.updateCourse(existingCourse);
+                                                    courseEditor.update(existingCourse);
                                                     System.out.println("Module level updated.");
                                                     break;
                                                 }
                                             }
                                         } else if (editModuleOption == 4) {
                                             existingCourse.removeModule(existingModule);
-                                            Courses.updateCourse(existingCourse);
+                                            courseEditor.update(existingCourse);
                                             System.out.printf("Removed module: '%s' from course.%n", existingModule.getName());
                                         } else if (editModuleOption == 5) {
                                             System.out.println("Going back...");
@@ -386,12 +392,9 @@ public class CourseManagementDomain {
                                 }
                             }
                         }
-                    } else {
-                        System.err.println("Enter a valid option.");
                     }
-                }
             } else if (option == 2) {
-//              Go back
+    //          Go back
                 System.out.println("Going back...");
                 break;
             } else {
@@ -401,21 +404,20 @@ public class CourseManagementDomain {
     }
 
     private static void deleteCourses() {
-        ArrayList<Course> existingCourses = Courses.getCourses();
+        ArrayList<Course> existingCourses = courseLoader.loadAll();
         if (existingCourses.size() == 0) {
             System.out.println("No courses to delete");
             return;
         }
 
         System.out.println("Existing courses:");
-        Courses.printCourses(existingCourses);
+        CoursePrinter.printCourses(existingCourses);
         while (true) {
             String[] options = {
                     "1 - Delete Course",
                     "2 - Go back"
             };
-            for (String option :
-                    options) {
+            for (String option : options) {
                 System.out.println(option);
             }
             System.out.println("What would you like to do?");
@@ -434,11 +436,14 @@ public class CourseManagementDomain {
                         continue;
                     }
 
-                    Course foundCourse = existingCourses.stream().filter(c -> c.getId().equals(guidId)).findAny().orElse(null);
+                    Course foundCourse = existingCourses.stream()
+                            .filter(c -> c.getId().equals(guidId))
+                            .findAny()
+                            .orElse(null);
                     if (foundCourse == null) {
                         System.err.println("No course with that Id, enter another.");
                     } else {
-                        Courses.deleteCourse(foundCourse);
+                        courseEditor.delete(foundCourse.getId());
                         System.out.println("Course deleted.");
                         break;
                     }
@@ -461,7 +466,10 @@ public class CourseManagementDomain {
             System.out.println("Enter module name:");
             name = Input.readString();
             String finalName = name;
-            Module existingModule = modules.stream().filter(m -> m.getName().equals(finalName)).findAny().orElse(null);
+            Module existingModule = modules.stream()
+                    .filter(m -> m.getName().equals(finalName))
+                    .findAny()
+                    .orElse(null);
             if (name.length() == 0) {
                 System.err.println("Module name cannot be blank.");
             } else if (existingModule != null) {
@@ -477,8 +485,7 @@ public class CourseManagementDomain {
                 "2 - Unavailable"
         };
         while (true) {
-            for (String option :
-                    options) {
+            for (String option : options) {
                 System.out.println(option);
             }
             System.out.println("What would you like to set the availability to?");
@@ -523,7 +530,7 @@ public class CourseManagementDomain {
         }
 
         System.out.println("Existing Modules:");
-        Courses.printModules(modules);
+        CoursePrinter.printModules(modules);
 
         Module existingModule;
         while (true) {
@@ -539,7 +546,10 @@ public class CourseManagementDomain {
                 continue;
             }
 
-            existingModule = modules.stream().filter(m -> m.getId().equals(guidId)).findAny().orElse(null);
+            existingModule = modules.stream()
+                    .filter(m -> m.getId().equals(guidId))
+                    .findAny()
+                    .orElse(null);
 
             if (existingModule == null) {
                 System.err.println("Module with that Id does not exist.");
@@ -556,8 +566,7 @@ public class CourseManagementDomain {
                     "4 - Go back"
             };
 
-            for (String option :
-                    options) {
+            for (String option : options) {
                 System.out.println(option);
             }
             System.out.println("What would you like to do?");
@@ -571,7 +580,10 @@ public class CourseManagementDomain {
 
                     if (newName.length() == 0) {
                         System.err.println("Name cannot be empty.");
-                    } else if (modules.stream().filter(m -> m.getName().equals(newName)).findAny().orElse(null) != null) {
+                    } else if (modules.stream()
+                            .filter(m -> m.getName().equals(newName))
+                            .findAny()
+                            .orElse(null) != null) {
                         System.err.println("Module already exists with that name, enter another.");
                     } else {
                         existingModule.setName(newName);
@@ -588,8 +600,7 @@ public class CourseManagementDomain {
                             "2 - Set to Unavailable",
                             "3 - Go back"
                     };
-                    for (String availabilityOption :
-                            availabilityOptions) {
+                    for (String availabilityOption : availabilityOptions) {
                         System.out.println(availabilityOption);
                     }
                     System.out.println("What do you want to do?");
@@ -641,7 +652,7 @@ public class CourseManagementDomain {
             return;
         }
 //      Get the module and delete
-        Courses.printModules(modules);
+        CoursePrinter.printModules(modules);
         while (true) {
             System.out.println("Which module should we remove?");
             String id = Input.readString();
@@ -654,12 +665,15 @@ public class CourseManagementDomain {
                 continue;
             }
 
-            Module existingModule = modules.stream().filter(m -> m.getId().equals(guidId)).findAny().orElse(null);
+            Module existingModule = modules.stream()
+                    .filter(m -> m.getId().equals(guidId))
+                    .findAny()
+                    .orElse(null);
 
             if (existingModule != null) {
                 modules.remove(existingModule);
                 System.out.println("Module removed. Remaining modules are:");
-                Courses.printModules(modules);
+                CoursePrinter.printModules(modules);
                 break;
             } else {
                 System.err.println("Module cannot be found, enter another id.");

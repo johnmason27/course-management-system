@@ -1,19 +1,25 @@
 package com.domains;
 
 import com.Session;
+import com.editors.StudentEditor;
 import com.io.Input;
+import com.loaders.CourseLoader;
 import com.models.*;
 import com.models.Module;
+import com.printers.CoursePrinter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class StudentEnrolledDomain {
+    private static final CourseLoader courseLoader = new CourseLoader();
+    private static final StudentEditor studentEditor = new StudentEditor();
+
     public static void load() {
-        Course enrolledCourse = Courses.findCourse(Session.student.getEnrolledCourseId());
+        Course enrolledCourse = courseLoader.find(Session.student.getEnrolledCourseId());
         System.out.println("Your currently enrolled onto:");
-        Course.printCourse(enrolledCourse);
+        CoursePrinter.printCourse(enrolledCourse);
 
         while (true) {
             String[] options = {
@@ -21,8 +27,7 @@ public class StudentEnrolledDomain {
                     "2 - Enroll onto modules",
                     "3 - Go back"
             };
-            for (String option :
-                    options) {
+            for (String option : options) {
                 System.out.println(option);
             }
             System.out.println("Would you like to enroll onto modules for your course or view modules your enrolled onto?");
@@ -38,12 +43,12 @@ public class StudentEnrolledDomain {
                 System.out.printf("You are currently level %d, printing modules for your level or previous levels.%n", studentLevel);
 
                 List<Module> availableLevelModules = enrolledCourse.getModules().stream()
-                        .filter(m -> m.getLevel() <= studentLevel && m.getAvailability()).toList();
+                        .filter(m -> m.getLevel() <= studentLevel && m.getAvailability())
+                        .toList();
                 ArrayList<Module> availableModules = new ArrayList<>(availableLevelModules);
 
                 for (Module availableLevelModule : availableLevelModules) {
-                    for (UUID id :
-                            activeStudent.getEnrolledModules()) {
+                    for (UUID id : activeStudent.getEnrolledModules()) {
                         if (availableLevelModule.getId().equals(id)) {
                             availableModules.remove(availableLevelModule);
                         }
@@ -55,15 +60,14 @@ public class StudentEnrolledDomain {
                     break;
                 }
 
-                Courses.printModules(new ArrayList<>(availableModules));
+                CoursePrinter.printModules(new ArrayList<>(availableModules));
 
                 while (true) {
                     String[] choseToEnrollOptions = {
                             "1 - Yes",
                             "2 - No"
                     };
-                    for (String chooseTooEnrollOption :
-                            choseToEnrollOptions) {
+                    for (String chooseTooEnrollOption : choseToEnrollOptions) {
                         System.out.println(chooseTooEnrollOption);
                     }
                     System.out.println("Would you like to enroll onto any?");
@@ -91,7 +95,7 @@ public class StudentEnrolledDomain {
                                 System.err.println("Module does not exist with that id, enter another.");
                             } else {
                                 activeStudent.addEnrolledModule(foundModule.getId());
-                                Students.updateStudent(activeStudent);
+                                studentEditor.update(activeStudent);
                                 System.out.println("Enrolled onto module.");
                                 break;
                             }

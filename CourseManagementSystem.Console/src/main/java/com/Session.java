@@ -1,21 +1,13 @@
 package com;
 
+import com.models.Admin;
 import com.models.Instructor;
 import com.models.Student;
-import com.models.User;
 
 public class Session {
-    public static User user;
     public static Student student;
     public static Instructor instructor;
-
-    public static User getUser() {
-        return user;
-    }
-
-    public static void setUser(User currentUser) {
-        user = currentUser;
-    }
+    public static Admin admin;
 
     public static Student getStudent() {
         return student;
@@ -31,5 +23,13 @@ public class Session {
 
     public static void setInstructor(Instructor currentInstructor) {
         instructor = currentInstructor;
+    }
+
+    public static Admin getAdmin() {
+        return admin;
+    }
+
+    public static void setAdmin(Admin currentAdmin) {
+        admin = currentAdmin;
     }
 }

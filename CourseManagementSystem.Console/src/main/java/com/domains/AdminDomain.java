@@ -2,12 +2,12 @@ package com.domains;
 
 import com.Session;
 import com.io.Input;
-import com.models.User;
+import com.models.Admin;
 import org.apache.commons.lang3.NotImplementedException;
 
-public class CourseAdminDomain {
+public class AdminDomain {
     public static void load() {
-        User currentUser = Session.getUser();
+        Admin currentUser = Session.getAdmin();
         System.out.printf("Welcome back %s%n", currentUser.getUsername());
 
         String[] options = {
@@ -18,8 +18,7 @@ public class CourseAdminDomain {
         };
 
         while (true) {
-            for (String option :
-                    options) {
+            for (String option : options) {
                 System.out.println(option);
             }
             System.out.println("What would you like to do?");
@@ -32,7 +31,7 @@ public class CourseAdminDomain {
             } else if (option == 3) {
                 throw new NotImplementedException("Print Student Report not programmed yet.");
             } else if (option == 4) {
-                Session.setUser(null);
+                Session.setAdmin(null);
                 System.out.println("Logged out!");
                 break;
             } else {
