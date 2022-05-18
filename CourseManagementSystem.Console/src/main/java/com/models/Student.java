@@ -92,7 +92,7 @@ public class Student extends User implements IStudent {
 
         for (Module module: enrolledModules) {
             Instructor moduleInstructor = instructorLoader.find(module.getInstructor());
-            moduleTable.addRow(module.getId(), module.getName(), module.getLevel(), moduleInstructor.getUsername());
+            moduleTable.addRow(module.getId(), module.getName(), module.getLevel(), (moduleInstructor != null) ? moduleInstructor.getUsername() : "No instructor assigned");
             moduleTable.addRule();
         }
 
@@ -117,5 +117,41 @@ public class Student extends User implements IStudent {
 
     public void addGrade(Grade grade) {
         this.grades.add(grade);
+    }
+
+    public ArrayList<Module> getCompletedModulesWithDetails() {
+        CourseLoader courseLoader = new CourseLoader();
+        Course enrolledCourse = courseLoader.find(this.getEnrolledCourseId());
+        ArrayList<Module> enrolledCourseModules = enrolledCourse.getModules();
+        ArrayList<UUID> completedModuleIds = this.getCompletedModules();
+        ArrayList<Module> completedModules = new ArrayList<>();
+
+        for (Module enrolledCourseModule : enrolledCourseModules) {
+            for (UUID completedModuleId : completedModuleIds) {
+                if (enrolledCourseModule.getId().equals(completedModuleId)) {
+                    completedModules.add(enrolledCourseModule);
+                }
+            }
+        }
+
+        return completedModules;
+    }
+
+    public ArrayList<CompletedModuleWithGrade> getCompletedModulesWithGradeForLevel(int level) {
+        ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = new ArrayList<>();
+        ArrayList<Grade> grades = this.getGrades();
+
+        for (Module m: this.getCompletedModulesWithDetails()) {
+            for (Grade g: grades) {
+                if (m.getLevel() == level && m.getId().equals(g.getModuleId())) {
+                    int grade = g.getGrade();
+                    if (grade >= 40) {
+                        completedModulesWithGrade.add(new CompletedModuleWithGrade(m, g));
+                    }
+                }
+            }
+        }
+
+        return completedModulesWithGrade;
     }
 }

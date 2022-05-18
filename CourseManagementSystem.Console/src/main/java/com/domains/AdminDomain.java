@@ -13,7 +13,7 @@ public class AdminDomain {
         String[] options = {
                 "1 - Manage Courses",
                 "2 - Manage Instructors",
-                "3 - Print Student Report",
+                "3 - Manage Students",
                 "4 - Logout"
         };
 
@@ -29,7 +29,7 @@ public class AdminDomain {
             } else if (option == 2) {
                 InstructorManagementDomain.load();
             } else if (option == 3) {
-                throw new NotImplementedException("Print Student Report not programmed yet.");
+                StudentManagementDomain.load();
             } else if (option == 4) {
                 Session.setAdmin(null);
                 System.out.println("Logged out!");

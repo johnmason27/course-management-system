@@ -177,7 +177,6 @@ public class InstructorDomain {
                 studentEditor.update(chosenStudent);
 
                 System.out.println("Grade given to student.");
-                break;
             } else if (option == 3) {
                 Session.setInstructor(null);
                 System.out.println("Logged out!");
