@@ -29,10 +29,7 @@ public class StudentManagementDomain {
             int option = Input.readInt();
 
             if (option == 1) {
-                List<Student> filteredStudentList = studentLoader.loadAll().stream()
-                        .filter(s -> s.getLevel() == 4 || s.getLevel() == 5 || s.getLevel() == 6)
-                        .toList();
-                ArrayList<Student> students = new ArrayList<>(filteredStudentList);
+                ArrayList<Student> students = studentLoader.loadPreGraduates();
 
                 if (students.size() == 0) {
                     System.out.println("No students to manage, going back!");
