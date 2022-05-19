@@ -174,6 +174,8 @@ public class InstructorDomain {
 
                 Grade newGrade = new Grade(UUID.randomUUID(), moduleId, grade);
                 chosenStudent.addGrade(newGrade);
+                chosenStudent.addCompletedModule(moduleId);
+                chosenStudent.removeEnrolledModule(moduleId);
                 studentEditor.update(chosenStudent);
 
                 System.out.println("Grade given to student.");

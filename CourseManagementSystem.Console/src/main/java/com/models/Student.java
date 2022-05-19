@@ -41,9 +41,6 @@ public class Student extends User implements IStudent {
     }
 
     public ArrayList<UUID> getEnrolledModules() {
-        if (this.enrolledModules == null) {
-            this.enrolledModules = new ArrayList<>();
-        }
         return this.enrolledModules;
     }
 
@@ -69,11 +66,11 @@ public class Student extends User implements IStudent {
     }
 
     public void addEnrolledModule(UUID moduleId) {
-        if (this.enrolledModules == null) {
-            this.enrolledModules = new ArrayList<>();
-        }
-
         this.enrolledModules.add(moduleId);
+    }
+
+    public void removeEnrolledModule(UUID moduleId) {
+        this.enrolledModules.remove(moduleId);
     }
 
     public void printEnrolledModules() {
@@ -107,6 +104,10 @@ public class Student extends User implements IStudent {
         this.completedModules = completedModules;
     }
 
+    public void addCompletedModule(UUID moduleId) {
+        this.completedModules.add(moduleId);
+    }
+
     public ArrayList<Grade> getGrades() {
         return this.grades;
     }
@@ -137,7 +138,25 @@ public class Student extends User implements IStudent {
         return completedModules;
     }
 
-    public ArrayList<CompletedModuleWithGrade> getCompletedModulesWithGradeForLevel(int level) {
+    public ArrayList<CompletedModuleWithGrade> getCompletedModulesWithGrade() {
+        ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = new ArrayList<>();
+        ArrayList<Grade> grades = this.getGrades();
+
+        for (Module m: this.getCompletedModulesWithDetails()) {
+            for (Grade g: grades) {
+                if (m.getId().equals(g.getModuleId())) {
+                    int grade = g.getGrade();
+                    if (grade >= 40) {
+                        completedModulesWithGrade.add(new CompletedModuleWithGrade(m, g));
+                    }
+                }
+            }
+        }
+
+        return completedModulesWithGrade;
+    }
+
+    public ArrayList<CompletedModuleWithGrade> getCompletedModulesWithGrade(int level) {
         ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = new ArrayList<>();
         ArrayList<Grade> grades = this.getGrades();
 

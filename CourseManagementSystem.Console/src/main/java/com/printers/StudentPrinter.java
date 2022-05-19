@@ -53,27 +53,6 @@ public class StudentPrinter {
         System.out.println(studentsTable.render());
     }
 
-    public static void printGrades(Student student) {
-        ArrayList<Module> enrolledModules = student.getEnrolledModulesWithDetails();
-        ArrayList<Grade> grades = student.getGrades();
-
-        AsciiTable gradesTable = new AsciiTable();
-        gradesTable.addRule();
-        gradesTable.addRow("Module", "Grade");
-        gradesTable.addRule();
-
-        for (Grade grade : grades) {
-            for (Module enrolledModule: enrolledModules) {
-                if (grade.getModuleId().equals(enrolledModule.getId())) {
-                    gradesTable.addRow(enrolledModule.getName(), String.format("%d%%", grade.getGrade()));
-                    gradesTable.addRule();
-                }
-            }
-        }
-
-        System.out.println(gradesTable.render());
-    }
-
     public static void printCompletedModulesWithGrade(ArrayList<CompletedModuleWithGrade> completedModuleWithGrades) {
         if (completedModuleWithGrades.size() == 0) {
             System.out.println("No completed modules with grades!");
@@ -81,8 +60,6 @@ public class StudentPrinter {
         }
 
         AsciiTable table = new AsciiTable();
-        table.addRule();
-        table.addRow("Completed modules with grades");
         table.addRule();
         table.addRow("Name", "Level", "Grade");
         table.addRule();

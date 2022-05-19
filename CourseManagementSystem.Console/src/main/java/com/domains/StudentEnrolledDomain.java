@@ -17,6 +17,11 @@ public class StudentEnrolledDomain {
     private static final StudentEditor studentEditor = new StudentEditor();
 
     public static void load() {
+        if (Session.student.getLevel() == 7) {
+            System.out.println("You have already graduated and have no active modules!");
+            return;
+        }
+
         Course enrolledCourse = courseLoader.find(Session.student.getEnrolledCourseId());
         System.out.println("Your currently enrolled onto:");
         CoursePrinter.printCourse(enrolledCourse);

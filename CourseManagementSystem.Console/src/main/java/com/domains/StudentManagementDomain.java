@@ -1,18 +1,19 @@
 package com.domains;
 
+import com.editors.StudentEditor;
 import com.io.Input;
-import com.loaders.CourseLoader;
 import com.loaders.StudentLoader;
-import com.models.*;
-import com.models.Module;
+import com.models.CompletedModuleWithGrade;
+import com.models.Student;
 import com.printers.StudentPrinter;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class StudentManagementDomain {
     private static final StudentLoader studentLoader = new StudentLoader();
-    private static final CourseLoader courseLoader = new CourseLoader();
+    private static final StudentEditor studentEditor = new StudentEditor();
 
     public static void load() {
         String[] options = {
@@ -28,7 +29,11 @@ public class StudentManagementDomain {
             int option = Input.readInt();
 
             if (option == 1) {
-                ArrayList<Student> students = studentLoader.loadAll();
+                List<Student> filteredStudentList = studentLoader.loadAll().stream()
+                        .filter(s -> s.getLevel() == 4 || s.getLevel() == 5 || s.getLevel() == 6)
+                        .toList();
+                ArrayList<Student> students = new ArrayList<>(filteredStudentList);
+
                 if (students.size() == 0) {
                     System.out.println("No students to manage, going back!");
                     return;
@@ -75,31 +80,39 @@ public class StudentManagementDomain {
         int level = student.getLevel();
 
         if (level == 4) {
-            ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGradeForLevel(4);
+            ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGrade(4);
             StudentPrinter.printCompletedModulesWithGrade(completedModulesWithGrade);
 
             if (completedModulesWithGrade.size() < 4) {
                 System.err.println("Student hasn't passed at least 4, level 4 modules yet. They cannot progress to the next level.");
             } else {
                 System.out.println("Student can progress to the next level!");
+                student.setLevel(5);
+                studentEditor.update(student);
+                System.out.println("Student is now level 5!");
             }
         } else if (level == 5) {
-            ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGradeForLevel(5);
+            ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGrade(5);
             StudentPrinter.printCompletedModulesWithGrade(completedModulesWithGrade);
 
             if (completedModulesWithGrade.size() < 4) {
                 System.err.println("Student hasn't passed at least 4, level 5 modules yet. They cannot progress to the next level.");
             } else {
                 System.out.println("Student can progress to the next level!");
+                student.setLevel(6);
+                studentEditor.update(student);
+                System.out.println("Student is now level 6!");
             }
         } else if (level == 6) {
-            ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGradeForLevel(6);
+            ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGrade(6);
             StudentPrinter.printCompletedModulesWithGrade(completedModulesWithGrade);
 
             if (completedModulesWithGrade.size() < 4) {
                 System.err.println("Student hasn't passed at least 4, level 6 modules yet. They cannot graduate.");
             } else {
-                System.out.println("Student has graduated!");
+                student.setLevel(7);
+                studentEditor.update(student);
+                System.out.println("Student is now graduated!");
             }
         }
     }

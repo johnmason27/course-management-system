@@ -3,7 +3,6 @@ package com.domains;
 import com.Session;
 import com.io.Input;
 import com.models.Student;
-import org.apache.commons.lang3.NotImplementedException;
 
 public class StudentDomain {
     public static void load() {

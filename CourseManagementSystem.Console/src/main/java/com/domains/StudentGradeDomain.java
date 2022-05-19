@@ -8,6 +8,10 @@ public class StudentGradeDomain {
     public static void load() {
         Student loggedInUser = Session.getStudent();
         System.out.println("Here are your grades:");
-        StudentPrinter.printGrades(loggedInUser);
+        StudentPrinter.printCompletedModulesWithGrade(loggedInUser.getCompletedModulesWithGrade());
+
+        if (loggedInUser.getLevel() == 7) {
+            System.out.println("You have received the correct amount of grades at levels 4, 5, 6 to graduate congratulations!");
+        }
     }
 }
