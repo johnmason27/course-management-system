@@ -1,21 +1,24 @@
 package com.models;
 
+import com.models.interfaces.IModule;
 import de.vandermeer.asciitable.AsciiTable;
 
 import java.util.UUID;
 
-public class Module {
+public class Module implements IModule {
     private UUID id;
     private String name;
     private boolean availability;
     private int level;
+    private boolean optional;
     private UUID instructor;
 
-    public Module(UUID id, String name, boolean availability, int level, UUID instructor) {
+    public Module(UUID id, String name, boolean availability, int level, boolean optional, UUID instructor) {
         this.id = id;
         this.name = name;
         this.availability = availability;
         this.level = level;
+        this.optional = optional;
         this.instructor = instructor;
     }
 
@@ -55,12 +58,20 @@ public class Module {
         AsciiTable modulesTable = new AsciiTable();
 
         modulesTable.addRule();
-        modulesTable.addRow("Id", "Name", "Level", "Availability");
+        modulesTable.addRow("Id", "Name", "Level", "Availability", "Optional");
         modulesTable.addRule();
-        modulesTable.addRow(module.getId(), module.getName(), module.getLevel(), module.getAvailability() ? "Available" : "Unavailable");
+        modulesTable.addRow(module.getId(), module.getName(), module.getLevel(), module.getAvailability() ? "Available" : "Unavailable", module.getOptional() ? "Optional" : "Required");
         modulesTable.addRule();
 
         System.out.println(modulesTable.render());
+    }
+
+    public boolean getOptional() {
+        return this.optional;
+    }
+
+    public void setOptional(boolean isOptional) {
+        this.optional = isOptional;
     }
 
     public UUID getInstructor() {

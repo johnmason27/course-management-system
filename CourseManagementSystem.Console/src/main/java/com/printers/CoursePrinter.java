@@ -46,11 +46,11 @@ public class CoursePrinter {
 
         AsciiTable table = new AsciiTable();
         table.addRule();
-        table.addRow("Id", "Name", "Level", "Availability");
+        table.addRow("Id", "Name", "Level", "Availability", "Optional");
         table.addRule();
 
         for (Module module : modules) {
-            table.addRow(module.getId(), module.getName(), module.getLevel(), module.getAvailability() ? "Available" : "Unavailable");
+            table.addRow(module.getId(), module.getName(), module.getLevel(), module.getAvailability() ? "Available" : "Unavailable", module.getOptional() ? "Optional" : "Required");
             table.addRule();
         }
 

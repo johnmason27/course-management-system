@@ -1,10 +1,12 @@
 package com.models;
 
+import com.models.interfaces.ICourse;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Course {
+public class Course implements ICourse {
     private UUID id;
     private String name;
     private boolean availability;
