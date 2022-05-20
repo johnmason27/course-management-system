@@ -82,18 +82,18 @@ public class Student extends User implements IStudent {
             return;
         }
 
-        AsciiTable moduleTable = new AsciiTable();
-        moduleTable.addRule();
-        moduleTable.addRow("Id", "Name", "Level", "Instructor");
-        moduleTable.addRule();
+        AsciiTable table = new AsciiTable();
+        table.addRule();
+        table.addRow("Id", "Name", "Level", "Instructor");
+        table.addRule();
 
         for (Module module: enrolledModules) {
             Instructor moduleInstructor = instructorLoader.find(module.getInstructor());
-            moduleTable.addRow(module.getId(), module.getName(), module.getLevel(), (moduleInstructor != null) ? moduleInstructor.getUsername() : "No instructor assigned");
-            moduleTable.addRule();
+            table.addRow(module.getId(), module.getName(), module.getLevel(), (moduleInstructor != null) ? moduleInstructor.getUsername() : "No instructor assigned");
+            table.addRule();
         }
 
-        System.out.println(moduleTable.render());
+        System.out.println(table.render());
     }
 
     public ArrayList<UUID> getCompletedModules() {

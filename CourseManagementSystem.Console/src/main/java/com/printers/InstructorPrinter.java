@@ -15,18 +15,18 @@ public class InstructorPrinter {
             return;
         }
 
-        AsciiTable instructorsTable = new AsciiTable();
-        instructorsTable.addRule();
-        instructorsTable.addRow("Id", "Name");
-        instructorsTable.addRule();
+        AsciiTable table = new AsciiTable();
+        table.addRule();
+        table.addRow("Id", "Name");
+        table.addRule();
 
         for (Instructor instructor : instructors) {
             Instructor instructorUser = instructorLoader.find(instructor.getId());
 
-            instructorsTable.addRow(instructorUser.getId(), String.format("%s %s", instructorUser.getForename(), instructorUser.getSurname()));
-            instructorsTable.addRule();
+            table.addRow(instructorUser.getId(), String.format("%s %s", instructorUser.getForename(), instructorUser.getSurname()));
+            table.addRule();
         }
 
-        System.out.println(instructorsTable.render());
+        System.out.println(table.render());
     }
 }

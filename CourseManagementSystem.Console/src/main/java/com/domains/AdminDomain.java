@@ -3,7 +3,6 @@ package com.domains;
 import com.Session;
 import com.io.Input;
 import com.models.Admin;
-import org.apache.commons.lang3.NotImplementedException;
 
 public class AdminDomain {
     public static void load() {

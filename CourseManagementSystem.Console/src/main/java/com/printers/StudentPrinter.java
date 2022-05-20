@@ -19,17 +19,17 @@ public class StudentPrinter {
             return;
         }
 
-        AsciiTable studentsTable = new AsciiTable();
-        studentsTable.addRule();
-        studentsTable.addRow("Id", "Username");
-        studentsTable.addRule();
+        AsciiTable table = new AsciiTable();
+        table.addRule();
+        table.addRow("Id", "Username");
+        table.addRule();
 
         for (Student s : students) {
-            studentsTable.addRow(s.getId(), s.getUsername());
-            studentsTable.addRule();
+            table.addRow(s.getId(), s.getUsername());
+            table.addRule();
         }
 
-        System.out.println(studentsTable.render());
+        System.out.println(table.render());
     }
 
     public static void printStudentsOnModule(UUID id) {
@@ -40,17 +40,17 @@ public class StudentPrinter {
             return;
         }
 
-        AsciiTable studentsTable = new AsciiTable();
-        studentsTable.addRule();
-        studentsTable.addRow("Id", "Username");
-        studentsTable.addRule();
+        AsciiTable table = new AsciiTable();
+        table.addRule();
+        table.addRow("Id", "Username");
+        table.addRule();
 
         for (Student student : studentsOnModule) {
-            studentsTable.addRow(student.getId(), student.getUsername());
-            studentsTable.addRule();
+            table.addRow(student.getId(), student.getUsername());
+            table.addRule();
         }
 
-        System.out.println(studentsTable.render());
+        System.out.println(table.render());
     }
 
     public static void printCompletedModulesWithGrade(ArrayList<CompletedModuleWithGrade> completedModuleWithGrades) {
@@ -70,5 +70,32 @@ public class StudentPrinter {
         }
 
         System.out.println(table.render());
+    }
+
+    public static String printReport(Student student) {
+        ArrayList<CompletedModuleWithGrade> completedModuleWithGrades = student.getCompletedModulesWithGrade();
+
+        if (completedModuleWithGrades.size() == 0) {
+            System.out.println("No completed modules! Nothing to print.");
+            return null;
+        }
+
+        String studentName = student.getForename() + " " + student.getSurname();
+        String studentEmail = student.getEmail();
+        int studentLevel = student.getLevel();
+        String renderString = String.format("Name: %s%nEmail: %s%nLevel: %s%n", studentName, studentEmail, studentLevel == 7 ? "Graduated" : studentLevel);
+
+        String completedModules = "Completed Modules:\n";
+        AsciiTable table = new AsciiTable();
+        table.addRule();
+        table.addRow("Module", "Level", "Grade");
+        table.addRule();
+
+        for (CompletedModuleWithGrade c: completedModuleWithGrades) {
+            table.addRow(c.getModule().getName(), c.getModule().getLevel(), String.format("%d%%", c.getGrade().getGrade()));
+            table.addRule();
+        }
+
+        return renderString + completedModules + table.render();
     }
 }

@@ -8,15 +8,15 @@ import java.util.ArrayList;
 
 public class CoursePrinter {
     public static void printCourse(Course course) {
-        AsciiTable coursesTable = new AsciiTable();
+        AsciiTable table = new AsciiTable();
 
-        coursesTable.addRule();
-        coursesTable.addRow("Id", "Name", "Availability");
-        coursesTable.addRule();
-        coursesTable.addRow(course.getId(), course.getName(), course.getAvailability() ? "Available" : "Unavailable");
-        coursesTable.addRule();
+        table.addRule();
+        table.addRow("Id", "Name", "Availability");
+        table.addRule();
+        table.addRow(course.getId(), course.getName(), course.getAvailability() ? "Available" : "Unavailable");
+        table.addRule();
 
-        System.out.println(coursesTable.render());
+        System.out.println(table.render());
     }
 
     public static void printCourses(ArrayList<Course> courses) {
@@ -25,17 +25,17 @@ public class CoursePrinter {
             return;
         }
 
-        AsciiTable coursesTable = new AsciiTable();
-        coursesTable.addRule();
-        coursesTable.addRow("Id", "Name", "Availability");
-        coursesTable.addRule();
+        AsciiTable table = new AsciiTable();
+        table.addRule();
+        table.addRow("Id", "Name", "Availability");
+        table.addRule();
 
         for (Course course : courses) {
-            coursesTable.addRow(course.getId(), course.getName(), course.getAvailability() ? "Available" : "Unavailable");
-            coursesTable.addRule();
+            table.addRow(course.getId(), course.getName(), course.getAvailability() ? "Available" : "Unavailable");
+            table.addRule();
         }
 
-        System.out.println(coursesTable.render());
+        System.out.println(table.render());
     }
 
     public static void printModules(ArrayList<Module> modules) {
@@ -44,16 +44,16 @@ public class CoursePrinter {
             return;
         }
 
-        AsciiTable modulesTable = new AsciiTable();
-        modulesTable.addRule();
-        modulesTable.addRow("Id", "Name", "Level", "Availability");
-        modulesTable.addRule();
+        AsciiTable table = new AsciiTable();
+        table.addRule();
+        table.addRow("Id", "Name", "Level", "Availability");
+        table.addRule();
 
         for (Module module : modules) {
-            modulesTable.addRow(module.getId(), module.getName(), module.getLevel(), module.getAvailability() ? "Available" : "Unavailable");
-            modulesTable.addRule();
+            table.addRow(module.getId(), module.getName(), module.getLevel(), module.getAvailability() ? "Available" : "Unavailable");
+            table.addRule();
         }
 
-        System.out.println(modulesTable.render());
+        System.out.println(table.render());
     }
 }
