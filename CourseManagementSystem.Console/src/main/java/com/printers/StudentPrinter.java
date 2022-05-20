@@ -61,11 +61,11 @@ public class StudentPrinter {
 
         AsciiTable table = new AsciiTable();
         table.addRule();
-        table.addRow("Name", "Level", "Grade");
+        table.addRow("Name", "Level", "Grade", "Optional");
         table.addRule();
 
         for (CompletedModuleWithGrade c : completedModuleWithGrades) {
-            table.addRow(c.getModule().getName(), c.getModule().getLevel(), String.format("%d%%", c.getGrade().getGrade()));
+            table.addRow(c.getModule().getName(), c.getModule().getLevel(), String.format("%d%%", c.getGrade().getGrade()), c.getModule().getOptional() ? "Optional" : "Required");
             table.addRule();
         }
 

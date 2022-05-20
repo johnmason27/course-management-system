@@ -151,8 +151,18 @@ public class StudentManagementDomain {
             ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGrade(6);
             StudentPrinter.printCompletedModulesWithGrade(completedModulesWithGrade);
 
-            if (completedModulesWithGrade.size() < 4) {
-                System.err.println("Student hasn't passed at least 4, level 6 modules yet. They cannot graduate.");
+            int optionalModuleCount = 0;
+            int requiredModuleCount = 0;
+            for (CompletedModuleWithGrade c: completedModulesWithGrade) {
+                if (c.getModule().getOptional()) {
+                    optionalModuleCount += 1;
+                } else {
+                    requiredModuleCount += 1;
+                }
+            }
+
+            if (optionalModuleCount < 2 || requiredModuleCount < 2) {
+                System.err.println("Student hasn't passed at least 2 optional and 2 required, level 6 modules yet. They cannot graduate.");
             } else {
                 student.setLevel(7);
                 studentEditor.update(student);

@@ -51,9 +51,19 @@ public class StudentEnrolledDomain {
                         .filter(m -> m.getLevel() <= studentLevel && m.getAvailability())
                         .toList();
                 ArrayList<Module> availableModules = new ArrayList<>(availableLevelModules);
+                ArrayList<UUID> completedModules = activeStudent.getCompletedModules();
+                ArrayList<UUID> enrolledModules = activeStudent.getEnrolledModules();
 
                 for (Module availableLevelModule : availableLevelModules) {
-                    for (UUID id : activeStudent.getEnrolledModules()) {
+                    for (UUID id : enrolledModules) {
+                        if (availableLevelModule.getId().equals(id)) {
+                            availableModules.remove(availableLevelModule);
+                        }
+                    }
+                }
+
+                for (Module availableLevelModule : availableLevelModules) {
+                    for (UUID id : completedModules) {
                         if (availableLevelModule.getId().equals(id)) {
                             availableModules.remove(availableLevelModule);
                         }
@@ -65,59 +75,64 @@ public class StudentEnrolledDomain {
                     break;
                 }
 
-                CoursePrinter.printModules(new ArrayList<>(availableModules));
+                enrollOntoModule(availableModules);
 
-                while (true) {
-                    String[] choseToEnrollOptions = {
-                            "1 - Yes",
-                            "2 - No"
-                    };
-                    for (String chooseTooEnrollOption : choseToEnrollOptions) {
-                        System.out.println(chooseTooEnrollOption);
-                    }
-                    System.out.println("Would you like to enroll onto any?");
-                    int chooseTooEnrollOption = Input.readInt();
-
-                    if (chooseTooEnrollOption == 1) {
-                        while (true) {
-                            System.out.println("Enter the module id:");
-                            String id = Input.readString();
-                            UUID convertedId;
-
-                            try {
-                                convertedId = UUID.fromString(id);
-                            } catch (IllegalArgumentException e) {
-                                System.err.println("Invalid Id, enter another.");
-                                continue;
-                            }
-
-                            Module foundModule = enrolledCourse.getModules().stream()
-                                    .filter(m -> m.getId().equals(convertedId))
-                                    .findAny()
-                                    .orElse(null);
-
-                            if (foundModule == null) {
-                                System.err.println("Module does not exist with that id, enter another.");
-                            } else {
-                                activeStudent.addEnrolledModule(foundModule.getId());
-                                studentEditor.update(activeStudent);
-                                System.out.println("Enrolled onto module.");
-                                break;
-                            }
-                        }
-                    } else if (chooseTooEnrollOption == 2) {
-                        System.out.println("Going back...");
-                        break;
-                    } else {
-                        System.err.println("Enter a valid option!");
-                    }
-                }
                 break;
             } else if (option == 3) {
                 System.out.println("Going back...");
                 break;
             } else {
                 System.err.println("Enter a valid option.");
+            }
+        }
+    }
+
+    private static void enrollOntoModule(ArrayList<Module> availableModules) {
+        Student activeStudent = Session.getStudent();
+        while (true) {
+            CoursePrinter.printModules(new ArrayList<>(availableModules));
+            String[] choseToEnrollOptions = {
+                    "1 - Yes",
+                    "2 - No"
+            };
+            for (String chooseTooEnrollOption : choseToEnrollOptions) {
+                System.out.println(chooseTooEnrollOption);
+            }
+            System.out.println("Would you like to enroll onto any?");
+            int chooseTooEnrollOption = Input.readInt();
+
+            if (chooseTooEnrollOption == 1) {
+                while (true) {
+                    System.out.println("Enter the module id:");
+                    String id = Input.readString();
+                    UUID convertedId;
+
+                    try {
+                        convertedId = UUID.fromString(id);
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Invalid Id, enter another.");
+                        continue;
+                    }
+
+                    Module foundModule = availableModules.stream()
+                            .filter(m -> m.getId().equals(convertedId))
+                            .findAny()
+                            .orElse(null);
+
+                    if (foundModule == null) {
+                        System.err.println("Module does not exist with that id, enter another.");
+                    } else {
+                        activeStudent.addEnrolledModule(foundModule.getId());
+                        studentEditor.update(activeStudent);
+                        System.out.println("Enrolled onto module.");
+                        break;
+                    }
+                }
+            } else if (chooseTooEnrollOption == 2) {
+                System.out.println("Going back...");
+                break;
+            } else {
+                System.err.println("Enter a valid option!");
             }
         }
     }
