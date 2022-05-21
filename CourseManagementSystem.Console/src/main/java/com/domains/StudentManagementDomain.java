@@ -3,6 +3,7 @@ package com.domains;
 import com.editors.StudentEditor;
 import com.io.IOManager;
 import com.io.Input;
+import com.loaders.CourseLoader;
 import com.loaders.StudentLoader;
 import com.models.CompletedModuleWithGrade;
 import com.models.Student;
@@ -16,6 +17,7 @@ public class StudentManagementDomain {
     private static final StudentLoader studentLoader = new StudentLoader();
     private static final StudentEditor studentEditor = new StudentEditor();
     private static final IOManager ioManager = new IOManager();
+    private static final CourseLoader courseLoader = new CourseLoader();
 
     public static void load() {
         String[] options = {
@@ -124,7 +126,7 @@ public class StudentManagementDomain {
         int level = student.getLevel();
 
         if (level == 4) {
-            ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGrade(4);
+            ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGrade(courseLoader, 4);
             StudentPrinter.printCompletedModulesWithGrade(completedModulesWithGrade);
 
             if (completedModulesWithGrade.size() < 4) {
@@ -136,7 +138,7 @@ public class StudentManagementDomain {
                 System.out.println("Student is now level 5!");
             }
         } else if (level == 5) {
-            ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGrade(5);
+            ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGrade(courseLoader, 5);
             StudentPrinter.printCompletedModulesWithGrade(completedModulesWithGrade);
 
             if (completedModulesWithGrade.size() < 4) {
@@ -148,7 +150,7 @@ public class StudentManagementDomain {
                 System.out.println("Student is now level 6!");
             }
         } else if (level == 6) {
-            ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGrade(6);
+            ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGrade(courseLoader, 6);
             StudentPrinter.printCompletedModulesWithGrade(completedModulesWithGrade);
 
             int optionalModuleCount = 0;

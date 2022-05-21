@@ -3,6 +3,7 @@ package com.domains;
 import com.Session;
 import com.editors.StudentEditor;
 import com.io.Input;
+import com.loaders.CourseLoader;
 import com.loaders.InstructorLoader;
 import com.loaders.StudentLoader;
 import com.models.Grade;
@@ -19,6 +20,7 @@ public class InstructorDomain {
     private static final InstructorLoader instructorLoader = new InstructorLoader();
     private static final StudentLoader studentLoader = new StudentLoader();
     private static final StudentEditor studentEditor = new StudentEditor();
+    private static final CourseLoader courseLoader = new CourseLoader();
     public static void load() {
         Instructor currentUser = Session.getInstructor();
         System.out.printf("Welcome back %s%n", currentUser.getUsername());
@@ -39,7 +41,7 @@ public class InstructorDomain {
             if (option == 1) {
                 UUID instructorId = Session.instructor.getId();
                 Instructor instructor = instructorLoader.find(instructorId);
-                ArrayList<Module> assignedModules = instructor.getAssignedModulesWithDetails();
+                ArrayList<Module> assignedModules = instructor.getAssignedModulesWithDetails(courseLoader);
                 System.out.println("Here are your assigned modules:");
                 CoursePrinter.printModules(assignedModules);
 
@@ -91,7 +93,7 @@ public class InstructorDomain {
                 }
             } else if (option == 2) {
                 Instructor currentInstructor = Session.getInstructor();
-                ArrayList<Module> assignedModules = currentInstructor.getAssignedModulesWithDetails();
+                ArrayList<Module> assignedModules = currentInstructor.getAssignedModulesWithDetails(courseLoader);
 
                 if (assignedModules.size() == 0) {
                     System.out.println("You have no modules to give grades too.");

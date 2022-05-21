@@ -18,8 +18,7 @@ public class Instructor extends User implements IInstructor {
         return this.assignedModules;
     }
 
-    public ArrayList<Module> getAssignedModulesWithDetails() {
-        CourseLoader courseLoader = new CourseLoader();
+    public ArrayList<Module> getAssignedModulesWithDetails(CourseLoader courseLoader) {
         ArrayList<Module> assignedModules = new ArrayList<>();
 
         for (Course course : courseLoader.loadAll()) {

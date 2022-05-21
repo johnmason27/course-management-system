@@ -19,15 +19,13 @@ public class UserTest {
 
     @Test
     public void testItConstructsTheUserAndPopulatesTheUser() {
-        User user = new User(userId, UserType.Student, "John", "Mason", "john.mason@wlv.ac.uk", "john.mason", "password");
-
-        assertEquals(this.userId, user.getId());
-        assertEquals(UserType.Student, user.getUserType());
-        assertEquals("John", user.getForename());
-        assertEquals("Mason", user.getSurname());
-        assertEquals("john.mason@wlv.ac.uk", user.getEmail());
-        assertEquals("john.mason", user.getUsername());
-        assertEquals("password", user.getPassword());
+        assertEquals(this.userId, this.user.getId());
+        assertEquals(UserType.Student, this.user.getUserType());
+        assertEquals("John", this.user.getForename());
+        assertEquals("Mason", this.user.getSurname());
+        assertEquals("john.mason@wlv.ac.uk", this.user.getEmail());
+        assertEquals("john.mason", this.user.getUsername());
+        assertEquals("password", this.user.getPassword());
     }
 
     @Test

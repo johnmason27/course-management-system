@@ -1,5 +1,6 @@
 package com.printers;
 
+import com.loaders.CourseLoader;
 import com.loaders.StudentLoader;
 import com.models.CompletedModuleWithGrade;
 import com.models.Grade;
@@ -12,6 +13,7 @@ import java.util.UUID;
 
 public class StudentPrinter {
     private static final StudentLoader studentLoader = new StudentLoader();
+    private static final CourseLoader courseLoader = new CourseLoader();
 
     public static void printAllStudents(ArrayList<Student> students) {
         if (students.size() == 0) {
@@ -73,7 +75,7 @@ public class StudentPrinter {
     }
 
     public static String printReport(Student student) {
-        ArrayList<CompletedModuleWithGrade> completedModuleWithGrades = student.getCompletedModulesWithGrade();
+        ArrayList<CompletedModuleWithGrade> completedModuleWithGrades = student.getCompletedModulesWithGrade(courseLoader);
 
         if (completedModuleWithGrades.size() == 0) {
             System.out.println("No completed modules! Nothing to print.");

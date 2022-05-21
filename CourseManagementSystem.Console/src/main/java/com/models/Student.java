@@ -44,8 +44,7 @@ public class Student extends User implements IStudent {
         return this.enrolledModules;
     }
 
-    public ArrayList<Module> getEnrolledModulesWithDetails() {
-        CourseLoader courseLoader = new CourseLoader();
+    public ArrayList<Module> getEnrolledModulesWithDetails(CourseLoader courseLoader) {
         Course enrolledCourse = courseLoader.find(this.enrolledCourseId);
         ArrayList<Module> courseModules = enrolledCourse.getModules();
         ArrayList<Module> enrolledModules = new ArrayList<>();
@@ -73,9 +72,8 @@ public class Student extends User implements IStudent {
         this.enrolledModules.remove(moduleId);
     }
 
-    public void printEnrolledModules() {
-        InstructorLoader instructorLoader = new InstructorLoader();
-        ArrayList<Module> enrolledModules = this.getEnrolledModulesWithDetails();
+    public void printEnrolledModules(CourseLoader courseLoader, InstructorLoader instructorLoader) {
+        ArrayList<Module> enrolledModules = this.getEnrolledModulesWithDetails(courseLoader);
 
         if (enrolledModules.size() == 0) {
             System.out.println("Oops there are no enrolled modules!");
@@ -120,8 +118,7 @@ public class Student extends User implements IStudent {
         this.grades.add(grade);
     }
 
-    public ArrayList<Module> getCompletedModulesWithDetails() {
-        CourseLoader courseLoader = new CourseLoader();
+    public ArrayList<Module> getCompletedModulesWithDetails(CourseLoader courseLoader) {
         Course enrolledCourse = courseLoader.find(this.getEnrolledCourseId());
         ArrayList<Module> enrolledCourseModules = enrolledCourse.getModules();
         ArrayList<UUID> completedModuleIds = this.getCompletedModules();
@@ -138,11 +135,11 @@ public class Student extends User implements IStudent {
         return completedModules;
     }
 
-    public ArrayList<CompletedModuleWithGrade> getCompletedModulesWithGrade() {
+    public ArrayList<CompletedModuleWithGrade> getCompletedModulesWithGrade(CourseLoader courseLoader) {
         ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = new ArrayList<>();
         ArrayList<Grade> grades = this.getGrades();
 
-        for (Module m: this.getCompletedModulesWithDetails()) {
+        for (Module m: this.getCompletedModulesWithDetails(courseLoader)) {
             for (Grade g: grades) {
                 if (m.getId().equals(g.getModuleId())) {
                     int grade = g.getGrade();
@@ -156,11 +153,11 @@ public class Student extends User implements IStudent {
         return completedModulesWithGrade;
     }
 
-    public ArrayList<CompletedModuleWithGrade> getCompletedModulesWithGrade(int level) {
+    public ArrayList<CompletedModuleWithGrade> getCompletedModulesWithGrade(CourseLoader courseLoader, int level) {
         ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = new ArrayList<>();
         ArrayList<Grade> grades = this.getGrades();
 
-        for (Module m: this.getCompletedModulesWithDetails()) {
+        for (Module m: this.getCompletedModulesWithDetails(courseLoader)) {
             for (Grade g: grades) {
                 if (m.getLevel() == level && m.getId().equals(g.getModuleId())) {
                     int grade = g.getGrade();

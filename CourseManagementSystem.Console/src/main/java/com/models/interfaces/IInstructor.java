@@ -1,5 +1,8 @@
 package com.models.interfaces;
 
+import com.loaders.CourseLoader;
+import com.models.Module;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -8,4 +11,5 @@ public interface IInstructor {
     void setAssignedModules(ArrayList<UUID> assignedModules);
     void addAssignedModule(UUID id);
     void removeAssignedModule(UUID id);
+    ArrayList<Module> getAssignedModulesWithDetails(CourseLoader courseLoader);
 }

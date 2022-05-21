@@ -4,6 +4,7 @@ import com.Session;
 import com.editors.StudentEditor;
 import com.io.Input;
 import com.loaders.CourseLoader;
+import com.loaders.InstructorLoader;
 import com.models.*;
 import com.models.Module;
 import com.printers.CoursePrinter;
@@ -14,6 +15,7 @@ import java.util.UUID;
 
 public class StudentEnrolledDomain {
     private static final CourseLoader courseLoader = new CourseLoader();
+    private static final InstructorLoader instructorLoader = new InstructorLoader();
     private static final StudentEditor studentEditor = new StudentEditor();
 
     public static void load() {
@@ -41,7 +43,7 @@ public class StudentEnrolledDomain {
 
             if (option == 1) {
                 System.out.println("Your enrolled modules are:");
-                activeStudent.printEnrolledModules();
+                activeStudent.printEnrolledModules(courseLoader, instructorLoader);
                 break;
             } else if (option == 2) {
                 int studentLevel = Session.student.getLevel();
