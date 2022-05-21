@@ -16,7 +16,7 @@ public class StudentLoader implements ILoader<Student> {
     private final Gson gson = new Gson();
 
     public ArrayList<Student> loadAll() {
-        String studentsFileContents = this.ioManager.readFile(FileNames.Students);
+        String studentsFileContents = this.ioManager.readFile(FileNames.STUDENTS);
         Type studentListType = new TypeToken<ArrayList<Student>>(){}.getType();
         ArrayList<Student> students = this.gson.fromJson(studentsFileContents, studentListType);
 

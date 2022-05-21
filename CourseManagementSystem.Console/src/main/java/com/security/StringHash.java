@@ -5,12 +5,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class StringHash {
-    private static final String salt = "jaoAdm!woG£moa£d#owAWm#w2220dmd//aWd223dw#~22322wd(";
+    private static final String SALT = "jaoAdm!woG£moa£d#owAWm#w2220dmd//aWd223dw#~22322wd(";
 
     public static String hash(String stringToHash) throws NoSuchAlgorithmException {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(salt.getBytes(StandardCharsets.UTF_8));
+            md.update(SALT.getBytes(StandardCharsets.UTF_8));
             byte[] bytes = md.digest(stringToHash.getBytes(StandardCharsets.UTF_8));
 
             StringBuilder sb = new StringBuilder();

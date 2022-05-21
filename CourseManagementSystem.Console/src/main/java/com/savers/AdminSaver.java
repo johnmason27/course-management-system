@@ -13,6 +13,6 @@ public class AdminSaver implements ISaver<Admin> {
 
     public void saveAll(ArrayList<Admin> entities) {
         String stringEntities = this.gson.toJson(entities);
-        this.ioManager.writeFile(FileNames.Admins, stringEntities);
+        this.ioManager.writeFile(FileNames.ADMINS, stringEntities);
     }
 }

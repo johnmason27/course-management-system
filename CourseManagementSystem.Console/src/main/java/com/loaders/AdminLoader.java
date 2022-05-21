@@ -15,7 +15,7 @@ public class AdminLoader implements ILoader<Admin> {
     private final Gson gson = new Gson();
 
     public ArrayList<Admin> loadAll() {
-        String adminsFileContents = this.ioManager.readFile(FileNames.Admins);
+        String adminsFileContents = this.ioManager.readFile(FileNames.ADMINS);
         Type adminListType = new TypeToken<ArrayList<Admin>>(){}.getType();
         ArrayList<Admin> admins = this.gson.fromJson(adminsFileContents, adminListType);
 

@@ -13,6 +13,6 @@ public class StudentSaver implements ISaver<Student> {
 
     public void saveAll(ArrayList<Student> entities) {
         String stringEntities = this.gson.toJson(entities);
-        this.ioManager.writeFile(FileNames.Students, stringEntities);
+        this.ioManager.writeFile(FileNames.STUDENTS, stringEntities);
     }
 }

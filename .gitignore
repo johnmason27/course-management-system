@@ -1,6 +1,7 @@
 # Custom files
 .idea/
 target/
+*.drawio.bkp
 
 # Compiled class file
 *.class
