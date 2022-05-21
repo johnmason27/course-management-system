@@ -29,10 +29,9 @@ public class CourseLoader implements ILoader<Course> {
     public ArrayList<Course> findAvailable() {
         ArrayList<Course> availableCourses = new ArrayList<>();
 
-        for (Course course :
-                this.loadAll()) {
-            if (course.getAvailability()) {
-                availableCourses.add(course);
+        for (Course c : this.loadAll()) {
+            if (c.getAvailability()) {
+                availableCourses.add(c);
             }
         }
 

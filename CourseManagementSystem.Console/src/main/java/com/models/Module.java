@@ -1,11 +1,10 @@
 package com.models;
 
-import com.models.interfaces.IModule;
 import de.vandermeer.asciitable.AsciiTable;
 
 import java.util.UUID;
 
-public class Module implements IModule {
+public class Module {
     private UUID id;
     private String name;
     private boolean availability;
@@ -55,15 +54,15 @@ public class Module implements IModule {
     }
 
     public void printModule(Module module) {
-        AsciiTable modulesTable = new AsciiTable();
+        AsciiTable table = new AsciiTable();
 
-        modulesTable.addRule();
-        modulesTable.addRow("Id", "Name", "Level", "Availability", "Optional");
-        modulesTable.addRule();
-        modulesTable.addRow(module.getId(), module.getName(), module.getLevel(), module.getAvailability() ? "Available" : "Unavailable", module.getOptional() ? "Optional" : "Required");
-        modulesTable.addRule();
+        table.addRule();
+        table.addRow("Id", "Name", "Level", "Availability", "Optional");
+        table.addRule();
+        table.addRow(module.getId(), module.getName(), module.getLevel(), module.getAvailability() ? "Available" : "Unavailable", module.getOptional() ? "Optional" : "Required");
+        table.addRule();
 
-        System.out.println(modulesTable.render());
+        System.out.println(table.render());
     }
 
     public boolean getOptional() {

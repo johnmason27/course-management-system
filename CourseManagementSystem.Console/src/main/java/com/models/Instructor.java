@@ -21,11 +21,11 @@ public class Instructor extends User implements IInstructor {
     public ArrayList<Module> getAssignedModulesWithDetails(CourseLoader courseLoader) {
         ArrayList<Module> assignedModules = new ArrayList<>();
 
-        for (Course course : courseLoader.loadAll()) {
-            ArrayList<Module> courseModules = course.getModules();
-            for (Module module : courseModules) {
-                if (module.getInstructor() != null && module.getInstructor().equals(this.getId())) {
-                    assignedModules.add(module);
+        for (Course c : courseLoader.loadAll()) {
+            ArrayList<Module> courseModules = c.getModules();
+            for (Module m : courseModules) {
+                if (m.getInstructor() != null && m.getInstructor().equals(this.getId())) {
+                    assignedModules.add(m);
                 }
             }
         }

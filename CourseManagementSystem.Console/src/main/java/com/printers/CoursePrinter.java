@@ -30,8 +30,8 @@ public class CoursePrinter {
         table.addRow("Id", "Name", "Availability");
         table.addRule();
 
-        for (Course course : courses) {
-            table.addRow(course.getId(), course.getName(), course.getAvailability() ? "Available" : "Unavailable");
+        for (Course c : courses) {
+            table.addRow(c.getId(), c.getName(), c.getAvailability() ? "Available" : "Unavailable");
             table.addRule();
         }
 
@@ -49,8 +49,8 @@ public class CoursePrinter {
         table.addRow("Id", "Name", "Level", "Availability", "Optional");
         table.addRule();
 
-        for (Module module : modules) {
-            table.addRow(module.getId(), module.getName(), module.getLevel(), module.getAvailability() ? "Available" : "Unavailable", module.getOptional() ? "Optional" : "Required");
+        for (Module m : modules) {
+            table.addRow(m.getId(), m.getName(), m.getLevel(), m.getAvailability() ? "Available" : "Unavailable", m.getOptional() ? "Optional" : "Required");
             table.addRule();
         }
 

@@ -1,10 +1,8 @@
 package com.models;
 
-import com.models.interfaces.IGrade;
-
 import java.util.UUID;
 
-public class Grade implements IGrade {
+public class Grade {
     private UUID id;
     private UUID moduleId;
     private int grade;

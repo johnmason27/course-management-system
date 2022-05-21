@@ -3,8 +3,6 @@ package com.printers;
 import com.loaders.CourseLoader;
 import com.loaders.StudentLoader;
 import com.models.CompletedModuleWithGrade;
-import com.models.Grade;
-import com.models.Module;
 import com.models.Student;
 import de.vandermeer.asciitable.AsciiTable;
 
@@ -47,8 +45,8 @@ public class StudentPrinter {
         table.addRow("Id", "Username");
         table.addRule();
 
-        for (Student student : studentsOnModule) {
-            table.addRow(student.getId(), student.getUsername());
+        for (Student s : studentsOnModule) {
+            table.addRow(s.getId(), s.getUsername());
             table.addRule();
         }
 
@@ -98,6 +96,52 @@ public class StudentPrinter {
             table.addRule();
         }
 
-        return renderString + completedModules + table.render();
+        return renderString + getStudentLevelUpString(student) + completedModules + table.render();
+    }
+
+    private static String getStudentLevelUpString(Student student) {
+        String levelUpString = null;
+        int level = student.getLevel();
+
+        if (level == 4) {
+            ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGrade(courseLoader, 4);
+            StudentPrinter.printCompletedModulesWithGrade(completedModulesWithGrade);
+
+            if (completedModulesWithGrade.size() < 4) {
+                levelUpString = String.format("%s hasn't passed at least 4, level 4 modules yet. They cannot progress to the next level.%n", student.getUsername());
+            } else {
+                levelUpString = String.format("%s has passed enough modules to be level 5!%n", student.getUsername());
+            }
+        } else if (level == 5) {
+            ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGrade(courseLoader, 5);
+            StudentPrinter.printCompletedModulesWithGrade(completedModulesWithGrade);
+
+            if (completedModulesWithGrade.size() < 4) {
+                levelUpString = String.format("%s hasn't passed at least 4, level 5 modules yet. They cannot progress to the next level.%n", student.getUsername());
+            } else {
+                levelUpString = String.format("%s has passed enough modules to be level 6!%n", student.getUsername());
+            }
+        } else if (level == 6) {
+            ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGrade(courseLoader, 6);
+            StudentPrinter.printCompletedModulesWithGrade(completedModulesWithGrade);
+
+            int optionalModuleCount = 0;
+            int requiredModuleCount = 0;
+            for (CompletedModuleWithGrade c: completedModulesWithGrade) {
+                if (c.getModule().getOptional()) {
+                    optionalModuleCount += 1;
+                } else {
+                    requiredModuleCount += 1;
+                }
+            }
+
+            if (optionalModuleCount < 2 || requiredModuleCount < 2) {
+                levelUpString = String.format("%s hasn't passed at least 2 optional and 2 required, level 6 modules yet. They cannot graduate.%n", student.getUsername());
+            } else {
+                levelUpString = String.format("%s has passed enough modules to graduate!%n", student.getUsername());
+            }
+        }
+
+        return levelUpString;
     }
 }

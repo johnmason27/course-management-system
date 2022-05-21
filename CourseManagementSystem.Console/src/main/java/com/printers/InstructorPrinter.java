@@ -20,8 +20,8 @@ public class InstructorPrinter {
         table.addRow("Id", "Name");
         table.addRule();
 
-        for (Instructor instructor : instructors) {
-            Instructor instructorUser = instructorLoader.find(instructor.getId());
+        for (Instructor i : instructors) {
+            Instructor instructorUser = instructorLoader.find(i.getId());
 
             table.addRow(instructorUser.getId(), String.format("%s %s", instructorUser.getForename(), instructorUser.getSurname()));
             table.addRule();

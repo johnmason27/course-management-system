@@ -81,9 +81,9 @@ public class Course implements ICourse {
     }
 
     public void toggleModuleAvailability(UUID moduleId, boolean availability) {
-        for (Module module : this.getModules()) {
-            if (module.getId().equals(moduleId)) {
-                module.setAvailability(availability);
+        for (Module m : this.getModules()) {
+            if (m.getId().equals(moduleId)) {
+                m.setAvailability(availability);
                 break;
             }
         }

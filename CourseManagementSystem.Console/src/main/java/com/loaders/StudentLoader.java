@@ -30,12 +30,12 @@ public class StudentLoader implements ILoader<Student> {
     public ArrayList<Student> loadFromModule(UUID moduleId) {
         ArrayList<Student> studentsOnModule = new ArrayList<>();
 
-        for (Student student : this.loadAll()) {
-            if (student.getEnrolledModules().stream()
+        for (Student s : this.loadAll()) {
+            if (s.getEnrolledModules().stream()
                     .filter(m -> m.equals(moduleId))
                     .findAny()
                     .orElse(null) != null) {
-                studentsOnModule.add(student);
+                studentsOnModule.add(s);
             }
         }
 

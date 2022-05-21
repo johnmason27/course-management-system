@@ -49,10 +49,10 @@ public class Student extends User implements IStudent {
         ArrayList<Module> courseModules = enrolledCourse.getModules();
         ArrayList<Module> enrolledModules = new ArrayList<>();
 
-        for (UUID moduleID: this.getEnrolledModules()) {
-            for (Module module: courseModules) {
-                if (module.getId().equals(moduleID)) {
-                    enrolledModules.add(module);
+        for (UUID id: this.getEnrolledModules()) {
+            for (Module m: courseModules) {
+                if (m.getId().equals(id)) {
+                    enrolledModules.add(m);
                 }
             }
         }
@@ -85,9 +85,9 @@ public class Student extends User implements IStudent {
         table.addRow("Id", "Name", "Level", "Instructor");
         table.addRule();
 
-        for (Module module: enrolledModules) {
-            Instructor moduleInstructor = instructorLoader.find(module.getInstructor());
-            table.addRow(module.getId(), module.getName(), module.getLevel(), (moduleInstructor != null) ? moduleInstructor.getUsername() : "No instructor assigned");
+        for (Module m: enrolledModules) {
+            Instructor moduleInstructor = instructorLoader.find(m.getInstructor());
+            table.addRow(m.getId(), m.getName(), m.getLevel(), (moduleInstructor != null) ? moduleInstructor.getUsername() : "No instructor assigned");
             table.addRule();
         }
 
@@ -124,10 +124,10 @@ public class Student extends User implements IStudent {
         ArrayList<UUID> completedModuleIds = this.getCompletedModules();
         ArrayList<Module> completedModules = new ArrayList<>();
 
-        for (Module enrolledCourseModule : enrolledCourseModules) {
-            for (UUID completedModuleId : completedModuleIds) {
-                if (enrolledCourseModule.getId().equals(completedModuleId)) {
-                    completedModules.add(enrolledCourseModule);
+        for (Module e : enrolledCourseModules) {
+            for (UUID c : completedModuleIds) {
+                if (e.getId().equals(c)) {
+                    completedModules.add(e);
                 }
             }
         }

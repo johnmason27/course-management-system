@@ -4,7 +4,6 @@ import com.consts.FileNames;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.io.IOManager;
-import com.models.Admin;
 import com.models.Instructor;
 
 import java.lang.reflect.Type;
