@@ -1,4 +1,4 @@
-package com.domains;
+package com.domains.student;
 
 import com.Session;
 import com.editors.StudentEditor;
@@ -14,17 +14,23 @@ import java.util.List;
 import java.util.UUID;
 
 public class StudentEnrolledDomain {
-    private static final CourseLoader courseLoader = new CourseLoader();
-    private static final InstructorLoader instructorLoader = new InstructorLoader();
-    private static final StudentEditor studentEditor = new StudentEditor();
+    private final CourseLoader courseLoader;
+    private final InstructorLoader instructorLoader;
+    private final StudentEditor studentEditor;
 
-    public static void load() {
+    public StudentEnrolledDomain(CourseLoader courseLoader, InstructorLoader instructorLoader, StudentEditor studentEditor) {
+        this.courseLoader = courseLoader;
+        this.instructorLoader = instructorLoader;
+        this.studentEditor = studentEditor;
+    }
+
+    public void load() {
         if (Session.student.getLevel() == 7) {
             System.out.println("You have already graduated and have no active modules!");
             return;
         }
 
-        Course enrolledCourse = courseLoader.find(Session.student.getEnrolledCourseId());
+        Course enrolledCourse = this.courseLoader.find(Session.student.getEnrolledCourseId());
         System.out.println("Your currently enrolled onto:");
         CoursePrinter.printCourse(enrolledCourse);
 
@@ -43,7 +49,7 @@ public class StudentEnrolledDomain {
 
             if (option == 1) {
                 System.out.println("Your enrolled modules are:");
-                activeStudent.printEnrolledModules(courseLoader, instructorLoader);
+                activeStudent.printEnrolledModules(this.courseLoader, this.instructorLoader);
                 break;
             } else if (option == 2) {
                 int studentLevel = Session.student.getLevel();
@@ -77,7 +83,7 @@ public class StudentEnrolledDomain {
                     break;
                 }
 
-                enrollOntoModule(availableModules);
+                this.enrollOntoModule(availableModules);
 
                 break;
             } else if (option == 3) {
@@ -89,7 +95,7 @@ public class StudentEnrolledDomain {
         }
     }
 
-    private static void enrollOntoModule(ArrayList<Module> availableModules) {
+    private void enrollOntoModule(ArrayList<Module> availableModules) {
         Student activeStudent = Session.getStudent();
         while (true) {
             CoursePrinter.printModules(new ArrayList<>(availableModules));

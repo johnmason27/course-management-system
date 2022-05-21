@@ -1,4 +1,4 @@
-package com.domains;
+package com.domains.student;
 
 import com.Session;
 import com.editors.StudentEditor;
@@ -11,10 +11,15 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class StudentCourseListDomain {
-    private static final CourseLoader courseLoader = new CourseLoader();
-    private static final StudentEditor studentEditor = new StudentEditor();
+    private final CourseLoader courseLoader;
+    private final StudentEditor studentEditor;
 
-    public static void load() {
+    public StudentCourseListDomain(CourseLoader courseLoader, StudentEditor studentEditor) {
+        this.courseLoader = courseLoader;
+        this.studentEditor = studentEditor;
+    }
+
+    public void load() {
         System.out.println("Welcome, here you can enroll onto courses.");
         String[] options = {
                 "1 - View Courses to enroll on",
@@ -33,7 +38,7 @@ public class StudentCourseListDomain {
 
             if (option == 1) {
                 System.out.println("Available courses:");
-                ArrayList<Course> availableCourses = courseLoader.findAvailable();
+                ArrayList<Course> availableCourses = this.courseLoader.findAvailable();
                 if (availableCourses.size() == 0) {
                     return;
                 }
@@ -85,7 +90,7 @@ public class StudentCourseListDomain {
                                     if (confirmOption == 1) {
                                         Student activeStudent = Session.getStudent();
                                         activeStudent.setEnrolledCourseId(existingCourse.getId());
-                                        studentEditor.update(activeStudent);
+                                        this.studentEditor.update(activeStudent);
                                         System.out.printf("Enrolled onto course: '%s'.%n", existingCourse.getName());
                                         break;
                                     } else if (confirmOption == 2) {

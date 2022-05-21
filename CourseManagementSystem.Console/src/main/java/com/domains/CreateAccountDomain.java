@@ -17,13 +17,23 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class CreateAccountDomain {
-    private static final StudentLoader studentLoader = new StudentLoader();
-    private static final InstructorLoader instructorLoader = new InstructorLoader();
-    private static final AdminLoader adminLoader = new AdminLoader();
-    private static final StudentEditor studentEditor = new StudentEditor();
-    private static final InstructorEditor instructorEditor = new InstructorEditor();
-    private static final AdminEditor adminEditor = new AdminEditor();
-    public static void load() {
+    private final StudentLoader studentLoader;
+    private final InstructorLoader instructorLoader;
+    private final AdminLoader adminLoader;
+    private final StudentEditor studentEditor;
+    private final InstructorEditor instructorEditor;
+    private final AdminEditor adminEditor;
+
+    public CreateAccountDomain(StudentLoader studentLoader, InstructorLoader instructorLoader, AdminLoader adminLoader, StudentEditor studentEditor, InstructorEditor instructorEditor, AdminEditor adminEditor) {
+        this.studentLoader = studentLoader;
+        this.instructorLoader = instructorLoader;
+        this.adminLoader = adminLoader;
+        this.studentEditor = studentEditor;
+        this.instructorEditor = instructorEditor;
+        this.adminEditor = adminEditor;
+    }
+
+    public void load() {
         System.out.println("Create Account Form!");
         System.out.println("Please fill in the following fields:");
         UserType userType;
@@ -43,8 +53,7 @@ public class CreateAccountDomain {
 
         while (true) {
             System.out.println("What type of account are you creating?");
-            for (String option :
-                    userTypeOptions) {
+            for (String option : userTypeOptions) {
                 System.out.println(option);
             }
 
@@ -100,11 +109,11 @@ public class CreateAccountDomain {
 
             User user;
             if (userType == UserType.Student) {
-                user = studentLoader.find(username);
+                user = this.studentLoader.find(username);
             } else if (userType == UserType.Instructor) {
-                user = instructorLoader.find(username);
+                user = this.instructorLoader.find(username);
             } else {
-                user = adminLoader.find(username);
+                user = this.adminLoader.find(username);
             }
 
             if (username.length() == 0) {
@@ -125,11 +134,11 @@ public class CreateAccountDomain {
 
             User user;
             if (userType == UserType.Student) {
-                user = studentLoader.find(email);
+                user = this.studentLoader.find(email);
             } else if (userType == UserType.Instructor) {
-                user = instructorLoader.find(email);
+                user = this.instructorLoader.find(email);
             } else {
-                user = adminLoader.find(email);
+                user = this.adminLoader.find(email);
             }
 
             if (email.length() == 0) {
@@ -180,8 +189,7 @@ public class CreateAccountDomain {
             };
             System.out.println("Are you sure you want to create your account?");
 
-            for (String option :
-                    options) {
+            for (String option : options) {
                 System.out.println(option);
             }
 
@@ -200,13 +208,13 @@ public class CreateAccountDomain {
                 UUID id = UUID.randomUUID();
                 if (userType == UserType.Student) {
                     Student newStudent = new Student(id, userType, forename, surname, email, username, hashedPassword, null, 4, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-                    studentEditor.add(newStudent);
+                    this.studentEditor.add(newStudent);
                 } else if (userType == UserType.Instructor) {
                     Instructor newInstructor = new Instructor(id, userType, forename, surname, email, username, hashedPassword, new ArrayList<>());
-                    instructorEditor.add(newInstructor);
+                    this.instructorEditor.add(newInstructor);
                 } else {
                     Admin newAdmin = new Admin(id, userType, forename, surname, email, username, hashedPassword);
-                    adminEditor.add(newAdmin);
+                    this.adminEditor.add(newAdmin);
                 }
 
                 System.out.println("Account created.");

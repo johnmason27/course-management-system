@@ -1,4 +1,4 @@
-package com.domains;
+package com.domains.admin;
 
 import com.editors.CourseEditor;
 import com.io.Input;
@@ -11,10 +11,15 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class CourseManagementDomain {
-    private final static CourseLoader courseLoader = new CourseLoader();
-    private final static CourseEditor courseEditor = new CourseEditor();
+    private final CourseLoader courseLoader;
+    private final CourseEditor courseEditor;
 
-    public static void load() {
+    public CourseManagementDomain(CourseLoader courseLoader, CourseEditor courseEditor) {
+        this.courseLoader = courseLoader;
+        this.courseEditor = courseEditor;
+    }
+
+    public void load() {
         String[] options = {
                 "1 - Add Courses",
                 "2 - Edit Courses",
@@ -30,11 +35,11 @@ public class CourseManagementDomain {
             int option = Input.readInt();
 
             if (option == 1) {
-                addCourses();
+                this.addCourses();
             } else if (option == 2) {
-                editCourses();
+                this.editCourses();
             } else if (option == 3) {
-                deleteCourses();
+                this.deleteCourses();
             } else if (option == 4) {
                 System.out.println("Going back...");
                 break;
@@ -44,9 +49,9 @@ public class CourseManagementDomain {
         }
     }
 
-    private static void addCourses() {
+    private void addCourses() {
         System.out.println("Before you decide to add a course here are the existing courses.");
-        CoursePrinter.printCourses(courseLoader.loadAll());
+        CoursePrinter.printCourses(this.courseLoader.loadAll());
         String courseName;
         ArrayList<Module> courseModules = new ArrayList<>();
         boolean availability;
@@ -57,7 +62,7 @@ public class CourseManagementDomain {
 
             if (courseName.length() == 0) {
                 System.err.println("Course name cannot be blank.");
-            } else if (courseLoader.find(courseName) != null) {
+            } else if (this.courseLoader.find(courseName) != null) {
                 System.err.println("Course already exists with that name enter another.");
             } else {
                 System.out.println("Course name valid.");
@@ -79,11 +84,11 @@ public class CourseManagementDomain {
             int option = Input.readInt();
 
             if (option == 1) {
-                addModule(courseModules);
+                this.addModule(courseModules);
             } else if (option == 2) {
-                editModule(courseModules);
+                this.editModule(courseModules);
             } else if (option == 3) {
-                removeModule(courseModules);
+                this.removeModule(courseModules);
             } else if (option == 4) {
                 System.out.println("Modules added are:");
                 CoursePrinter.printModules(courseModules);
@@ -118,13 +123,13 @@ public class CourseManagementDomain {
         }
 //      Create course
         Course newCourse = new Course(UUID.randomUUID(), courseName, availability, courseModules);
-        courseEditor.add(newCourse);
+        this.courseEditor.add(newCourse);
         System.out.println("Created new course:");
         CoursePrinter.printCourse(newCourse);
     }
 
-    private static void editCourses() {
-        ArrayList<Course> existingCourses = courseLoader.loadAll();
+    private void editCourses() {
+        ArrayList<Course> existingCourses = this.courseLoader.loadAll();
         if (existingCourses.size() == 0) {
             System.out.println("No courses to edit.");
             return;
@@ -192,7 +197,7 @@ public class CourseManagementDomain {
                             System.err.println("Course already exists with that name, enter another.");
                         } else {
                             existingCourse.setName(newName);
-                            courseEditor.update(existingCourse);
+                            this.courseEditor.update(existingCourse);
                             System.out.printf("Name changed to: '%s'.%n", newName);
                         }
                     } else if (editOption == 2) {
@@ -211,12 +216,12 @@ public class CourseManagementDomain {
 
                         if (availabilityOption == 1) {
                             existingCourse.setAvailability(true);
-                            courseEditor.update(existingCourse);
+                            this.courseEditor.update(existingCourse);
                             System.out.println("Course availability set to available.");
                             break;
                         } else if (availabilityOption == 2) {
                             existingCourse.setAvailability(false);
-                            courseEditor.update(existingCourse);
+                            this.courseEditor.update(existingCourse);
                             System.out.println("Course availability set to unavailable.");
                             break;
                         } else if (availabilityOption == 3) {
@@ -242,8 +247,8 @@ public class CourseManagementDomain {
                                 int addModuleOption = Input.readInt();
 
                                 if (addModuleOption == 1) {
-                                    addModule(existingModules);
-                                    courseEditor.update(existingCourse);
+                                    this.addModule(existingModules);
+                                    this.courseEditor.update(existingCourse);
                                     break;
                                 } else if (addModuleOption == 2) {
                                     System.out.println("Going back...");
@@ -278,8 +283,8 @@ public class CourseManagementDomain {
                                 int addModuleOption = Input.readInt();
 
                                 if (addModuleOption == 1) {
-                                    addModule(existingModules);
-                                    courseEditor.update(existingCourse);
+                                    this.addModule(existingModules);
+                                    this.courseEditor.update(existingCourse);
                                     return;
                                 } else if (addModuleOption == 2) {
                                     System.out.println("Going back...");
@@ -356,7 +361,7 @@ public class CourseManagementDomain {
                                                     } else {
                                                         existingModule.setName(newName);
                                                         existingCourse.updateModule(existingModule);
-                                                        courseEditor.update(existingCourse);
+                                                        this.courseEditor.update(existingCourse);
                                                         break;
                                                     }
                                                 }
@@ -377,12 +382,12 @@ public class CourseManagementDomain {
                                                     if (availabilityOption == 1) {
                                                         existingModule.setAvailability(true);
                                                         existingCourse.updateModule(existingModule);
-                                                        courseEditor.update(existingCourse);
+                                                        this.courseEditor.update(existingCourse);
                                                         break;
                                                     } else if (availabilityOption == 2) {
                                                         existingModule.setAvailability(false);
                                                         existingCourse.updateModule(existingModule);
-                                                        courseEditor.update(existingCourse);
+                                                        this.courseEditor.update(existingCourse);
                                                         break;
                                                     } else if (availabilityOption == 3) {
                                                         System.out.println("Going back...");
@@ -402,7 +407,7 @@ public class CourseManagementDomain {
                                                     } else {
                                                         existingModule.setLevel(level);
                                                         existingCourse.updateModule(existingModule);
-                                                        courseEditor.update(existingCourse);
+                                                        this.courseEditor.update(existingCourse);
                                                         System.out.println("Module level updated.");
                                                         break;
                                                     }
@@ -429,11 +434,11 @@ public class CourseManagementDomain {
                                                         System.err.println("Enter a valid option!");
                                                     }
                                                 }
-                                                courseEditor.update(existingCourse);
+                                                this.courseEditor.update(existingCourse);
                                                 System.out.printf("Current module is now: %s%n", existingModule.getOptional() ? "Optional" : "Required");
                                             } else if (editModuleOption == 5) {
                                                 existingCourse.removeModule(existingModule);
-                                                courseEditor.update(existingCourse);
+                                                this.courseEditor.update(existingCourse);
                                                 System.out.printf("Removed module: '%s' from course.%n", existingModule.getName());
                                             } else if (editModuleOption == 6) {
                                                 System.out.println("Going back...");
@@ -468,8 +473,8 @@ public class CourseManagementDomain {
         }
     }
 
-    private static void deleteCourses() {
-        ArrayList<Course> existingCourses = courseLoader.loadAll();
+    private void deleteCourses() {
+        ArrayList<Course> existingCourses = this.courseLoader.loadAll();
         if (existingCourses.size() == 0) {
             System.out.println("No courses to delete");
             return;
@@ -508,7 +513,7 @@ public class CourseManagementDomain {
                     if (foundCourse == null) {
                         System.err.println("No course with that Id, enter another.");
                     } else {
-                        courseEditor.delete(foundCourse.getId());
+                        this.courseEditor.delete(foundCourse.getId());
                         System.out.println("Course deleted.");
                         break;
                     }
@@ -522,7 +527,7 @@ public class CourseManagementDomain {
         }
     }
 
-    private static void addModule(ArrayList<Module> modules) {
+    private void addModule(ArrayList<Module> modules) {
         String name;
         boolean availability;
         int level;
@@ -606,7 +611,7 @@ public class CourseManagementDomain {
         System.out.println("Module added.");
     }
 
-    private static void editModule(ArrayList<Module> modules) {
+    private void editModule(ArrayList<Module> modules) {
 //      Check there are any to edit
         if (modules.size() == 0) {
             System.out.println("There are no modules to edit");
@@ -753,7 +758,7 @@ public class CourseManagementDomain {
         }
     }
 
-    private static void removeModule(ArrayList<Module> modules) {
+    private void removeModule(ArrayList<Module> modules) {
 //      Check there is any modules
         if (modules.size() == 0) {
             System.out.println("No modules to delete");

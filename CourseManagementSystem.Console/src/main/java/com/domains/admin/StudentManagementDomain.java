@@ -1,4 +1,4 @@
-package com.domains;
+package com.domains.admin;
 
 import com.editors.StudentEditor;
 import com.io.IOManager;
@@ -14,12 +14,18 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class StudentManagementDomain {
-    private static final StudentLoader studentLoader = new StudentLoader();
-    private static final StudentEditor studentEditor = new StudentEditor();
-    private static final IOManager ioManager = new IOManager();
-    private static final CourseLoader courseLoader = new CourseLoader();
+    private final StudentLoader studentLoader;
+    private final StudentEditor studentEditor;
+    private final CourseLoader courseLoader;
+    private final IOManager ioManager = new IOManager();
 
-    public static void load() {
+    public StudentManagementDomain(StudentLoader studentLoader, StudentEditor studentEditor, CourseLoader courseLoader) {
+        this.studentLoader = studentLoader;
+        this.studentEditor = studentEditor;
+        this.courseLoader = courseLoader;
+    }
+
+    public void load() {
         String[] options = {
                 "1 - Increase student level",
                 "2 - Print student result slip",
@@ -33,7 +39,7 @@ public class StudentManagementDomain {
             int option = Input.readInt();
 
             if (option == 1) {
-                ArrayList<Student> students = studentLoader.loadPreGraduates();
+                ArrayList<Student> students = this.studentLoader.loadPreGraduates();
 
                 if (students.size() == 0) {
                     System.out.println("No students to manage, going back!");
@@ -54,7 +60,7 @@ public class StudentManagementDomain {
                         continue;
                     }
 
-                    selectedStudent = studentLoader.find(studentId);
+                    selectedStudent = this.studentLoader.find(studentId);
 
                     if (selectedStudent == null) {
                         System.err.println("Student does not exist with that id, enter another.");
@@ -64,9 +70,9 @@ public class StudentManagementDomain {
                     }
                 }
 
-                upgradeStudentLevel(selectedStudent);
+                this.upgradeStudentLevel(selectedStudent);
             } else if (option == 2) {
-                ArrayList<Student> students = studentLoader.loadAll();
+                ArrayList<Student> students = this.studentLoader.loadAll();
 
                 if (students.size() == 0) {
                     System.out.println("No students to print, going back!");
@@ -87,7 +93,7 @@ public class StudentManagementDomain {
                         continue;
                     }
 
-                    selectedStudent = studentLoader.find(studentId);
+                    selectedStudent = this.studentLoader.find(studentId);
 
                     if (selectedStudent == null) {
                         System.err.println("Student does not exist with that id, enter another.");
@@ -110,7 +116,7 @@ public class StudentManagementDomain {
 
                 String reportFilePath = String.format("%s\\%s_report.txt", saveDirectory.getPath(), selectedStudent.getUsername());
 
-                ioManager.writeFile(reportFilePath, report);
+                this.ioManager.writeFile(reportFilePath, report);
                 System.out.println("Saved report at location: ");
                 System.out.println(reportFilePath);
             } else if (option == 3) {
@@ -122,11 +128,11 @@ public class StudentManagementDomain {
         }
     }
 
-    private static void upgradeStudentLevel(Student student) {
+    private void upgradeStudentLevel(Student student) {
         int level = student.getLevel();
 
         if (level == 4) {
-            ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGrade(courseLoader, 4);
+            ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGrade(this.courseLoader, 4);
             StudentPrinter.printCompletedModulesWithGrade(completedModulesWithGrade);
 
             if (completedModulesWithGrade.size() < 4) {
@@ -134,11 +140,11 @@ public class StudentManagementDomain {
             } else {
                 System.out.println("Student can progress to the next level!");
                 student.setLevel(5);
-                studentEditor.update(student);
+                this.studentEditor.update(student);
                 System.out.println("Student is now level 5!");
             }
         } else if (level == 5) {
-            ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGrade(courseLoader, 5);
+            ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGrade(this.courseLoader, 5);
             StudentPrinter.printCompletedModulesWithGrade(completedModulesWithGrade);
 
             if (completedModulesWithGrade.size() < 4) {
@@ -146,11 +152,11 @@ public class StudentManagementDomain {
             } else {
                 System.out.println("Student can progress to the next level!");
                 student.setLevel(6);
-                studentEditor.update(student);
+                this.studentEditor.update(student);
                 System.out.println("Student is now level 6!");
             }
         } else if (level == 6) {
-            ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGrade(courseLoader, 6);
+            ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGrade(this.courseLoader, 6);
             StudentPrinter.printCompletedModulesWithGrade(completedModulesWithGrade);
 
             int optionalModuleCount = 0;
@@ -167,7 +173,7 @@ public class StudentManagementDomain {
                 System.err.println("Student hasn't passed at least 2 optional and 2 required, level 6 modules yet. They cannot graduate.");
             } else {
                 student.setLevel(7);
-                studentEditor.update(student);
+                this.studentEditor.update(student);
                 System.out.println("Student is now graduated!");
             }
         }

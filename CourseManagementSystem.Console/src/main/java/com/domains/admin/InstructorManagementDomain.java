@@ -1,4 +1,4 @@
-package com.domains;
+package com.domains.admin;
 
 import com.editors.CourseEditor;
 import com.editors.InstructorEditor;
@@ -14,12 +14,19 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class InstructorManagementDomain {
-    private static final InstructorLoader instructorLoader = new InstructorLoader();
-    private static final InstructorEditor instructorEditor = new InstructorEditor();
-    private static final CourseLoader courseLoader = new CourseLoader();
-    private static final CourseEditor courseEditor = new CourseEditor();
+    private final InstructorLoader instructorLoader;
+    private final InstructorEditor instructorEditor;
+    private final CourseLoader courseLoader;
+    private final CourseEditor courseEditor;
 
-    public static void load() {
+    public InstructorManagementDomain(InstructorLoader instructorLoader, InstructorEditor instructorEditor, CourseLoader courseLoader, CourseEditor courseEditor) {
+        this.instructorLoader = instructorLoader;
+        this.instructorEditor = instructorEditor;
+        this.courseLoader = courseLoader;
+        this.courseEditor = courseEditor;
+    }
+
+    public void load() {
         System.out.println("Here you can manage your instructors by adding/removing them onto modules to teach");
 
         while (true) {
@@ -35,35 +42,35 @@ public class InstructorManagementDomain {
             int option = Input.readInt();
 
             if (option == 1) {
-                Course chosenCourse = chooseCourse("Enter the id of the course to assign somebody too?");
+                Course chosenCourse = this.chooseCourse("Enter the id of the course to assign somebody too?");
                 ArrayList<Module> availableModules = chosenCourse.getUnassignedModules();
-                Module chosenModule = chooseModule(availableModules, "Enter the id of the module to assign somebody too?");
+                Module chosenModule = this.chooseModule(availableModules, "Enter the id of the module to assign somebody too?");
 
-                ArrayList<Instructor> availableInstructors = instructorLoader.findAvailable();
-                Instructor chosenInstructor = chooseInstructor(availableInstructors);
+                ArrayList<Instructor> availableInstructors = this.instructorLoader.findAvailable();
+                Instructor chosenInstructor = this.chooseInstructor(availableInstructors);
 
                 chosenModule.setInstructor(chosenInstructor.getId());
                 chosenInstructor.addAssignedModule(chosenModule.getId());
-                instructorEditor.update(chosenInstructor);
-                courseEditor.update(chosenCourse);
+                this.instructorEditor.update(chosenInstructor);
+                this.courseEditor.update(chosenCourse);
                 System.out.printf("Added your chosen instructor onto the module: %s.%n", chosenModule.getName());
                 break;
             } else if (option == 2) {
-                Course chosenCourse = chooseCourse("Enter the id of the course to remove somebody from?");
+                Course chosenCourse = this.chooseCourse("Enter the id of the course to remove somebody from?");
                 ArrayList<Module> availableModules = chosenCourse.getAssignedModules();
                 if (availableModules.size() == 0) {
                     System.out.println("No instructors on this course assigned to modules.");
                     break;
                 }
 
-                Module chosenModule = chooseModule(availableModules, "Enter the id of the module to remove the instructor?");
+                Module chosenModule = this.chooseModule(availableModules, "Enter the id of the module to remove the instructor?");
 
                 UUID instructorId = chosenModule.getInstructor();
-                Instructor moduleInstructor = instructorLoader.find(instructorId);
+                Instructor moduleInstructor = this.instructorLoader.find(instructorId);
                 moduleInstructor.removeAssignedModule(chosenModule.getId());
                 chosenModule.setInstructor(null);
-                courseEditor.update(chosenCourse);
-                instructorEditor.update(moduleInstructor);
+                this.courseEditor.update(chosenCourse);
+                this.instructorEditor.update(moduleInstructor);
                 System.out.printf("Removed the chosen instructor from the module: %s.%n", chosenModule.getName());
                 break;
             } else if (option == 3) {
@@ -75,9 +82,9 @@ public class InstructorManagementDomain {
         }
     }
 
-    private static Course chooseCourse(String choiceMessage) {
+    private Course chooseCourse(String choiceMessage) {
         while (true) {
-            ArrayList<Course> availableCourses = courseLoader.findAvailable();
+            ArrayList<Course> availableCourses = this.courseLoader.findAvailable();
             CoursePrinter.printCourses(availableCourses);
             System.out.println(choiceMessage);
 
@@ -105,7 +112,7 @@ public class InstructorManagementDomain {
         }
     }
 
-    private static Module chooseModule(ArrayList<Module> availableModules, String choiceMessage) {
+    private Module chooseModule(ArrayList<Module> availableModules, String choiceMessage) {
         while (true) {
             CoursePrinter.printModules(availableModules);
             System.out.println(choiceMessage);
@@ -134,7 +141,7 @@ public class InstructorManagementDomain {
         }
     }
 
-    private static Instructor chooseInstructor(ArrayList<Instructor> instructors) {
+    private Instructor chooseInstructor(ArrayList<Instructor> instructors) {
         while (true) {
             InstructorPrinter.printInstructors(instructors);
             System.out.println("Enter the id of the instructor to add to the module?");

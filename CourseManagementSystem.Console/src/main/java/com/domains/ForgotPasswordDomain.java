@@ -16,45 +16,54 @@ import com.security.StringValidator;
 import java.security.NoSuchAlgorithmException;
 
 public class ForgotPasswordDomain {
-    private static final StudentLoader studentLoader = new StudentLoader();
-    private static final InstructorLoader instructorLoader = new InstructorLoader();
-    private static final AdminLoader adminLoader = new AdminLoader();
-    private static final StudentEditor studentEditor = new StudentEditor();
-    private static final InstructorEditor instructorEditor = new InstructorEditor();
-    private static final AdminEditor adminEditor = new AdminEditor();
+    private final StudentLoader studentLoader;
+    private final InstructorLoader instructorLoader;
+    private final AdminLoader adminLoader;
+    private final StudentEditor studentEditor;
+    private final InstructorEditor instructorEditor;
+    private final AdminEditor adminEditor;
 
-    public static void load() {
+    public ForgotPasswordDomain(StudentLoader studentLoader, InstructorLoader instructorLoader, AdminLoader adminLoader, StudentEditor studentEditor, InstructorEditor instructorEditor, AdminEditor adminEditor) {
+        this.studentLoader = studentLoader;
+        this.instructorLoader = instructorLoader;
+        this.adminLoader = adminLoader;
+        this.studentEditor = studentEditor;
+        this.instructorEditor = instructorEditor;
+        this.adminEditor = adminEditor;
+    }
+
+    public void load() {
         System.out.println("Forgot Password Form!");
 //      Find existing user
         while (true) {
             System.out.println("Enter username or email:");
             String usernameEmail = Input.readString();
-            Student student = studentLoader.find(usernameEmail);
-            Instructor instructor = instructorLoader.find(usernameEmail);
-            Admin admin = adminLoader.find(usernameEmail);
+            Student student = this.studentLoader.find(usernameEmail);
+            Instructor instructor = this.instructorLoader.find(usernameEmail);
+            Admin admin = this.adminLoader.find(usernameEmail);
 
             if (student != null) {
 //              Reset password
                 System.out.println("Found user.");
-                String hashedPassword = getNewPassword();
+                String hashedPassword = this.getNewPassword();
                 student.setPassword(hashedPassword);
-                studentEditor.update(student);
+                this.studentEditor.update(student);
                 System.out.printf("User %s password has been reset.%n", student.getUsername());
                 break;
             } else if (instructor != null) {
 //              Reset password
                 System.out.println("Found user.");
-                String hashedPassword = getNewPassword();
+                String hashedPassword = this.getNewPassword();
                 instructor.setPassword(hashedPassword);
-                instructorEditor.update(instructor);
+                this.instructorEditor.update(instructor);
                 System.out.printf("User %s password has been reset.%n", instructor.getUsername());
                 break;
             } else if (admin != null) {
 //              Reset password
                 System.out.println("Found user.");
-                String hashedPassword = getNewPassword();
+                String hashedPassword = this.getNewPassword();
                 admin.setPassword(hashedPassword);
-                adminEditor.update(admin);
+                this.adminEditor.update(admin);
                 System.out.printf("User %s password has been reset.%n", admin.getUsername());
                 break;
             } else {
@@ -63,7 +72,7 @@ public class ForgotPasswordDomain {
         }
     }
 
-    private static String getNewPassword() {
+    private String getNewPassword() {
         String password;
         String confirmPassword;
 //      Get new password
