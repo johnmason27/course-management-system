@@ -4,6 +4,9 @@ import com.models.interfaces.IUser;
 
 import java.util.UUID;
 
+/**
+ * Base user class which Admin, Student and Instructor extend.
+ */
 public class User implements IUser {
     private UUID id;
     private UserType userType;
@@ -13,6 +16,16 @@ public class User implements IUser {
     private String username;
     private String password;
 
+    /**
+     * Initialize a User.
+     * @param id User id
+     * @param userType User type
+     * @param forename User forename
+     * @param surname User surname
+     * @param email User email
+     * @param username User username
+     * @param password User password
+     */
     public User(UUID id, UserType userType, String forename, String surname, String email, String username, String password) {
         this.id = id;
         this.userType = userType;

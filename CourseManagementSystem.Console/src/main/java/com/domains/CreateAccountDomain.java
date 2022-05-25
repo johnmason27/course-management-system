@@ -16,6 +16,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * Houses the logic for creating accounts.
+ */
 public class CreateAccountDomain {
     private final StudentLoader studentLoader;
     private final InstructorLoader instructorLoader;
@@ -24,6 +27,15 @@ public class CreateAccountDomain {
     private final InstructorEditor instructorEditor;
     private final AdminEditor adminEditor;
 
+    /**
+     * Initialize a CreateAccountDomain.
+     * @param studentLoader Load students
+     * @param instructorLoader Load instructors
+     * @param adminLoader Load admins
+     * @param studentEditor Edit students
+     * @param instructorEditor Edit instructors
+     * @param adminEditor Edit admins
+     */
     public CreateAccountDomain(StudentLoader studentLoader, InstructorLoader instructorLoader, AdminLoader adminLoader, StudentEditor studentEditor, InstructorEditor instructorEditor, AdminEditor adminEditor) {
         this.studentLoader = studentLoader;
         this.instructorLoader = instructorLoader;
@@ -33,6 +45,9 @@ public class CreateAccountDomain {
         this.adminEditor = adminEditor;
     }
 
+    /**
+     * Load the CreateAccountDomain.
+     */
     public void load() {
         System.out.println("Create Account Form!");
         System.out.println("Please fill in the following fields:");
@@ -44,13 +59,13 @@ public class CreateAccountDomain {
         String password;
         String confirmPassword;
 
-//      Get UserType
         String[] userTypeOptions = {
                 "1 - Student",
                 "2 - Instructor",
                 "3 - Course Administrator"
         };
 
+        // Get the account type to create
         while (true) {
             System.out.println("What type of account are you creating?");
             for (String option : userTypeOptions) {
@@ -74,7 +89,7 @@ public class CreateAccountDomain {
         }
 
         System.out.println("User type set.");
-//      Get Forename
+        // Get Forename
         while (true) {
             System.out.println("Forename:");
             forename = Input.readString();
@@ -88,7 +103,7 @@ public class CreateAccountDomain {
                 break;
             }
         }
-//      Get Surname
+        // Get Surname
         while (true) {
             System.out.println("Surname:");
             surname = Input.readString();
@@ -102,7 +117,7 @@ public class CreateAccountDomain {
                 break;
             }
         }
-//      Get Username
+        // Get Username
         while (true) {
             System.out.println("Username:");
             username = Input.readString();
@@ -127,7 +142,7 @@ public class CreateAccountDomain {
                 break;
             }
         }
-//      Get Email
+        // Get Email
         while (true) {
             System.out.println("Email:");
             email = Input.readString();
@@ -154,7 +169,7 @@ public class CreateAccountDomain {
                 break;
             }
         }
-//      Get Password
+        // Get Password
         while (true) {
             System.out.println("Password:");
             password = Input.readPassword("Enter Password");
@@ -169,7 +184,7 @@ public class CreateAccountDomain {
                 break;
             }
         }
-//      Confirm Password
+        // Confirm Password
         while (true) {
             System.out.println("Confirm Password:");
             confirmPassword = Input.readPassword("Confirm Password");
@@ -181,7 +196,7 @@ public class CreateAccountDomain {
                 break;
             }
         }
-//      Confirm Account Creation
+        // Confirm Account Creation
         while (true) {
             String[] options = {
               "1 - Yes",
@@ -205,6 +220,7 @@ public class CreateAccountDomain {
                     System.exit(1);
                 }
 
+                // Finish creating account and save to file
                 UUID id = UUID.randomUUID();
                 if (userType == UserType.Student) {
                     Student newStudent = new Student(id, userType, forename, surname, email, username, hashedPassword, null, 4, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());

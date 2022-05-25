@@ -6,7 +6,14 @@ import de.vandermeer.asciitable.AsciiTable;
 
 import java.util.ArrayList;
 
+/**
+ * Print all the course information into ASCII tables.
+ */
 public class CoursePrinter {
+    /**
+     * Print a given course into an ASCII table.
+     * @param course Course to print
+     */
     public static void printCourse(Course course) {
         AsciiTable table = new AsciiTable();
 
@@ -19,6 +26,10 @@ public class CoursePrinter {
         System.out.println(table.render());
     }
 
+    /**
+     * Print all the given courses into an ASCII table.
+     * @param courses Courses to print
+     */
     public static void printCourses(ArrayList<Course> courses) {
         if (courses.size() == 0) {
             System.out.println("Oh looks like there are no courses.");
@@ -38,6 +49,10 @@ public class CoursePrinter {
         System.out.println(table.render());
     }
 
+    /**
+     * Print all the given modules into an ASCII table.
+     * @param modules Modules to print
+     */
     public static void printModules(ArrayList<Module> modules) {
         if (modules.size() == 0) {
             System.out.println("There are no modules.");

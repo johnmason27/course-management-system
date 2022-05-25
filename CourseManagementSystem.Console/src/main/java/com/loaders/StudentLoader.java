@@ -27,6 +27,11 @@ public class StudentLoader implements ILoader<Student> {
         return students;
     }
 
+    /**
+     * Load all students from a given module
+     * @param moduleId The id of the module to search
+     * @return All student on the module
+     */
     public ArrayList<Student> loadFromModule(UUID moduleId) {
         ArrayList<Student> studentsOnModule = new ArrayList<>();
 
@@ -42,6 +47,10 @@ public class StudentLoader implements ILoader<Student> {
         return studentsOnModule;
     }
 
+    /**
+     * Load all students which are levels 4, 5 and 6
+     * @return All students found
+     */
     public ArrayList<Student> loadPreGraduates() {
         List<Student> filteredStudentList = this.loadAll().stream()
                 .filter(s -> s.getLevel() == 4 || s.getLevel() == 5 || s.getLevel() == 6)

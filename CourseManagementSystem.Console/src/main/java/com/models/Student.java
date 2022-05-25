@@ -8,6 +8,10 @@ import de.vandermeer.asciitable.AsciiTable;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * Student which can enroll onto courses and modules for that course and progress through levels
+ * 4, 5, 6 before graduating.
+ */
 public class Student extends User implements IStudent {
     private UUID enrolledCourseId;
     private int level;
@@ -15,6 +19,21 @@ public class Student extends User implements IStudent {
     private ArrayList<UUID> completedModules;
     private ArrayList<Grade> grades;
 
+    /**
+     * Initialize a Student.
+     * @param id Student id
+     * @param userType Student user type
+     * @param forename Student forename
+     * @param surname Student surname
+     * @param email Student email
+     * @param username Student username
+     * @param password Student password
+     * @param enrolledCourseId Id of course student enrolled on
+     * @param level Level of student (4, 5, 6 and 7 for graduated)
+     * @param enrolledModules Enrolled modules
+     * @param completedModules Completed modules
+     * @param grades Grades given from modules
+     */
     public Student(UUID id, UserType userType, String forename, String surname, String email, String username, String password, UUID enrolledCourseId, int level, ArrayList<UUID> enrolledModules, ArrayList<UUID> completedModules, ArrayList<Grade> grades) {
         super(id, userType, forename, surname, email, username, password);
         this.enrolledCourseId = enrolledCourseId;

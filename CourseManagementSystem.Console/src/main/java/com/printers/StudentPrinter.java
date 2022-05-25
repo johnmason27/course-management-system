@@ -9,10 +9,17 @@ import de.vandermeer.asciitable.AsciiTable;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * Print student information to the console in ASCII tables.
+ */
 public class StudentPrinter {
     private static final StudentLoader studentLoader = new StudentLoader();
     private static final CourseLoader courseLoader = new CourseLoader();
 
+    /**
+     * Print all the given students in an ASCII table.
+     * @param students The students to print
+     */
     public static void printAllStudents(ArrayList<Student> students) {
         if (students.size() == 0) {
             System.out.println("Oh looks like there are no students!");
@@ -32,6 +39,10 @@ public class StudentPrinter {
         System.out.println(table.render());
     }
 
+    /**
+     * Print all the students in an ASCII table on a given module.
+     * @param id Id of the module to search
+     */
     public static void printStudentsOnModule(UUID id) {
         ArrayList<Student> studentsOnModule = studentLoader.loadFromModule(id);
 
@@ -53,6 +64,10 @@ public class StudentPrinter {
         System.out.println(table.render());
     }
 
+    /**
+     * Print all the given completed modules with a grade out into an ASCII table.
+     * @param completedModuleWithGrades The completed modules with grades
+     */
     public static void printCompletedModulesWithGrade(ArrayList<CompletedModuleWithGrade> completedModuleWithGrades) {
         if (completedModuleWithGrades.size() == 0) {
             System.out.println("No completed modules with grades!");
@@ -72,6 +87,12 @@ public class StudentPrinter {
         System.out.println(table.render());
     }
 
+    /**
+     * Print the report for a given student containing their Name, Email, Level and
+     * a table containing their completed modules.
+     * @param student The student to compile the report for
+     * @return The report
+     */
     public static String printReport(Student student) {
         ArrayList<CompletedModuleWithGrade> completedModuleWithGrades = student.getCompletedModulesWithGrade(courseLoader);
 

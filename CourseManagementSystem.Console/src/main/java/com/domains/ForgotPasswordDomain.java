@@ -15,6 +15,9 @@ import com.security.StringValidator;
 
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Houses the ForgotPasswordDomain.
+ */
 public class ForgotPasswordDomain {
     private final StudentLoader studentLoader;
     private final InstructorLoader instructorLoader;
@@ -23,6 +26,15 @@ public class ForgotPasswordDomain {
     private final InstructorEditor instructorEditor;
     private final AdminEditor adminEditor;
 
+    /**
+     * Initialize the ForgotPasswordDomain.
+     * @param studentLoader Load students
+     * @param instructorLoader Load instructors
+     * @param adminLoader Load admins
+     * @param studentEditor Edit students
+     * @param instructorEditor Edit instructors
+     * @param adminEditor Edit admins
+     */
     public ForgotPasswordDomain(StudentLoader studentLoader, InstructorLoader instructorLoader, AdminLoader adminLoader, StudentEditor studentEditor, InstructorEditor instructorEditor, AdminEditor adminEditor) {
         this.studentLoader = studentLoader;
         this.instructorLoader = instructorLoader;
@@ -32,9 +44,12 @@ public class ForgotPasswordDomain {
         this.adminEditor = adminEditor;
     }
 
+    /**
+     * Load the ForgotPasswordDomain.
+     */
     public void load() {
         System.out.println("Forgot Password Form!");
-//      Find existing user
+        // Find existing user
         while (true) {
             System.out.println("Enter username or email:");
             String usernameEmail = Input.readString();
@@ -42,8 +57,8 @@ public class ForgotPasswordDomain {
             Instructor instructor = this.instructorLoader.find(usernameEmail);
             Admin admin = this.adminLoader.find(usernameEmail);
 
+            // Reset password for user depending on type
             if (student != null) {
-//              Reset password
                 System.out.println("Found user.");
                 String hashedPassword = this.getNewPassword();
                 student.setPassword(hashedPassword);
@@ -51,7 +66,6 @@ public class ForgotPasswordDomain {
                 System.out.printf("User %s password has been reset.%n", student.getUsername());
                 break;
             } else if (instructor != null) {
-//              Reset password
                 System.out.println("Found user.");
                 String hashedPassword = this.getNewPassword();
                 instructor.setPassword(hashedPassword);
@@ -59,7 +73,6 @@ public class ForgotPasswordDomain {
                 System.out.printf("User %s password has been reset.%n", instructor.getUsername());
                 break;
             } else if (admin != null) {
-//              Reset password
                 System.out.println("Found user.");
                 String hashedPassword = this.getNewPassword();
                 admin.setPassword(hashedPassword);
@@ -75,7 +88,7 @@ public class ForgotPasswordDomain {
     private String getNewPassword() {
         String password;
         String confirmPassword;
-//      Get new password
+        // Get new password
         while (true) {
             System.out.println("Enter New Password:");
             password = Input.readPassword("Enter New Password");
@@ -90,7 +103,7 @@ public class ForgotPasswordDomain {
                 break;
             }
         }
-//      Confirm new password
+        // Confirm new password
         while (true) {
             System.out.println("Confirm Password:");
             confirmPassword = Input.readPassword("Confirm Password");
@@ -103,6 +116,7 @@ public class ForgotPasswordDomain {
             }
         }
 
+        // Hash new password and return
         try {
             return StringHash.hash(password);
         } catch (NoSuchAlgorithmException e) {

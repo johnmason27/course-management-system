@@ -26,6 +26,10 @@ public class CourseLoader implements ILoader<Course> {
         return courses;
     }
 
+    /**
+     * Find all the courses which are available for teaching and enrollment.
+     * @return All the available courses
+     */
     public ArrayList<Course> findAvailable() {
         ArrayList<Course> availableCourses = new ArrayList<>();
 

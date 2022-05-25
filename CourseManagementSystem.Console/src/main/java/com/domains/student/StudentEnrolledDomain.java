@@ -13,18 +13,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Houses the StudentEnrolledDomain where students can view their enrolled modules
+ * and enroll onto modules.
+ */
 public class StudentEnrolledDomain {
     private final CourseLoader courseLoader;
     private final InstructorLoader instructorLoader;
     private final StudentEditor studentEditor;
 
+    /**
+     * Initialize a StudentEnrolledDomain.
+     * @param courseLoader Load courses
+     * @param instructorLoader Load instructors
+     * @param studentEditor Edit students
+     */
     public StudentEnrolledDomain(CourseLoader courseLoader, InstructorLoader instructorLoader, StudentEditor studentEditor) {
         this.courseLoader = courseLoader;
         this.instructorLoader = instructorLoader;
         this.studentEditor = studentEditor;
     }
 
+    /**
+     * Load the StudentEnrolledDomain.
+     */
     public void load() {
+        // They are graduated so don't have any enrolled modules
         if (Session.student.getLevel() == 7) {
             System.out.println("You have already graduated and have no active modules!");
             return;
@@ -35,6 +49,7 @@ public class StudentEnrolledDomain {
         CoursePrinter.printCourse(enrolledCourse);
 
         while (true) {
+            // See whether they want to enroll onto modules or view their existing enrolled modules
             String[] options = {
                     "1 - View enrolled modules",
                     "2 - Enroll onto modules",
@@ -55,6 +70,7 @@ public class StudentEnrolledDomain {
                 int studentLevel = Session.student.getLevel();
                 System.out.printf("You are currently level %d, printing modules for your level or previous levels.%n", studentLevel);
 
+                // Filter the modules according to their level and the availability
                 List<Module> availableLevelModules = enrolledCourse.getModules().stream()
                         .filter(m -> m.getLevel() <= studentLevel && m.getAvailability())
                         .toList();
@@ -62,6 +78,7 @@ public class StudentEnrolledDomain {
                 ArrayList<UUID> completedModules = activeStudent.getCompletedModules();
                 ArrayList<UUID> enrolledModules = activeStudent.getEnrolledModules();
 
+                // Filter modules that aren't in their enrolled modules
                 for (Module availableLevelModule : availableLevelModules) {
                     for (UUID id : enrolledModules) {
                         if (availableLevelModule.getId().equals(id)) {
@@ -70,6 +87,7 @@ public class StudentEnrolledDomain {
                     }
                 }
 
+                // Filter modules that aren't in their enrolled modules
                 for (Module availableLevelModule : availableLevelModules) {
                     for (UUID id : completedModules) {
                         if (availableLevelModule.getId().equals(id)) {
@@ -98,6 +116,7 @@ public class StudentEnrolledDomain {
     private void enrollOntoModule(ArrayList<Module> availableModules) {
         Student activeStudent = Session.getStudent();
         while (true) {
+            // Print modules you can enroll onto
             CoursePrinter.printModules(new ArrayList<>(availableModules));
             String[] choseToEnrollOptions = {
                     "1 - Yes",
@@ -122,6 +141,7 @@ public class StudentEnrolledDomain {
                         continue;
                     }
 
+                    // Check the module they want to enroll onto exists
                     Module foundModule = availableModules.stream()
                             .filter(m -> m.getId().equals(convertedId))
                             .findAny()

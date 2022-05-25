@@ -41,6 +41,10 @@ public class InstructorLoader implements ILoader<Instructor> {
                 .orElse(null);
     }
 
+    /**
+     * Find all instructors that have less than 4 modules assigned to them.
+     * @return All available instructors
+     */
     public ArrayList<Instructor> findAvailable() {
         List<Instructor> availableInstructors = this.loadAll().stream()
                 .filter(i -> i.getAssignedModules().size() < 4)

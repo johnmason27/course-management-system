@@ -23,6 +23,13 @@ public class Main {
     private static final InstructorEditor instructorEditor = new InstructorEditor();
     private static final CourseEditor courseEditor = new CourseEditor();
 
+    /**
+     * The CourseManagementSystemConsole program implements is an application
+     * that allows you to manage courses for a university program.
+     * @author  John Mason
+     * @version 1.0
+     * @since   2022-05-25
+     */
     public static void main(String[] args) {
         String[] options = {
                 "1 - Login",

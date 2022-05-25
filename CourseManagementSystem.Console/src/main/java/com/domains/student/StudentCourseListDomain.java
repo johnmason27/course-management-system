@@ -10,15 +10,26 @@ import com.printers.CoursePrinter;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * Houses the StudentCourseListDomain where students can view and enroll onto active courses.
+ */
 public class StudentCourseListDomain {
     private final CourseLoader courseLoader;
     private final StudentEditor studentEditor;
 
+    /**
+     * Initialize the StudentCourseListDomain.
+     * @param courseLoader Load courses
+     * @param studentEditor Edit students
+     */
     public StudentCourseListDomain(CourseLoader courseLoader, StudentEditor studentEditor) {
         this.courseLoader = courseLoader;
         this.studentEditor = studentEditor;
     }
 
+    /**
+     * Load the StudentCourseListDomain.
+     */
     public void load() {
         System.out.println("Welcome, here you can enroll onto courses.");
         String[] options = {
@@ -37,6 +48,7 @@ public class StudentCourseListDomain {
             int option = Input.readInt();
 
             if (option == 1) {
+                // Print all available courses
                 System.out.println("Available courses:");
                 ArrayList<Course> availableCourses = this.courseLoader.findAvailable();
                 if (availableCourses.size() == 0) {
@@ -58,6 +70,7 @@ public class StudentCourseListDomain {
                     int availableCoursesOption = Input.readInt();
 
                     if (availableCoursesOption == 1) {
+                        // Find the id of the course to enroll onto
                         while (true) {
                             System.out.println("Enter the id of the course you'd like to enroll on:");
                             String id = Input.readString();
@@ -76,6 +89,7 @@ public class StudentCourseListDomain {
                                     .orElse(null);
 
                             if (existingCourse != null) {
+                                // Confirm they want to enroll
                                 while (true) {
                                     String[] confirmOptions = {
                                             "1 - Yes",

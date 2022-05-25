@@ -6,9 +6,16 @@ import de.vandermeer.asciitable.AsciiTable;
 
 import java.util.ArrayList;
 
+/**
+ * Print all the instructor information in ASCII tables.
+ */
 public class InstructorPrinter {
     private static final InstructorLoader instructorLoader = new InstructorLoader();
 
+    /**
+     * Print all given instructors into an ASCII table.
+     * @param instructors Instructors to print
+     */
     public static void printInstructors(ArrayList<Instructor> instructors) {
         if (instructors.size() == 0) {
             System.out.println("Oh looks like there is no instructors.");

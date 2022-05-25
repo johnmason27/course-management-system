@@ -13,18 +13,31 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * Houses the StudentManagementDomain where you can increase students levels and print their
+ * result slips.
+ */
 public class StudentManagementDomain {
     private final StudentLoader studentLoader;
     private final StudentEditor studentEditor;
     private final CourseLoader courseLoader;
     private final IOManager ioManager = new IOManager();
 
+    /**
+     * Initialize a StudentManagementDomain.
+     * @param studentLoader Load students
+     * @param studentEditor Edit students
+     * @param courseLoader Load courses
+     */
     public StudentManagementDomain(StudentLoader studentLoader, StudentEditor studentEditor, CourseLoader courseLoader) {
         this.studentLoader = studentLoader;
         this.studentEditor = studentEditor;
         this.courseLoader = courseLoader;
     }
 
+    /**
+     * Load the StudentManagementDomain.
+     */
     public void load() {
         String[] options = {
                 "1 - Increase student level",
@@ -70,6 +83,7 @@ public class StudentManagementDomain {
                     }
                 }
 
+                // Upgrade the found students level
                 this.upgradeStudentLevel(selectedStudent);
             } else if (option == 2) {
                 ArrayList<Student> students = this.studentLoader.loadAll();
@@ -103,9 +117,11 @@ public class StudentManagementDomain {
                     }
                 }
 
+                // Print results slip for student
                 String report = StudentPrinter.printReport(selectedStudent);
                 System.out.println(report);
 
+                // Get an available drive to save results slip too
                 File firstAvailableDrive = File.listRoots()[0];
                 String stringSaveDirectory = firstAvailableDrive.getPath() + "\\results";
                 File saveDirectory = new File(stringSaveDirectory);
@@ -116,6 +132,7 @@ public class StudentManagementDomain {
 
                 String reportFilePath = String.format("%s\\%s_report.txt", saveDirectory.getPath(), selectedStudent.getUsername());
 
+                // Save the results slip to a file
                 this.ioManager.writeFile(reportFilePath, report);
                 System.out.println("Saved report at location: ");
                 System.out.println(reportFilePath);
@@ -131,6 +148,8 @@ public class StudentManagementDomain {
     private void upgradeStudentLevel(Student student) {
         int level = student.getLevel();
 
+        // Upgrade the student depending on the level if they've got the correct amount of completed
+        // modules and met the grades.
         if (level == 4) {
             ArrayList<CompletedModuleWithGrade> completedModulesWithGrade = student.getCompletedModulesWithGrade(this.courseLoader, 4);
             StudentPrinter.printCompletedModulesWithGrade(completedModulesWithGrade);

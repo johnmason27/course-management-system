@@ -6,7 +6,15 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * Interface between IO operations and the application.
+ */
 public class IOManager {
+    /**
+     * Read the string contents of a file.
+     * @param filename The filepath of the file to read
+     * @return The string contents of the file
+     */
     public String readFile(String filename) {
         String contents = "";
 
@@ -19,6 +27,11 @@ public class IOManager {
         return contents;
     }
 
+    /**
+     * Write the given string contents to a specified filepath.
+     * @param filename The filepath to write to
+     * @param contents The string contents of the file
+     */
     public void writeFile(String filename, String contents) {
         try {
             FileWriter fileWriter = new FileWriter(filename, false);

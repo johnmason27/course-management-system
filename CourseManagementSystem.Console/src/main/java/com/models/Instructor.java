@@ -6,9 +6,23 @@ import com.models.interfaces.IInstructor;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * Instructor which can instruct on courses and give students on those courses grades.
+ */
 public class Instructor extends User implements IInstructor {
     private ArrayList<UUID> assignedModules;
 
+    /**
+     * Initialize an Instructor.
+     * @param id Instructor id
+     * @param userType Instructor user type
+     * @param forename Instructor forename
+     * @param surname Instructor surname
+     * @param email Instructor email
+     * @param username Instructor username
+     * @param password Instructor password
+     * @param assignedModules Assigned modules for the instructor
+     */
     public Instructor(UUID id,  UserType userType, String forename, String surname, String email, String username, String password, ArrayList<UUID> assignedModules) {
         super(id, userType, forename, surname, email, username, password);
         this.assignedModules = assignedModules;

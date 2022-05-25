@@ -13,6 +13,9 @@ import com.loaders.InstructorLoader;
 import com.loaders.StudentLoader;
 import com.models.Admin;
 
+/**
+ * Houses the AdminDomain where you can manage courses, instructors and students.
+ */
 public class AdminDomain extends LoginDomain {
     private final CourseLoader courseLoader;
     private final CourseEditor courseEditor;
@@ -21,6 +24,17 @@ public class AdminDomain extends LoginDomain {
     private final StudentLoader studentLoader;
     private final StudentEditor studentEditor;
 
+    /**
+     * Initialize the AdminDomain.
+     * @param adminLoader Load admins
+     * @param studentLoader Load students
+     * @param instructorLoader Load instructors
+     * @param courseLoader Load courses
+     * @param studentEditor Edit students
+     * @param adminEditor Edit admins
+     * @param instructorEditor Edit instructors
+     * @param courseEditor Edit courses
+     */
     public AdminDomain(AdminLoader adminLoader, StudentLoader studentLoader, InstructorLoader instructorLoader, CourseLoader courseLoader, StudentEditor studentEditor, AdminEditor adminEditor, InstructorEditor instructorEditor, CourseEditor courseEditor) {
         super(adminLoader, studentLoader, instructorLoader, courseLoader, studentEditor, adminEditor, instructorEditor, courseEditor);
 
@@ -32,6 +46,9 @@ public class AdminDomain extends LoginDomain {
         this.studentEditor = studentEditor;
     }
 
+    /**
+     * Load the AdminDomain.
+     */
     @Override
     public void load() {
         Admin currentUser = Session.getAdmin();

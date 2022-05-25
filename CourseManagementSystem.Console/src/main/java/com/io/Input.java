@@ -7,7 +7,14 @@ import java.util.IllegalFormatException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * Interface between UserInput and the main application.
+ */
 public class Input {
+    /**
+     * Get a string input from the console.
+     * @return The input from console
+     */
     public static String readString() {
         String inputString;
 
@@ -24,6 +31,10 @@ public class Input {
         return inputString;
     }
 
+    /**
+     * Get an integer input from the console.
+     * @return The input from the console
+     */
     public static int readInt() {
         int inputInt;
 
@@ -40,6 +51,12 @@ public class Input {
         return inputInt;
     }
 
+    /**
+     * Get a password input from the console or if a console instance can't be
+     * found load swing component to securely read the password.
+     * @param message The message for the swing component to render
+     * @return The password input
+     */
     public static String readPassword(String message) {
         char[] passwordArray;
         Console console = System.console();

@@ -6,12 +6,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Course made up of modules that students can take.
+ */
 public class Course implements ICourse {
     private UUID id;
     private String name;
     private boolean availability;
     private ArrayList<Module> modules;
 
+    /**
+     * Initialize a Course.
+     * @param id Course id
+     * @param name Course name
+     * @param availability Course availability
+     * @param modules Course modules
+     */
     public Course(UUID id, String name, boolean availability, ArrayList<Module> modules) {
         this.id = id;
         this.name = name;

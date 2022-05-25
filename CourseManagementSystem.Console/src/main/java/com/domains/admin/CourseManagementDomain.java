@@ -10,15 +10,26 @@ import com.printers.CoursePrinter;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * Houses the CourseManageDomain where admins can create, edit and delete courses.
+ */
 public class CourseManagementDomain {
     private final CourseLoader courseLoader;
     private final CourseEditor courseEditor;
 
+    /**
+     * Initialize the CourseManagementDomain.
+     * @param courseLoader Load courses
+     * @param courseEditor Edit courses
+     */
     public CourseManagementDomain(CourseLoader courseLoader, CourseEditor courseEditor) {
         this.courseLoader = courseLoader;
         this.courseEditor = courseEditor;
     }
 
+    /**
+     * Load the CourseManagementDomain.
+     */
     public void load() {
         String[] options = {
                 "1 - Add Courses",
@@ -55,7 +66,7 @@ public class CourseManagementDomain {
         String courseName;
         ArrayList<Module> courseModules = new ArrayList<>();
         boolean availability;
-//      Get Course Name
+        // Get Course Name
         while (true) {
             System.out.println("Enter course name:");
             courseName = Input.readString();
@@ -69,7 +80,7 @@ public class CourseManagementDomain {
                 break;
             }
         }
-//      Add Modules
+        // Add Modules
         while (true) {
             String[] options = {
                     "1 - Add Module",
@@ -97,7 +108,7 @@ public class CourseManagementDomain {
                 System.err.println("Enter a valid option.");
             }
         }
-//      Set availability
+        // Set availability
         while (true) {
             String[] options = {
                     "1 - Available",
@@ -121,7 +132,7 @@ public class CourseManagementDomain {
                 System.err.println("Enter a valid option.");
             }
         }
-//      Create course
+        // Create course
         Course newCourse = new Course(UUID.randomUUID(), courseName, availability, courseModules);
         this.courseEditor.add(newCourse);
         System.out.println("Created new course:");
@@ -150,7 +161,7 @@ public class CourseManagementDomain {
             int option = Input.readInt();
 
             if (option == 1) {
-//              Edit course
+                // Edit course
                 System.out.println("Enter the id of the course to edit:");
                 String id = Input.readString();
                 UUID guidId;
@@ -162,6 +173,7 @@ public class CourseManagementDomain {
                     continue;
                 }
 
+                // Find the existing course
                 Course existingCourse = existingCourses.stream()
                         .filter(c -> c.getId().equals(guidId))
                         .findAny()
@@ -184,7 +196,7 @@ public class CourseManagementDomain {
                     int editOption = Input.readInt();
 
                     if (editOption == 1) {
-//                      Edit name
+                        // Edit name
                         System.out.printf("Existing name is '%s' enter new name:%n", existingCourse.getName());
                         String newName = Input.readString();
 
@@ -201,7 +213,7 @@ public class CourseManagementDomain {
                             System.out.printf("Name changed to: '%s'.%n", newName);
                         }
                     } else if (editOption == 2) {
-//                      Edit availability
+                        // Edit availability
                         System.out.printf("Existing availability is '%s'.%n", existingCourse.getAvailability() ? "Available" : "Unavailable");
                         String[] availabilityOptions = {
                                 "1 - Set to available",
@@ -231,7 +243,7 @@ public class CourseManagementDomain {
                             System.err.println("Enter valid option.");
                         }
                     } else if (editOption == 3) {
-//                      Edit modules
+                        // Edit modules
                         ArrayList<Module> existingModules = existingCourse.getModules();
                         if (existingModules.size() == 0) {
                             System.out.println("No existing modules to edit.");
@@ -283,6 +295,7 @@ public class CourseManagementDomain {
                                 int addModuleOption = Input.readInt();
 
                                 if (addModuleOption == 1) {
+                                    // Add module
                                     this.addModule(existingModules);
                                     this.courseEditor.update(existingCourse);
                                     return;
@@ -319,6 +332,7 @@ public class CourseManagementDomain {
                                             continue;
                                         }
 
+                                        // Check existing module exists
                                         Module existingModule = existingModules.stream()
                                                 .filter(m -> m.getId().equals(moduleGuidId))
                                                 .findAny()
@@ -347,6 +361,7 @@ public class CourseManagementDomain {
                                             int editModuleOption = Input.readInt();
 
                                             if (editModuleOption == 1) {
+                                                // Edit name
                                                 System.out.printf("Existing name is '%s', enter new name:%n", existingModule.getName());
                                                 while (true) {
                                                     String newName = Input.readString();
@@ -366,6 +381,7 @@ public class CourseManagementDomain {
                                                     }
                                                 }
                                             } else if (editModuleOption == 2) {
+                                                // Edit availability
                                                 System.out.printf("Existing availability is %s:%n", existingModule.getAvailability() ? "Available" : "Unavailable");
                                                 while (true) {
                                                     String[] availabilityOptions = {
@@ -398,6 +414,7 @@ public class CourseManagementDomain {
                                                 }
                                                 break;
                                             } else if (editModuleOption == 3) {
+                                                // Edit level
                                                 System.out.printf("Existing module is level %d, enter new level 4, 5 or 6:", existingModule.getLevel());
                                                 while (true) {
                                                     int level = Input.readInt();
@@ -413,6 +430,7 @@ public class CourseManagementDomain {
                                                     }
                                                 }
                                             } else if (editModuleOption == 4) {
+                                                // Edit optionality
                                                 System.out.printf("Current module is: %s%n", existingModule.getOptional() ? "Optional" : "Required");
                                                 while (true) {
                                                     String[] optionalOptions = {
@@ -437,6 +455,7 @@ public class CourseManagementDomain {
                                                 this.courseEditor.update(existingCourse);
                                                 System.out.printf("Current module is now: %s%n", existingModule.getOptional() ? "Optional" : "Required");
                                             } else if (editModuleOption == 5) {
+                                                // Remove module
                                                 existingCourse.removeModule(existingModule);
                                                 this.courseEditor.update(existingCourse);
                                                 System.out.printf("Removed module: '%s' from course.%n", existingModule.getName());
@@ -506,6 +525,7 @@ public class CourseManagementDomain {
                         continue;
                     }
 
+                    // Check course trying to be removed exists
                     Course foundCourse = existingCourses.stream()
                             .filter(c -> c.getId().equals(guidId))
                             .findAny()
@@ -513,6 +533,7 @@ public class CourseManagementDomain {
                     if (foundCourse == null) {
                         System.err.println("No course with that Id, enter another.");
                     } else {
+                        // Delete course
                         this.courseEditor.delete(foundCourse.getId());
                         System.out.println("Course deleted.");
                         break;
@@ -532,7 +553,7 @@ public class CourseManagementDomain {
         boolean availability;
         int level;
         boolean optional = false;
-//      Get name
+        // Get name
         while (true) {
             System.out.println("Enter module name:");
             name = Input.readString();
@@ -550,7 +571,7 @@ public class CourseManagementDomain {
                 break;
             }
         }
-//      Get availability
+        // Get availability
         String[] options = {
                 "1 - Available",
                 "2 - Unavailable"
@@ -574,7 +595,7 @@ public class CourseManagementDomain {
                 System.err.println("Enter a valid option.");
             }
         }
-//      Get level
+        // Get level
         while (true) {
             System.out.println("What level is this module: (4, 5 or 6)");
             level = Input.readInt();
@@ -604,15 +625,15 @@ public class CourseManagementDomain {
                 }
             }
         }
-//      Add module
+        // Add module
         Module newModule = new Module(UUID.randomUUID(), name, availability, level, optional, null);
         modules.add(newModule);
-        newModule.printModule(newModule);
+        newModule.printModule();
         System.out.println("Module added.");
     }
 
     private void editModule(ArrayList<Module> modules) {
-//      Check there are any to edit
+        // Check there are any to edit
         if (modules.size() == 0) {
             System.out.println("There are no modules to edit");
             return;
@@ -623,7 +644,7 @@ public class CourseManagementDomain {
 
         Module existingModule;
         while (true) {
-//          Get which module to edit
+            // Get which module to edit
             System.out.println("Enter the Id of the Module to edit:");
             String id = Input.readString();
             UUID guidId;
@@ -646,7 +667,7 @@ public class CourseManagementDomain {
                 break;
             }
         }
-//      Choose which part to edit
+        // Choose which part to edit
         while (true) {
             String[] options = {
                     "1 - Edit Name",
@@ -663,7 +684,7 @@ public class CourseManagementDomain {
             int option = Input.readInt();
 
             if (option == 1) {
-//              Edit name
+                // Edit name
                 while (true) {
                     System.out.printf("Existing name is '%s' enter new Name:%n", existingModule.getName());
                     String newName = Input.readString();
@@ -682,7 +703,7 @@ public class CourseManagementDomain {
                     }
                 }
             } else if (option == 2) {
-//              Edit availability
+                // Edit availability
                 System.out.printf("Current availability is: '%s'%n", existingModule.getAvailability() ? "Available" : "Unavailable");
                 while (true) {
                     String[] availabilityOptions = {
@@ -712,7 +733,7 @@ public class CourseManagementDomain {
                     }
                 }
             } else if (option == 3) {
-//              Edit level
+                // Edit level
                 System.out.printf("Current level is: '%d'%n", existingModule.getLevel());
                 while (true) {
                     System.out.println("What level do you want to set the module to? (4, 5 or 6)");
@@ -727,7 +748,7 @@ public class CourseManagementDomain {
                     }
                 }
             } else if (option == 4) {
-//              Edit optionality
+                // Edit optionality
                 System.out.printf("Current module is: %s%n", existingModule.getOptional() ? "Optional" : "Required");
                 while (true) {
                     String[] optionalOptions = {
@@ -759,12 +780,12 @@ public class CourseManagementDomain {
     }
 
     private void removeModule(ArrayList<Module> modules) {
-//      Check there is any modules
+        // Check there is any modules
         if (modules.size() == 0) {
             System.out.println("No modules to delete");
             return;
         }
-//      Get the module and delete
+        // Get the module and delete
         CoursePrinter.printModules(modules);
         while (true) {
             System.out.println("Which module should we remove?");

@@ -21,12 +21,26 @@ import com.printers.StudentPrinter;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * Houses logic for the InstructorDomain.
+ */
 public class InstructorDomain extends LoginDomain {
     private final StudentLoader studentLoader;
     private final InstructorLoader instructorLoader;
     private final CourseLoader courseLoader;
     private final StudentEditor studentEditor;
 
+    /**
+     * Initialize the InstructorDomain.
+     * @param adminLoader Load admins
+     * @param studentLoader Load students
+     * @param instructorLoader Load instructors
+     * @param courseLoader Load courses
+     * @param studentEditor Edit students
+     * @param adminEditor Edit admins
+     * @param instructorEditor Edit instructors
+     * @param courseEditor Edit courses
+     */
     public InstructorDomain(AdminLoader adminLoader, StudentLoader studentLoader, InstructorLoader instructorLoader, CourseLoader courseLoader, StudentEditor studentEditor, AdminEditor adminEditor, InstructorEditor instructorEditor, CourseEditor courseEditor) {
         super(adminLoader, studentLoader, instructorLoader, courseLoader, studentEditor, adminEditor, instructorEditor, courseEditor);
         this.instructorLoader = instructorLoader;
@@ -35,6 +49,9 @@ public class InstructorDomain extends LoginDomain {
         this.courseLoader = courseLoader;
     }
 
+    /**
+     * Load the InstructorDomain.
+     */
     @Override
     public void load() {
         Instructor currentUser = Session.getInstructor();
@@ -74,6 +91,7 @@ public class InstructorDomain extends LoginDomain {
 
                     if (viewOption == 1) {
                         while (true) {
+                            // Get the Id of the module to print students from
                             System.out.println("Enter the id of the module:");
                             String id = Input.readString();
                             UUID convertedId;
@@ -93,6 +111,7 @@ public class InstructorDomain extends LoginDomain {
                             if (foundModule == null) {
                                 System.err.println("No module with that id enter another.");
                             } else {
+                                // Print the students on the module
                                 System.out.printf("Here are the students who are on the module: %s.%n", foundModule.getName());
                                 StudentPrinter.printStudentsOnModule(foundModule.getId());
                                 break;
@@ -107,6 +126,7 @@ public class InstructorDomain extends LoginDomain {
                     }
                 }
             } else if (option == 2) {
+                // Give grades to students on their assigned modules
                 Instructor currentInstructor = Session.getInstructor();
                 ArrayList<Module> assignedModules = currentInstructor.getAssignedModulesWithDetails(this.courseLoader);
 
@@ -115,6 +135,7 @@ public class InstructorDomain extends LoginDomain {
                     return;
                 }
 
+                // Get module to assign grades from
                 UUID moduleId;
                 while (true) {
                     CoursePrinter.printModules(assignedModules);
@@ -147,6 +168,7 @@ public class InstructorDomain extends LoginDomain {
                     return;
                 }
 
+                // Get the student to add grades too
                 UUID studentId;
                 Student chosenStudent;
                 while (true) {
@@ -175,6 +197,7 @@ public class InstructorDomain extends LoginDomain {
                     }
                 }
 
+                // Get the grade and save to student
                 int grade;
                 while (true) {
                     System.out.println("Enter the grade you'd like to give:");

@@ -1,5 +1,8 @@
 package com.consts;
 
+/**
+ * Constant strings for the file paths used by the application.
+ */
 public class FileNames {
     public static String COURSES = "./src/main/resources/courses.json";
     public static String STUDENTS = "./src/main/resources/students.json";

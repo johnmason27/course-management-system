@@ -13,12 +13,22 @@ import com.printers.InstructorPrinter;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * Houses the InstructorManagementDomain where you can assign and remove instructors from modules.
+ */
 public class InstructorManagementDomain {
     private final InstructorLoader instructorLoader;
     private final InstructorEditor instructorEditor;
     private final CourseLoader courseLoader;
     private final CourseEditor courseEditor;
 
+    /**
+     * Initialize the InstructorManagementDomain.
+     * @param instructorLoader Load instructors
+     * @param instructorEditor Edit instructors
+     * @param courseLoader Load courses
+     * @param courseEditor Edit courses
+     */
     public InstructorManagementDomain(InstructorLoader instructorLoader, InstructorEditor instructorEditor, CourseLoader courseLoader, CourseEditor courseEditor) {
         this.instructorLoader = instructorLoader;
         this.instructorEditor = instructorEditor;
@@ -26,6 +36,9 @@ public class InstructorManagementDomain {
         this.courseEditor = courseEditor;
     }
 
+    /**
+     * Load the InstructorManagementDomain.
+     */
     public void load() {
         System.out.println("Here you can manage your instructors by adding/removing them onto modules to teach");
 
@@ -49,6 +62,7 @@ public class InstructorManagementDomain {
                 ArrayList<Instructor> availableInstructors = this.instructorLoader.findAvailable();
                 Instructor chosenInstructor = this.chooseInstructor(availableInstructors);
 
+                // Update the module with the instructor and instructor with module id
                 chosenModule.setInstructor(chosenInstructor.getId());
                 chosenInstructor.addAssignedModule(chosenModule.getId());
                 this.instructorEditor.update(chosenInstructor);
@@ -65,6 +79,7 @@ public class InstructorManagementDomain {
 
                 Module chosenModule = this.chooseModule(availableModules, "Enter the id of the module to remove the instructor?");
 
+                // Update the chosen module and instructor
                 UUID instructorId = chosenModule.getInstructor();
                 Instructor moduleInstructor = this.instructorLoader.find(instructorId);
                 moduleInstructor.removeAssignedModule(chosenModule.getId());

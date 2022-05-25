@@ -18,6 +18,9 @@ import com.security.StringHash;
 
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Houses the login logic for logging into the system.
+ */
 public class LoginDomain {
     private final AdminLoader adminLoader;
     private final StudentLoader studentLoader;
@@ -28,6 +31,17 @@ public class LoginDomain {
     private final InstructorEditor instructorEditor;
     private final CourseEditor courseEditor;
 
+    /**
+     * Initialize the LoginDomain.
+     * @param adminLoader Load admins
+     * @param studentLoader Load students
+     * @param instructorLoader Load instructors
+     * @param courseLoader Load courses
+     * @param studentEditor Edit students
+     * @param adminEditor Edit admins
+     * @param instructorEditor Edit instructors
+     * @param courseEditor Edit courses
+     */
     public LoginDomain(AdminLoader adminLoader, StudentLoader studentLoader, InstructorLoader instructorLoader, CourseLoader courseLoader, StudentEditor studentEditor, AdminEditor adminEditor, InstructorEditor instructorEditor, CourseEditor courseEditor) {
         this.adminLoader = adminLoader;
         this.studentLoader = studentLoader;
@@ -39,9 +53,12 @@ public class LoginDomain {
         this.courseEditor = courseEditor;
     }
 
+    /**
+     * Load the login domain.
+     */
     public void load() {
         System.out.println("Login Form!");
-//      Get username or email
+        // Get username or email
         while (true) {
             System.out.println("Enter username or email:");
             String usernameEmail = Input.readString();
@@ -51,9 +68,9 @@ public class LoginDomain {
 
             if (student != null) {
                 System.out.println("Found user.");
-//              Get Password
+                // Get and check Password
                 this.checkPassword(student);
-//              Login and load next domain
+                // Login and load next domain
                 System.out.println("Password matches! Logged in.");
                 Session.setStudent(student);
                 StudentDomain studentDomain = new StudentDomain(adminLoader, studentLoader, instructorLoader, courseLoader, studentEditor, adminEditor, instructorEditor, courseEditor);
@@ -61,9 +78,9 @@ public class LoginDomain {
                 break;
             } else if (instructor != null) {
                 System.out.println("Found user.");
-//              Get Password
+                // Get and check Password
                 this.checkPassword(instructor);
-//              Login and load next domain
+                // Login and load next domain
                 System.out.println("Password matches! Logged in.");
                 Session.setInstructor(instructor);
                 InstructorDomain instructorDomain = new InstructorDomain(adminLoader, studentLoader, instructorLoader, courseLoader, studentEditor, adminEditor, instructorEditor, courseEditor);
@@ -71,9 +88,9 @@ public class LoginDomain {
                 break;
             } else if (admin != null) {
                 System.out.println("Found user.");
-//              Get Password
+                // Get and check Password
                 this.checkPassword(admin);
-//              Login and load next domain
+                // Login and load next domain
                 System.out.println("Password matches! Logged in.");
                 Session.setAdmin(admin);
                 AdminDomain adminDomain = new AdminDomain(adminLoader, studentLoader, instructorLoader, courseLoader, studentEditor, adminEditor, instructorEditor, courseEditor);
@@ -91,6 +108,7 @@ public class LoginDomain {
             String password = Input.readPassword("Enter Password");
             String hashedPassword = null;
 
+            // Try to hash the password to compare against existing hashed password
             try {
                 hashedPassword = StringHash.hash(password);
             } catch (NoSuchAlgorithmException e) {
